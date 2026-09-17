@@ -12,9 +12,10 @@ html {
 
 body {
   margin: 0;
+  background: #ffeed6;
 }
 
-.site-header { align-items: center; background: #e8a07c; border: 1px solid #e8dec9; display: flex; justify-content: space-between; min-height: 100px; padding: 16px 80px; width: 100%; }
+.site-header { align-items: center; background: #e8a07c; border: 1px solid #e8dec9; display: flex; height: 80px; justify-content: space-between; padding: 16px 80px; width: 100%; }
 .brand { align-items: center; display: flex; gap: 8px; text-decoration: none; }
 .brand-mark { border-radius: 50%; display: block; flex: 0 0 66px; height: 66px; overflow: hidden; width: 66px; }
 .brand-mark img { display: block; height: 100%; object-fit: cover; width: 100%; }
@@ -58,6 +59,8 @@ body {
 .filter-chip img { display: block; height: 16px; width: 16px; }
 .filter-sort img { height: 12px; width: 12px; }
 
+.results-content { background: #ffeed6; display: flex; flex-direction: column; gap: 32px; min-height: 560px; padding: 40px 80px; width: 100%; }
+
 .walker-heading {
   align-items: center;
   display: flex;
@@ -79,8 +82,8 @@ body {
   margin: 0;
 }
 
-.walker-grid { display: grid; gap: 20px 24px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.walker-card { background: #fff; border: 1px solid #e8dec9; border-radius: 24px; box-shadow: 0 8px 8px rgba(130,113,72,.06); display: flex; flex-direction: column; gap: 20px; min-height: 155px; padding: 20px 24px; }
+.walker-grid { display: grid; gap: 24px; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; }
+.walker-card { background: #fff; border: 1px solid #e8dec9; border-radius: 24px; box-shadow: 0 8px 8px rgba(130,113,72,.06); display: flex; flex-direction: column; gap: 20px; min-height: 141px; padding: 20px 24px; }
 .card-top { align-items: center; display: flex; gap: 16px; }
 .avatar { border-radius: 50%; display: block; flex: 0 0 72px; height: 72px; object-fit: cover; width: 72px; }
 .card-top h2 { color: #827148; font: 800 18px/normal "Outfit", sans-serif; margin: 0 0 4px; white-space: nowrap; }
@@ -94,6 +97,6 @@ body {
 
 @media (max-width: 700px) { .site-header { padding-left: 24px; padding-right: 24px; } .nav-actions { flex-basis: 120px; } }
 @media (max-width: 700px) { .filter-bar { gap: 8px; overflow-x: auto; padding-left: 24px; padding-right: 24px; } }
-@media (max-width: 700px) { .walker-heading { gap: 16px; overflow-x: auto; padding: 0 24px; } }
-@media (max-width: 900px) { .walker-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0 24px; } }
+@media (max-width: 700px) { .walker-heading { gap: 16px; overflow-x: auto; } .results-content { padding-left: 24px; padding-right: 24px; } }
+@media (max-width: 900px) { .walker-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .walker-grid { grid-template-columns: 1fr; } }
