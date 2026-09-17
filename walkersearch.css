@@ -95,8 +95,19 @@ body {
 .card-footer strong { color: #a5af79; display: block; font: 800 22px/normal "Outfit", sans-serif; }
 .card-footer a { background: #a5af79; border-radius: 12px; color: #fff; font: 700 14px/normal "Figtree", sans-serif; padding: 12px 20px; text-decoration: none; white-space: nowrap; }
 
+.search-footer { align-items: flex-start; background: #ffeed6; border: 1px solid #e8dec9; display: flex; padding: 60px 100px; width: 100%; }
+.search-footer > * { flex: 1; }
+.footer-brand { display: flex; flex-direction: column; gap: 16px; max-width: 360px; }
+.footer-brand h2 { color: #827148; font: 800 32px/normal "Outfit", sans-serif; margin: 0; }
+.footer-brand p { color: #6b5e43; font: 400 14px/1.5 "Figtree", sans-serif; margin: 0; }
+.footer-links { display: flex; gap: 64px; justify-content: flex-end; }
+.footer-links div { display: flex; flex-direction: column; gap: 14px; min-width: 47px; }
+.footer-links strong { color: #827148; font: 800 15px/normal "Outfit", sans-serif; }
+.footer-links a { color: #6b5e43; font: 400 14px/normal "Figtree", sans-serif; text-decoration: none; }
+
 @media (max-width: 700px) { .site-header { padding-left: 24px; padding-right: 24px; } .nav-actions { flex-basis: 120px; } }
 @media (max-width: 700px) { .filter-bar { gap: 8px; overflow-x: auto; padding-left: 24px; padding-right: 24px; } }
 @media (max-width: 700px) { .walker-heading { gap: 16px; overflow-x: auto; } .results-content { padding-left: 24px; padding-right: 24px; } }
 @media (max-width: 900px) { .walker-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .walker-grid { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .search-footer { flex-direction: column; gap: 40px; padding: 40px 24px; } .footer-links { justify-content: flex-start; } }
