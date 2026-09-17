@@ -129,7 +129,32 @@ h3 { color: var(--brown); font-family: "Outfit", sans-serif; }
   .testimonials { grid-template-columns: 1fr; }
 }
 
+/* ================================================================
+   12. MOBILE RESPONSIVE RULES
+   ================================================================ */
+@media (max-width: 540px) {
+  .container { width: calc(100% - 32px); }
+  .brand { font-size: 25px; }
+  .brand__logo { width: 48px; height: 48px; }
+  .actions { gap: 10px; }
+  .signin { font-size: 13px; }
+  .pill { padding: 9px 12px; font-size: 12px; }
+  .section { padding: 56px 0; }
+  h1 { margin-bottom: 20px; font-size: clamp(2.75rem, 13vw, 3.35rem); }
+  h2 { margin-bottom: 32px; font-size: 30px; }
+  .hero-copy__description { font-size: 16px; }
+  .card, .quote { padding: 24px; border-radius: 20px; }
+  .feature-title h2 { font-size: 30px; }
+  .walker-steps { margin-top: 40px; padding-top: 40px; }
+}
 
+/* ================================================================
+   13. VERY NARROW SCREENS + REDUCED MOTION
+   ================================================================ */
+@media (max-width: 380px) {
+  .signin { display: none; }
+  .primary { width: 100%; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; }
