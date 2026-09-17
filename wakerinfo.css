@@ -1,0 +1,68 @@
+:root {
+    --header-background: #e8a07c;
+    --header-border: #e8dec9;
+    --brand-color: #827148;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    min-width: 320px;
+}
+
+body {
+    background: var(--header-background);
+}
+
+.common-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 100px;
+    padding: 16px 80px;
+    background: var(--header-background);
+    border: 1px solid var(--header-border);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-mark {
+    width: 68px;
+    height: 68px;
+    flex: 0 0 68px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.logo-mark img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.brand-name {
+    margin: 0;
+    color: var(--brand-color);
+    font-family: "Outfit", sans-serif;
+    font-size: 28.8px;
+    font-weight: 800;
+    line-height: normal;
+    white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+    .common-header {
+        padding-right: 24px;
+        padding-left: 24px;
+    }
+}
