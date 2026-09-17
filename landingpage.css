@@ -100,6 +100,36 @@ h3 { color: var(--brown); font-family: "Outfit", sans-serif; }
 .walker-steps { margin-top: 56px; padding-top: 58px; border-top: 3px solid rgb(255 255 255 / 80%); }
 .walker-steps h2 { margin-bottom: 56px; }
 
+/* ================================================================
+   10. TESTIMONIAL SECTION
+   ================================================================ */
+.testimonial-section { background: var(--cream); }
+.testimonials { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.quote { display: flex; flex-direction: column; align-items: flex-start; min-height: 216px; padding: 32px; border: 1px solid var(--line); border-radius: 24px; background: var(--white); }
+.quote > img { width: 24px; height: 24px; margin-bottom: 20px; }
+.quote blockquote { margin: 0 0 20px; color: var(--brown); font-size: 16px; line-height: 1.6; }
+.quote figcaption { margin-top: auto; }
+.quote cite { color: var(--brown); font-weight: 700; font-style: normal; }
+.quote small { display: block; margin-top: 4px; color: var(--copy); font-size: 13px; }
+
+/* ================================================================
+   11. TABLET AND SMALL-DESKTOP RESPONSIVE RULES
+   ================================================================ */
+@media (max-width: 900px) {
+  .container { width: min(calc(100% - 48px), 650px); }
+  .header { height: auto; min-height: 76px; padding: 8px 0; }
+  .hero, .hero__inner { min-height: auto; }
+  .hero__inner { grid-template-columns: 1fr; gap: 42px; padding: 64px 0 56px; }
+  .hero-image { height: auto; aspect-ratio: 1.08; }
+  .watermark { top: -80px; left: -300px; width: 670px; }
+  .cards { grid-template-columns: 1fr; gap: 16px; }
+  .card { min-height: auto; }
+  .walker { grid-template-columns: 1fr; gap: 42px; }
+  .feature-image { height: auto; aspect-ratio: 1.04; }
+  .testimonials { grid-template-columns: 1fr; }
+}
+
+
 
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; }
