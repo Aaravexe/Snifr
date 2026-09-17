@@ -1,0 +1,23 @@
+/* Figma design: common header */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Outfit", sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+.site-header { align-items: center; background: #e8a07c; border: 1px solid #e8dec9; display: flex; justify-content: space-between; min-height: 100px; padding: 16px 80px; width: 100%; }
+.brand { align-items: center; display: flex; gap: 8px; text-decoration: none; }
+.brand-mark { border-radius: 50%; display: block; flex: 0 0 66px; height: 66px; overflow: hidden; width: 66px; }
+.brand-mark img { display: block; height: 100%; object-fit: cover; width: 100%; }
+.brand-name { color: #827148; font-size: 28.8px; font-weight: 800; line-height: normal; }
+.nav-actions { flex: 0 0 295px; height: 37px; }
+@media (max-width: 700px) { .site-header { padding-left: 24px; padding-right: 24px; } .nav-actions { flex-basis: 120px; } }
