@@ -58,5 +58,27 @@ body {
 .filter-chip img { display: block; height: 16px; width: 16px; }
 .filter-sort img { height: 12px; width: 12px; }
 
+.walker-heading {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  line-height: normal;
+  min-height: 40px;
+  white-space: nowrap;
+}
+
+.walker-heading h1 {
+  color: #827148;
+  font: 800 28px/normal "Outfit", sans-serif;
+  margin: 0;
+}
+
+.walker-heading p {
+  color: #6b5e43;
+  font: 400 15px/normal "Figtree", sans-serif;
+  margin: 0;
+}
+
 @media (max-width: 700px) { .site-header { padding-left: 24px; padding-right: 24px; } .nav-actions { flex-basis: 120px; } }
 @media (max-width: 700px) { .filter-bar { gap: 8px; overflow-x: auto; padding-left: 24px; padding-right: 24px; } }
+@media (max-width: 700px) { .walker-heading { gap: 16px; overflow-x: auto; padding: 0 24px; } }
