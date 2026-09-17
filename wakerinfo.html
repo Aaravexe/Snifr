@@ -17,12 +17,13 @@
     <header class="header" data-node-id="6:346">
         <div class="brand"><img src="assets/snifr-logo.png" alt="Snifr logo"><b>Snifr</b></div>
     </header>
+    <a class="back-button" href="walkersearch.html">← Go Back to Walker Listing</a>
     <main class="split" data-node-id="6:360">
         <div class="profile">
             <section class="intro card">
                 <div class="profile-head"><img class="profile-pic" src="assets/walker.png" alt="Priyanka">
                     <div>
-                        <h1>Priyanka ✓</h1>
+                        <h1>Priyanka</h1>
                         <p>★ 5.0 (54 reviews)</p>
                     </div>
                 </div>
@@ -62,21 +63,31 @@
             <section class="card calendar">
                 <h2>Select Date</h2>
                 <div class="days">
-                    <b>Mon<strong>15</strong></b><b>Tue<strong>16</strong></b><b>Wed<strong>17</strong></b><b>Thu<strong>18</strong></b><b>Fri<strong>19</strong></b>
+                    <button class="date-option selected" type="button"
+                        data-date="Mon, Mar 15">Mon<strong>15</strong></button><button class="date-option" type="button"
+                        data-date="Tue, Mar 16">Tue<strong>16</strong></button><button class="date-option" type="button"
+                        data-date="Wed, Mar 17">Wed<strong>17</strong></button><button class="date-option" type="button"
+                        data-date="Thu, Mar 18">Thu<strong>18</strong></button><button class="date-option" type="button"
+                        data-date="Fri, Mar 19">Fri<strong>19</strong></button>
                 </div>
                 <h3>Available Time Slots</h3>
-                <div class="times"><b>2:00 PM</b><b>3:30 PM</b><b>5:00 PM</b></div>
+                <div class="times"><button class="time-option selected" type="button">2:00 PM</button><button
+                        class="time-option" type="button">3:30 PM</button><button class="time-option" type="button">5:00
+                        PM</button></div>
             </section>
             <section class="card summary">
                 <h2>Booking Summary</h2>
-                <p>Dog Name <b>Sheru</b></p>
+                <p>Select Pet <span class="pet-select-wrap"><select id="pet-select" aria-label="Select pet">
+                            <option>Sheru</option>
+                            <option>Pinky</option>
+                        </select></span></p>
                 <p>Duration <b>60 Minute Walk</b></p>
-                <p>Date &amp; Time <b>Mon, Mar 15 @ 2:00 PM</b></p>
+                <p>Date &amp; Time <b id="booking-date-time">Mon, Mar 15 @ 2:00 PM</b></p>
                 <hr>
                 <p>Rate <span>₹250.00</span></p>
-                <p>Service Fee <span>₹30.00</span></p>
+                <p>Platform Service Fee <span>₹30.00</span></p>
                 <hr>
-                <h2>Total Cost <strong>₹280.00</strong></h2><button>Confirm Booking</button>
+                <h2>Total Cost <strong>₹280.00</strong></h2><button>Confirm Booking & Pay</button>
             </section>
         </aside>
     </main>
@@ -87,10 +98,18 @@
                 reliable.</p>
         </div>
         <nav>
-            <div><b>Product</b><a>Find Walkers</a><a>Safety Vetting</a><a>Pricing</a></div>
-            <div><b>Company</b><a>About Us</a><a>Press &amp; Media</a><a>Careers</a></div>
+            <div><b>Product</b><a href="index.html">Find Walkers</a><a href="#safety-vetting">Safety Vetting</a><a
+                    href="#pricing">Pricing</a></div>
+            <div><b>Company</b><a href="#about">About Us</a><a href="#press">Press &amp; Media</a><a
+                    href="#careers">Careers</a></div>
         </nav>
     </footer>
 </body>
+
+<script>
+    const dateTime = document.querySelector('#booking-date-time'); let selectedDate = 'Mon, Mar 15', selectedTime = '2:00 PM';
+    document.querySelectorAll('.date-option').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.date-option').forEach(item => item.classList.remove('selected')); button.classList.add('selected'); selectedDate = button.dataset.date; dateTime.textContent = `${selectedDate} @ ${selectedTime}`; }));
+    document.querySelectorAll('.time-option').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.time-option').forEach(item => item.classList.remove('selected')); button.classList.add('selected'); selectedTime = button.textContent; dateTime.textContent = `${selectedDate} @ ${selectedTime}`; }));
+</script>
 
 </html>
