@@ -1,75 +1,337 @@
-:root {
-    --header-background: #e8a07c;
-    --header-border: #e8dec9;
-    --brand-color: #827148;
+﻿:root {
+    --cream: #ffeed6;
+    --peach: #e8a07c;
+    --brown: #827148;
+    --muted: #6b5e43;
+    --green: #a5af79;
+    --border: #e8dec9
 }
 
 * {
-    box-sizing: border-box;
+    box-sizing: border-box
 }
 
-html,
 body {
     margin: 0;
-    min-width: 320px;
+    background: var(--cream);
+    color: var(--brown);
+    font-family: Figtree, sans-serif
 }
 
-body {
-    background: #ffeed6;
-    color: #827148;
-}
-
-.dashboard-content { display:flex; flex-direction:column; gap:40px; padding:40px 5.55%; }
-
-h1 { font:800 36px Outfit,sans-serif; } h2 { font:800 20px Outfit,sans-serif; }
-.footer { display:flex; justify-content:space-between; padding:60px 7%; border:1px solid #e8dec9; background:#ffeed6; } .footer-about { width:360px; display:flex; flex-direction:column; gap:12px; } .footer-about h2 { font-size:24px; } .footer p,.footer a { line-height:1.5; font-size:12px; } .footer-links { display:flex; gap:64px; } .footer-links div { display:flex; flex-direction:column; gap:10px; } .footer-links b { font-size:12px; } .footer a { text-decoration:none; }
-@media(max-width:700px){ .dashboard-content{padding:24px;} .quick-access-row,.walkers-row,.footer{flex-direction:column;} .footer-about{width:auto;} .footer-links{gap:40px;} h1{font-size:28px;} }
-
-.common-header {
+.header {
+    height: 80px;
+    padding: 6px 80px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    min-height: 100px;
-    padding: 16px 80px;
-    background: var(--header-background);
-    border: 1px solid var(--header-border);
+    background: var(--peach);
+    border: 1px solid var(--border)
 }
 
-.logo {
+.brand {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 8px
 }
 
-.logo-mark {
+.brand img {
     width: 68px;
     height: 68px;
-    flex: 0 0 68px;
-    overflow: hidden;
     border-radius: 50%;
+    object-fit: cover
 }
 
-.logo-mark img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.brand b {
+    font: 800 28.8px Outfit
 }
 
-.brand-name {
-    margin: 0;
-    color: var(--brand-color);
-    font-family: "Outfit", sans-serif;
-    font-size: 28.8px;
-    font-weight: 800;
-    line-height: normal;
+.split {
+    display: flex;
+    gap: 40px;
+    padding: 40px 5.55%
+}
+
+.profile {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px
+}
+
+.booking {
+    width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px
+}
+
+.card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 28px
+}
+
+.intro {
+    padding: 32px
+}
+
+.profile-head {
+    display: flex;
+    align-items: center;
+    gap: 24px
+}
+
+.profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover
+}
+
+.profile h1 {
+    margin: 0 0 8px;
+    font: 800 28px Outfit
+}
+
+.profile p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.5
+}
+
+.about {
+    margin-top: 24px
+}
+
+.about h2,
+.reviews h2,
+.calendar h2,
+.summary h2 {
+    margin: 0 0 8px;
+    font: 800 20px Outfit
+}
+
+.about p {
+    margin: 0
+}
+
+.stats {
+    display: flex;
+    gap: 24px;
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 13px
+}
+
+.stats span {
+    display: flex;
+    flex-direction: column;
+    gap: 4px
+}
+
+.stats strong {
+    color: var(--brown)
+}
+
+.reviews {
+    display: flex;
+    flex-direction: column;
+    gap: 12px
+}
+
+.reviews h2 {
+    margin-bottom: 0
+}
+
+.review {
+    padding: 16px 20px;
+    border-radius: 16px;
+    position: relative
+}
+
+.review b {
+    font-weight: 700
+}
+
+.review p {
+    margin: 10px 0 0;
+    font-size: 14px;
     white-space: nowrap;
+    overflow: hidden
 }
 
-@media (max-width: 640px) {
-    .common-header {
-        padding-right: 24px;
-        padding-left: 24px;
+.stars {
+    position: absolute;
+    right: 14px;
+    top: 14px;
+    display: flex;
+    gap: 4px
+}
+
+.stars img {
+    width: 16px;
+    height: 16px
+}
+
+.calendar h2,
+.summary h2 {
+    font-size: 18px
+}
+
+.days,
+.times {
+    display: flex;
+    gap: 8px
+}
+
+.days {
+    margin: 16px 0 18px
+}
+
+.days b,
+.times b {
+    flex: 1;
+    text-align: center;
+    border-radius: 12px;
+    padding: 10px 4px;
+    background: var(--cream);
+    font-size: 12px
+}
+
+.days b:first-child {
+    background: var(--green);
+    color: #fff
+}
+
+.days strong {
+    display: block;
+    font: 800 18px Outfit;
+    margin-top: 4px
+}
+
+.calendar h3 {
+    font-size: 14px;
+    margin: 0 0 8px;
+    color: var(--muted)
+}
+
+.times b {
+    border-radius: 8px;
+    font-size: 14px
+}
+
+.times b:first-child {
+    border: 1px solid var(--green);
+    background: rgba(165, 175, 121, .13)
+}
+
+.summary {
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+.summary p {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px
+}
+
+.summary p b,
+.summary p span {
+    color: var(--brown)
+}
+
+hr {
+    width: 100%;
+    border: 0;
+    border-top: 1px solid var(--border)
+}
+
+.summary h2 {
+    display: flex;
+    justify-content: space-between;
+    margin: 0
+}
+
+.summary h2 strong {
+    color: var(--green);
+    font-size: 22px
+}
+
+.summary button {
+    border: 0;
+    border-radius: 12px;
+    padding: 15px;
+    background: var(--green);
+    color: #fff;
+    font: 700 16px Figtree
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 60px 7%;
+    border: 1px solid var(--border)
+}
+
+.footer>div {
+    width: 360px
+}
+
+.footer h2 {
+    font: 800 32px Outfit;
+    margin: 0 0 16px
+}
+
+.footer p,
+.footer a {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--muted)
+}
+
+.footer nav {
+    display: flex;
+    gap: 64px
+}
+
+.footer nav div {
+    display: flex;
+    flex-direction: column;
+    gap: 14px
+}
+
+.footer nav b {
+    font: 800 15px Outfit
+}
+
+.footer a {
+    text-decoration: none
+}
+
+@media(max-width:800px) {
+
+    .split,
+    .footer {
+        flex-direction: column
+    }
+
+    .booking {
+        width: auto
+    }
+
+    .header {
+        padding-left: 24px
+    }
+
+    .footer>div {
+        width: auto
+    }
+
+    .footer nav {
+        gap: 40px
     }
 }
