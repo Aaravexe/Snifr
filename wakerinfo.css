@@ -24,7 +24,7 @@ body {
     display: flex;
     align-items: center;
     background: var(--peach);
-    border: 1px solid var(--border)
+    border: none;
 }
 
 .brand {
@@ -47,7 +47,8 @@ body {
 .split {
     display: flex;
     gap: 40px;
-    padding: 40px 5.55%
+    padding: 40px 5.55%;
+    padding-top: 25px
 }
 
 .profile {
@@ -104,7 +105,9 @@ body {
 }
 
 .about h2,
-.reviews h2{
+.reviews h2,
+.calendar h2,
+z {
     margin: 0 0 8px;
     font: 800 20px Outfit
 }
@@ -171,6 +174,103 @@ body {
     height: 16px
 }
 
+.calendar h2,
+.summary h2 {
+    font-size: 18px
+}
+
+.days,
+.times {
+    display: flex;
+    gap: 8px
+}
+
+.days {
+    margin: 16px 0 18px
+}
+
+.days b,
+.times b {
+    flex: 1;
+    text-align: center;
+    border-radius: 12px;
+    padding: 10px 4px;
+    background: var(--cream);
+    font-size: 12px
+}
+
+.days b:first-child {
+    background: var(--green);
+    color: #fff
+}
+
+.days strong {
+    display: block;
+    font: 800 18px Outfit;
+    margin-top: 4px
+}
+
+.calendar h3 {
+    font-size: 14px;
+    margin: 0 0 8px;
+    color: var(--muted)
+}
+
+.times b {
+    border-radius: 8px;
+    font-size: 14px
+}
+
+.times b:first-child {
+    border: 1px solid var(--green);
+    background: rgba(165, 175, 121, .13)
+}
+
+.summary {
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+.summary p {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px
+}
+
+.summary p b,
+.summary p span {
+    color: var(--brown)
+}
+
+hr {
+    width: 100%;
+    border: 0;
+    border-top: 1px solid var(--border)
+}
+
+.summary h2 {
+    display: flex;
+    justify-content: space-between;
+    margin: 0
+}
+
+.summary h2 strong {
+    color: var(--green);
+    font-size: 22px
+}
+
+.summary button {
+    border: 0;
+    border-radius: 12px;
+    padding: 15px;
+    background: var(--green);
+    color: #fff;
+    font: 700 16px Figtree
+}
+
 .footer {
     display: flex;
     justify-content: space-between;
@@ -235,4 +335,119 @@ body {
     .footer nav {
         gap: 40px
     }
+}
+
+.days button,
+.times button {
+    flex: 1;
+    text-align: center;
+    border-radius: 12px;
+    padding: 10px 4px;
+    background: var(--cream);
+    color: var(--brown);
+    font-size: 12px;
+    border: 0;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .18s ease, transform .18s ease, color .18s ease;
+}
+
+.times button {
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.days button strong {
+    display: block;
+    font: 800 18px Outfit;
+    margin-top: 4px;
+}
+
+.days button.selected,
+.times button.selected {
+    background: var(--green);
+    color: #fff;
+}
+
+.days button:not(.selected):hover,
+.times button:not(.selected):hover {
+    background: #f3e2c5;
+    transform: translateY(-1px);
+}
+
+.pet-select-wrap {
+    position: relative;
+    display: inline-flex;
+}
+
+.pet-select-wrap::after {
+    content: "⌄";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    pointer-events: none;
+    transform: translateY(-55%);
+}
+
+.pet-select-wrap select {
+    appearance: none;
+    min-width: 105px;
+    padding: 7px 28px 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--brown);
+    font: 700 15px Figtree;
+    cursor: pointer;
+}
+
+.back-button {
+    display: inline-block;
+    margin: 24px 5.55% 0;
+    color: var(--brown);
+    font: 700 18px Figtree, sans-serif;
+    font-weight:900;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color .18s ease, transform .18s ease;
+}
+
+.back-button:hover {
+    color: var(--green);
+    transform: translateX(-2px);
+}
+
+.summary button {
+    cursor: pointer;
+    transition: background .18s ease, transform .18s ease;
+}
+
+.summary button:hover {
+    background: #929e68;
+    transform: translateY(-1px);
+}
+
+.footer a {
+    cursor: pointer;
+    transition: color .18s ease, transform .18s ease;
+}
+
+.footer a:hover {
+    color: var(--peach);
+    transform: translateX(2px);
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.header {
+    width: 100vw;
+    max-width: none;
+    margin: 0;
+    border-radius: 0;
+    background-color: var(--peach);
 }
