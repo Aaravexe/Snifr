@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
 
+
 :root {
   --peach: #e8a07c;
   --border: #e8dec9;
@@ -13,6 +14,8 @@
 html, body { margin: 0; min-width: 320px; }
 
 body {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   background: #fffaf5;
   color: var(--ink);
@@ -101,6 +104,52 @@ h1 {
 .profile-button:hover { background: #f7eadc; }
 .profile-button:focus-visible, .brand:focus-visible { outline: 3px solid #fffaf5; outline-offset: 4px; }
 
+.site-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  background: #f7eadc;
+}
+
+.footer-content, .footer-bottom {
+  width: min(100%, 1440px);
+  margin: 0 auto;
+  padding-right: 80px;
+  padding-left: 80px;
+}
+
+.footer-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 64px;
+  padding-top: 56px;
+  padding-bottom: 52px;
+}
+
+.footer-brand-block { max-width: 300px; }
+.footer-brand .brand-mark { width: 56px; height: 56px; flex-basis: 56px; }
+.footer-brand .brand-name { font-size: 25px; }
+.footer-brand-block p { margin: 20px 0 0; color: var(--muted); font-size: 1rem; line-height: 1.5; }
+
+.footer-nav { display: flex; gap: clamp(56px, 8vw, 128px); }
+.footer-nav-group { display: flex; min-width: 120px; flex-direction: column; gap: 12px; }
+.footer-nav-group h2 { margin: 2px 0 8px; color: var(--ink); font-size: 1rem; font-weight: 700; }
+.footer-nav-group a { width: fit-content; color: var(--muted); font-size: .95rem; text-decoration: none; }
+.footer-nav-group a:hover { color: var(--olive); }
+.footer-nav-group a:focus-visible { outline: 3px solid var(--peach); outline-offset: 4px; }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+  padding-bottom: 24px;
+  color: var(--muted);
+  font-size: .875rem;
+}
+.footer-bottom p { margin: 0; }
+
 @media (max-width: 640px) {
   .main-nav, .welcome-row { padding-right: 24px; padding-left: 24px; }
   .main-nav { min-height: 84px; }
@@ -108,4 +157,8 @@ h1 {
   .brand-mark { width: 56px; height: 56px; flex-basis: 56px; }
   .brand-name { font-size: 25px; }
   .profile-button { width: 44px; height: 44px; flex-basis: 44px; }
+  .footer-content, .footer-bottom { padding-right: 24px; padding-left: 24px; }
+  .footer-content { flex-direction: column; gap: 40px; padding-top: 40px; padding-bottom: 36px; }
+  .footer-nav { width: 100%; justify-content: space-between; gap: 24px; }
+  .footer-bottom { flex-direction: column; gap: 8px; padding-top: 16px; padding-bottom: 20px; }
 }
