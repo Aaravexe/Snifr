@@ -15,8 +15,15 @@ body {
 }
 
 body {
-    background: var(--header-background);
+    background: #ffeed6;
+    color: #827148;
 }
+
+.dashboard-content { display:flex; flex-direction:column; gap:40px; padding:40px 5.55%; }
+
+h1 { font:800 36px Outfit,sans-serif; } h2 { font:800 20px Outfit,sans-serif; }
+.footer { display:flex; justify-content:space-between; padding:60px 7%; border:1px solid #e8dec9; background:#ffeed6; } .footer-about { width:360px; display:flex; flex-direction:column; gap:12px; } .footer-about h2 { font-size:24px; } .footer p,.footer a { line-height:1.5; font-size:12px; } .footer-links { display:flex; gap:64px; } .footer-links div { display:flex; flex-direction:column; gap:10px; } .footer-links b { font-size:12px; } .footer a { text-decoration:none; }
+@media(max-width:700px){ .dashboard-content{padding:24px;} .quick-access-row,.walkers-row,.footer{flex-direction:column;} .footer-about{width:auto;} .footer-links{gap:40px;} h1{font-size:28px;} }
 
 .common-header {
     display: flex;
