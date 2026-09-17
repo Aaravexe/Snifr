@@ -104,9 +104,7 @@ body {
 }
 
 .about h2,
-.reviews h2,
-.calendar h2,
-.summary h2 {
+.reviews h2{
     margin: 0 0 8px;
     font: 800 20px Outfit
 }
@@ -171,103 +169,6 @@ body {
 .stars img {
     width: 16px;
     height: 16px
-}
-
-.calendar h2,
-.summary h2 {
-    font-size: 18px
-}
-
-.days,
-.times {
-    display: flex;
-    gap: 8px
-}
-
-.days {
-    margin: 16px 0 18px
-}
-
-.days b,
-.times b {
-    flex: 1;
-    text-align: center;
-    border-radius: 12px;
-    padding: 10px 4px;
-    background: var(--cream);
-    font-size: 12px
-}
-
-.days b:first-child {
-    background: var(--green);
-    color: #fff
-}
-
-.days strong {
-    display: block;
-    font: 800 18px Outfit;
-    margin-top: 4px
-}
-
-.calendar h3 {
-    font-size: 14px;
-    margin: 0 0 8px;
-    color: var(--muted)
-}
-
-.times b {
-    border-radius: 8px;
-    font-size: 14px
-}
-
-.times b:first-child {
-    border: 1px solid var(--green);
-    background: rgba(165, 175, 121, .13)
-}
-
-.summary {
-    display: flex;
-    flex-direction: column;
-    gap: 10px
-}
-
-.summary p {
-    display: flex;
-    justify-content: space-between;
-    margin: 0;
-    color: var(--muted);
-    font-size: 15px
-}
-
-.summary p b,
-.summary p span {
-    color: var(--brown)
-}
-
-hr {
-    width: 100%;
-    border: 0;
-    border-top: 1px solid var(--border)
-}
-
-.summary h2 {
-    display: flex;
-    justify-content: space-between;
-    margin: 0
-}
-
-.summary h2 strong {
-    color: var(--green);
-    font-size: 22px
-}
-
-.summary button {
-    border: 0;
-    border-radius: 12px;
-    padding: 15px;
-    background: var(--green);
-    color: #fff;
-    font: 700 16px Figtree
 }
 
 .footer {
