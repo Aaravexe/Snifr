@@ -114,3 +114,196 @@ body {
     color: var(--muted);
     font: 400 18px/1.5 Figtree
 }
+
+.auth-card {
+    position: relative;
+    z-index: 2;
+    width: 480px;
+    margin: 110px 0 0 auto;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 24px
+}
+
+.auth-toggle {
+    height: 50px;
+    padding: 4px;
+    display: flex;
+    border-radius: 99px;
+    background: var(--cream)
+}
+
+.auth-toggle button {
+    flex: 1;
+    border: 0;
+    border-radius: 99px;
+    background: transparent;
+    color: var(--muted);
+    font: 600 15px Figtree;
+    cursor: pointer
+}
+
+.auth-toggle .active {
+    background: #fff
+}
+
+.role {
+    margin: 0;
+    padding: 0;
+    border: 0
+}
+
+.role legend {
+    margin-bottom: 12px;
+    color: var(--brown);
+    font: 700 14px Figtree
+}
+
+.role>div {
+    display: flex;
+    gap: 12px
+}
+
+.role-option {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--muted);
+    font: 600 15px Figtree;
+    cursor: pointer
+}
+
+.role-option.selected {
+    border: 2px solid var(--green);
+    padding: 11px;
+    color: var(--brown);
+    background: rgba(165, 175, 121, .08)
+}
+
+.role-option input {
+    display: none
+}
+
+.auth-card>label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--brown);
+    font: 700 13px Figtree
+}
+
+.auth-card>label input:not([type=checkbox]) {
+    height: 48px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--muted);
+    font: 400 15px Figtree
+}
+
+.extras {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--muted);
+    font: 400 14px Figtree
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+    gap: 8px
+}
+
+.remember input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--green)
+}
+
+.extras a {
+    color: var(--peach);
+    font-weight: 600;
+    text-decoration: none
+}
+
+.submit {
+    width: 100%;
+    padding: 16px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--green);
+    color: #fff;
+    font: 700 16px Figtree;
+    cursor: pointer;
+    transition: background .18s ease, transform .18s ease
+}
+
+@media(max-width:900px) {
+    .header {
+        padding: 5px 24px
+    }
+
+    .auth-container {
+        min-height: 900px;
+        padding: 0 24px
+    }
+
+    .auth-container::before {
+        left: -120px
+    }
+
+    .auth-copy {
+        width: 52%;
+        margin-top: 260px
+    }
+
+    .auth-copy h1 {
+        font-size: 38px
+    }
+
+    .auth-card {
+        width: 48%;
+        padding: 28px 24px
+    }
+}
+
+@media(max-width:650px) {
+    .header nav>a:first-child {
+        display: none
+    }
+
+    .auth-container {
+        display: block;
+        padding: 48px 20px
+    }
+
+    .auth-container::before {
+        left: 50%;
+        top: 20px;
+        transform: translateX(-50%);
+        width: 520px;
+        height: 520px
+    }
+
+    .auth-copy {
+        width: auto;
+        margin: 0 0 280px
+    }
+
+    .auth-copy h1 {
+        font-size: 36px
+    }
+
+    .auth-card {
+        width: 100%;
+        margin: 0;
+        padding: 28px 22px
+    }
+}
