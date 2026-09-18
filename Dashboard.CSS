@@ -24,7 +24,7 @@ body {
 
 .site-header {
   width: 100%;
-  border: none;
+  border: 1px solid var(--border);
   background: var(--peach);
 }
 
@@ -176,6 +176,3 @@ body{background:#ffeed6;color:#6b5e43;font-family:'Figtree','Outfit',sans-serif}
 .profile-button{border:0;border-radius:0;background:transparent;overflow:visible}
 .profile-button img{width:64px;height:64px;object-fit:contain}
 @media(max-width:700px){.profile-button img{width:48px;height:48px}}
-
-/* Figma node 6:84 */
-.search-section{padding:32px;gap:16px}.search-section h2{font-size:20px}.search-row{gap:16px;margin-top:0}.search-input{gap:12px;padding:14px 16px}.search-input img{width:20px;height:20px;display:block;flex:0 0 20px}.search-input input::placeholder{color:#827148;opacity:1}.search-button{padding:14px 32px}
