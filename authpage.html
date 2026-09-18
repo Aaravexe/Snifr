@@ -27,7 +27,16 @@
         <form class="auth-card">
             <div class="auth-toggle"><button type="button" class="active">Create Account</button><button
                     type="button">Sign In</button></div>
-            
+            <fieldset class="role">
+                <legend>I am a...</legend>
+                <div><label class="role-option selected"><input type="radio" name="role" checked>Pet Owner</label><label
+                        class="role-option"><input type="radio" name="role">Walker</label></div>
+            </fieldset><label>Email Address<input type="email" value="user@gmail.com"></label><label>Password<input
+                    type="password" value="password123"></label>
+            <div class="extras"><label class="remember"><input type="checkbox" checked>Remember Me</label><a
+                    href="#forgot">Forgot Password?</a></div><button class="submit" type="submit">Sign In</button>
+        </form>
+    </main>
 </body>
 
 </html>
