@@ -30,7 +30,7 @@ body {
     align-items: center;
     justify-content: space-between;
     background: var(--peach);
-    border: 1px solid var(--border)
+    border: none
 }
 
 .brand {
@@ -86,10 +86,10 @@ body {
 .auth-container::before {
     content: "";
     position: absolute;
-    width: 790px;
-    height: 790px;
-    left: 18%;
-    top: 130px;
+    width: 1500px;
+    height: 1500px;
+    left: -20%;
+    top: -265px;
     border-radius: 50%;
     background: url("assets/auth-illustration.png") center/cover no-repeat;
     opacity: .18;
