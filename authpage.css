@@ -61,3 +61,56 @@ body {
     text-decoration: none
 }
 
+.walker-link {
+    padding: 10px 20px;
+    border-radius: 99px;
+    background: var(--green);
+    font-size: 14px !important
+}
+
+.walker-link:hover,
+.submit:hover {
+    background: #929e68;
+    transform: translateY(-1px)
+}
+
+.auth-container {
+    position: relative;
+    min-height: 850px;
+    overflow: hidden;
+    padding: 0 7%;
+    display: flex;
+    align-items: flex-start
+}
+
+.auth-container::before {
+    content: "";
+    position: absolute;
+    width: 790px;
+    height: 790px;
+    left: 18%;
+    top: 130px;
+    border-radius: 50%;
+    background: url("assets/auth-illustration.png") center/cover no-repeat;
+    opacity: .18;
+    mix-blend-mode: multiply
+}
+
+.auth-copy {
+    position: relative;
+    z-index: 1;
+    width: 680px;
+    margin-top: 378px
+}
+
+.auth-copy h1 {
+    margin: 0 0 24px;
+    font: 800 48px/1.15 Outfit;
+    color: var(--brown)
+}
+
+.auth-copy p {
+    margin: 0;
+    color: var(--muted);
+    font: 400 18px/1.5 Figtree
+}
