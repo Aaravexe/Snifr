@@ -1,0 +1,42 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Snifr | Sign In</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Outfit:wght@700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="authpage.css">
+</head>
+
+<body>
+    <header class="header"><a class="brand" href="index.html"><img src="assets/auth-logo.png"
+                alt="Snifr logo"><span>Snifr</span></a>
+        <nav><a href="#auth">Sign In | Sign Up</a><a class="walker-link" href="#walker">Become a Walker</a></nav>
+    </header>
+    <main class="auth-container" id="auth">
+        <section class="auth-copy">
+            <h1>Connecting paws with loving hands</h1>
+            <p>Join thousands of pet parents who trust Snifr for on-demand walks.<br>Every walker is fully
+                background-checked.</p>
+        </section>
+        <form class="auth-card">
+            <div class="auth-toggle"><button type="button" class="active">Create Account</button><button
+                    type="button">Sign In</button></div>
+            <fieldset class="role">
+                <legend>I am a...</legend>
+                <div><label class="role-option selected"><input type="radio" name="role" checked>Pet Owner</label><label
+                        class="role-option"><input type="radio" name="role">Walker</label></div>
+            </fieldset><label>Email Address<input type="email" value="user@gmail.com"></label><label>Password<input
+                    type="password" value="password123"></label>
+            <div class="extras"><label class="remember"><input type="checkbox" checked>Remember Me</label><a
+                    href="#forgot">Forgot Password?</a></div><button class="submit" type="submit">Sign In</button>
+        </form>
+    </main>
+</body>
+
+</html>

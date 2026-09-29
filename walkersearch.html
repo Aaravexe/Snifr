@@ -1,42 +1,55 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Snifr" />
-    <title>Snifr</title>
-    <link rel="stylesheet" href="walkersearch.css" />
-  </head>
-  <body>
-    <header class="site-header" data-node-id="6:159">
-      <a class="brand" href="/" aria-label="Snifr home" data-node-id="6:160">
-        <span class="brand-mark" data-node-id="21:13"><img src="https://www.figma.com/api/mcp/asset/4106c27e-2457-4cb3-bead-a71828ad0839.png" alt="" /></span>
-        <span class="brand-name" data-node-id="6:163">Snifr</span>
-      </a>
-      <nav class="nav-actions" aria-label="Primary navigation" data-node-id="6:169"></nav>
-    </header>
 
-    <section class="filter-bar" aria-label="Search filters" data-node-id="6:173">
-      <p class="filter-label" data-node-id="6:174">Filters:</p>
-      <button class="filter-chip" type="button" data-node-id="6:175">
-        <img src="https://www.figma.com/api/mcp/asset/992df274-14b5-49f9-a5a8-79d296af43fb.svg" alt="" />
-        <span>Today, March 15</span>
-      </button>
-      <button class="filter-chip" type="button" data-node-id="6:178">
-        <img src="https://www.figma.com/api/mcp/asset/7bdcf01d-4eeb-4a97-9ace-cedef4275892.svg" alt="" />
-        <span>Afternoon (12pm - 4pm)</span>
-      </button>
-      <button class="filter-chip" type="button" data-node-id="6:181">
-        <img src="https://www.figma.com/api/mcp/asset/f48b4364-78e8-4b28-8021-e32dd4b9a89b.svg" alt="" />
-        <span>4.5+ Stars</span>
-      </button>
-      <button class="filter-chip filter-sort" type="button" data-node-id="6:184">
-        <span>Sort by: Best Match</span>
-        <img src="https://www.figma.com/api/mcp/asset/ef029489-b8f4-4486-9116-09814f1fb661.svg" alt="" />
-      </button>
-    </section>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Snifr" />
+  <title>Snifr</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Outfit:wght@700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="walkersearch.css" />
+</head>
 
-    <main class="results-content" data-node-id="6:187">
+<body>
+  <header class="site-header" data-node-id="6:159">
+    <a class="brand" href="/" aria-label="Snifr home" data-node-id="6:160">
+      <span class="brand-mark" data-node-id="21:13"><img src="assets/snifr-logo.png" alt="" /></span>
+      <span class="brand-name" data-node-id="6:163">Snifr</span>
+    </a>
+    <nav class="nav-actions" aria-label="Primary navigation" data-node-id="6:169"></nav>
+  </header>
+
+  <section class="filter-bar" aria-label="Search filters" data-node-id="6:173">
+    <p class="filter-label" data-node-id="6:174">Filters:</p>
+    <details class="filter-dropdown date-dropdown" data-node-id="6:175">
+      <summary class="filter-chip"><span>Today, March 15</span></summary>
+      <div class="dropdown-menu calendar-menu"><label for="walker-date">Choose a date</label><input id="walker-date"
+          type="date" value="2025-03-15" min="2025-03-15">
+        <div class="calendar-hint">Select a day for your walk</div>
+      </div>
+    </details>
+    <details class="filter-dropdown" data-node-id="6:178">
+      <summary class="filter-chip"><span>Afternoon (12pm - 4pm)</span></summary>
+      <div class="dropdown-menu"><a href="#">Morning (8am - 12pm)</a><a href="#">Afternoon (12pm - 4pm)</a><a
+          href="#">Evening (4pm - 8pm)</a></div>
+    </details>
+    <details class="filter-dropdown" data-node-id="6:181">
+      <summary class="filter-chip"><span>4.5+ Stars</span></summary>
+      <div class="dropdown-menu rating-menu"><a href="#">1 Star</a><a href="#">1.5 Stars</a><a href="#">2 Stars</a><a
+          href="#">2.5 Stars</a><a href="#">3 Stars</a><a href="#">3.5 Stars</a><a href="#">4 Stars</a><a href="#">4.5
+          Stars</a><a href="#">5 Stars</a></div>
+    </details>
+    <details class="filter-dropdown filter-sort" data-node-id="6:184">
+      <summary class="filter-chip"><span>Sort by: Best Match</span></summary>
+      <div class="dropdown-menu"><a href="#">Best Match</a><a href="#">Highest Rated</a><a href="#">Lowest Hourly
+          Rate</a></div>
+    </details>
+  </section>
+
+  <main class="results-content" data-node-id="6:187">
     <section class="walker-heading" data-node-id="6:188">
       <h1 data-node-id="6:189">Available Walkers in Your Area</h1>
       <p data-node-id="6:190">5 active walkers found</p>
@@ -44,25 +57,111 @@
 
     <section class="walker-grid" aria-label="Available walkers" data-node-id="6:191">
       <article class="walker-card" data-node-id="6:218">
-        <div class="card-top"><img class="avatar" src="https://www.figma.com/api/mcp/asset/34cf2ca1-330c-46f5-aa09-7e89fc267d35.png" alt="" /><div><h2>Priyanka</h2><div class="rating"><span class="stars"><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /></span> (54)</div></div></div>
-        <div class="card-footer"><div><span>Hourly Rate</span><strong>₹250/hr</strong></div><a href="wakerinfo.html">View Profile</a></div>
+        <div class="card-top"><img class="avatar"
+            src="https://www.figma.com/api/mcp/asset/34cf2ca1-330c-46f5-aa09-7e89fc267d35.png" alt="" />
+          <div>
+            <h2>Priyanka</h2>
+            <div class="rating"><span class="stars"><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /></span>
+              (54)</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div><span>Hourly Rate</span><strong>₹250/hr</strong></div><a href="wakerinfo.html">View Profile</a>
+        </div>
       </article>
-      <article class="walker-card"><div class="card-top"><img class="avatar" src="https://www.figma.com/api/mcp/asset/34cf2ca1-330c-46f5-aa09-7e89fc267d35.png" alt="" /><div><h2>Shubham Bhardwaj</h2><div class="rating"><span class="stars"><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/7df49086-c954-4972-ac31-8dc27c33ba54.svg" alt="" /></span> (29)</div></div></div><div class="card-footer"><div><span>Hourly Rate</span><strong>₹180/hr</strong></div><a href="wakerinfo.html">View Profile</a></div></article>
-      <article class="walker-card"><div class="card-top"><img class="avatar" src="https://www.figma.com/api/mcp/asset/34cf2ca1-330c-46f5-aa09-7e89fc267d35.png" alt="" /><div><h2>Anshul Sharma</h2><div class="rating"><span class="stars"><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/7df49086-c954-4972-ac31-8dc27c33ba54.svg" alt="" /></span> (88)</div></div></div><div class="card-footer"><div><span>Hourly Rate</span><strong>₹210/hr</strong></div><a href="wakerinfo.html">View Profile</a></div></article>
-      <article class="walker-card"><div class="card-top"><img class="avatar" src="https://www.figma.com/api/mcp/asset/34cf2ca1-330c-46f5-aa09-7e89fc267d35.png" alt="" /><div><h2>Gaurav Pratap Singh</h2><div class="rating"><span class="stars"><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /></span> (67)</div></div></div><div class="card-footer"><div><span>Hourly Rate</span><strong>₹240/hr</strong></div><a href="wakerinfo.html">View Profile</a></div></article>
-      <article class="walker-card"><div class="card-top"><img class="avatar" src="https://www.figma.com/api/mcp/asset/34cf2ca1-330c-46f5-aa09-7e89fc267d35.png" alt="" /><div><h2>Aarav Chib</h2><div class="rating"><span class="stars"><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /></span> (15)</div></div></div><div class="card-footer"><div><span>Hourly Rate</span><strong>₹676/hr</strong></div><a href="wakerinfo.html">View Profile</a></div></article>
+      <article class="walker-card">
+        <div class="card-top"><img class="avatar"
+            src="https://www.figma.com/api/mcp/asset/34cf2ca1-330c-46f5-aa09-7e89fc267d35.png" alt="" />
+          <div>
+            <h2>Shubham Bhardwaj</h2>
+            <div class="rating"><span class="stars"><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/7df49086-c954-4972-ac31-8dc27c33ba54.svg" alt="" /></span>
+              (29)</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div><span>Hourly Rate</span><strong>₹180/hr</strong></div><a href="wakerinfo.html">View Profile</a>
+        </div>
+      </article>
+      <article class="walker-card">
+        <div class="card-top"><img class="avatar"
+            src="https://www.figma.com/api/mcp/asset/34cf2ca1-330c-46f5-aa09-7e89fc267d35.png" alt="" />
+          <div>
+            <h2>Anshul Sharma</h2>
+            <div class="rating"><span class="stars"><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/7df49086-c954-4972-ac31-8dc27c33ba54.svg" alt="" /></span>
+              (88)</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div><span>Hourly Rate</span><strong>₹210/hr</strong></div><a href="wakerinfo.html">View Profile</a>
+        </div>
+      </article>
+      <article class="walker-card">
+        <div class="card-top"><img class="avatar"
+            src="https://www.figma.com/api/mcp/asset/34cf2ca1-330c-46f5-aa09-7e89fc267d35.png" alt="" />
+          <div>
+            <h2>Thakur Gaurav Pratap Singh Chandel</h2>
+            <div class="rating"><span class="stars"><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /></span>
+              (67)</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div><span>Hourly Rate</span><strong>₹240/hr</strong></div><a href="wakerinfo.html">View Profile</a>
+        </div>
+      </article>
+      <article class="walker-card">
+        <div class="card-top"><img class="avatar"
+            src="https://www.figma.com/api/mcp/asset/34cf2ca1-330c-46f5-aa09-7e89fc267d35.png" alt="" />
+          <div>
+            <h2>Aarav Chib</h2>
+            <div class="rating"><span class="stars"><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
+                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /></span>
+              (15)</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div><span>Hourly Rate</span><strong>₹676/hr</strong></div><a href="wakerinfo.html">View Profile</a>
+        </div>
+      </article>
     </section>
-    </main>
+  </main>
 
-    <footer class="search-footer" data-node-id="38:33">
-      <div class="footer-brand" data-node-id="38:35">
-        <h2 data-node-id="38:37">Snifr</h2>
-        <p data-node-id="38:38">Providing safe, professional on-demand pet care for modern families. Verified, background-checked, and reliable.</p>
-      </div>
-      <nav class="footer-links" aria-label="Footer navigation" data-node-id="38:39">
-        <div data-node-id="38:40"><strong>Product</strong><a href="#">Find Walkers</a><a href="#">Safety Vetting</a><a href="#">Pricing</a></div>
-        <div data-node-id="38:45"><strong>Company</strong><a href="#">About Us</a><a href="#">Press &amp; Media</a><a href="#">Careers</a></div>
-      </nav>
-    </footer>
-  </body>
+  <footer class="search-footer" data-node-id="38:33">
+    <div class="footer-brand" data-node-id="38:35">0
+      <h2 data-node-id="38:37">Snifr</h2>
+      <p data-node-id="38:38">Providing safe, professional on-demand pet care for modern families. Verified,
+        background-checked, and reliable.</p>
+    </div>
+    <nav class="footer-links" aria-label="Footer navigation" data-node-id="38:39">
+      <div data-node-id="38:40"><strong>Product</strong><a href="#">Find Walkers</a><a href="#">Safety Vetting</a><a
+          href="#">Pricing</a></div>
+      <div data-node-id="38:45"><strong>Company</strong><a href="#">About Us</a><a href="#">Press &amp; Media</a><a
+          href="#">Careers</a></div>
+    </nav>
+  </footer>
+</body>
+
 </html>
