@@ -1,0 +1,7 @@
+[
+  { "id": "priyanka", "name": "Priyanka", "rating": 5, "reviewCount": 54, "hourlyRate": 250, "availableDates": ["2025-03-15", "2025-03-16"], "availableTimes": ["morning", "afternoon"], "matchRank": 1, "image": "assets/walker.png" },
+  { "id": "shubham-bhardwaj", "name": "Shubham Bhardwaj", "rating": 4.5, "reviewCount": 29, "hourlyRate": 180, "availableDates": ["2025-03-15", "2025-03-17"], "availableTimes": ["afternoon", "evening"], "matchRank": 2, "image": "assets/walker.png" },
+  { "id": "anshul-sharma", "name": "Anshul Sharma", "rating": 4.5, "reviewCount": 88, "hourlyRate": 210, "availableDates": ["2025-03-15", "2025-03-16", "2025-03-18"], "availableTimes": ["morning", "evening"], "matchRank": 3, "image": "assets/walker.png" },
+  { "id": "thakur-gaurav-pratap-singh-chandel", "name": "Thakur Gaurav Pratap Singh Chandel", "rating": 5, "reviewCount": 67, "hourlyRate": 240, "availableDates": ["2025-03-15", "2025-03-16", "2025-03-17"], "availableTimes": ["afternoon", "evening"], "matchRank": 4, "image": "assets/walker.png" },
+  { "id": "aarav-chib", "name": "Aarav Chib", "rating": 4, "reviewCount": 15, "hourlyRate": 676, "availableDates": ["2025-03-15", "2025-03-18"], "availableTimes": ["morning", "afternoon"], "matchRank": 5, "image": "assets/walker.png" }
+]

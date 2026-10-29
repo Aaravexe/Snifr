@@ -1,178 +1,35 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Snifr" />
-  <title>Snifr</title>
+  <meta name="description" content="Find local dog walkers on Snifr" />
+  <title>Find Walkers | Snifr</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Outfit:wght@700;800&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="walkersearch.css" />
 </head>
-
 <body>
-  <header class="site-header" data-node-id="6:159">
-    <a class="brand" href="landingpage.html" aria-label="Snifr home" data-node-id="6:160">
-      <span class="brand-mark" data-node-id="21:13"><img src="assets/snifr-logo.png" alt="" /></span>
-      <span class="brand-name" data-node-id="6:163">Snifr</span>
-    </a>
-    <nav class="nav-actions page-nav" aria-label="Primary navigation" data-node-id="6:169"><a href="landingpage.html">Home</a><a href="Dashboard.HTML">Dashboard</a><a href="walkersearch.html" aria-current="page">Find Walkers</a><a href="authpage.html?role=walker">Become a Walker</a></nav>
+  <header class="site-header">
+    <a class="brand" href="landingpage.html" aria-label="Snifr home"><span class="brand-mark"><img src="assets/snifr-logo.png" alt="" /></span><span class="brand-name">Snifr</span></a>
+    <nav class="nav-actions page-nav" aria-label="Primary navigation"><a href="landingpage.html">Home</a><a href="Dashboard.HTML">Dashboard</a><a href="walkersearch.html" aria-current="page">Find Walkers</a><a href="authpage.html?role=walker">Become a Walker</a></nav>
   </header>
-
-  <section class="filter-bar" aria-label="Search filters" data-node-id="6:173">
-    <p class="filter-label" data-node-id="6:174">Filters:</p>
-    <details class="filter-dropdown date-dropdown" data-node-id="6:175">
-      <summary class="filter-chip"><span>Today, March 15</span></summary>
-      <div class="dropdown-menu calendar-menu"><label for="walker-date">Choose a date</label><input id="walker-date"
-          type="date" value="2025-03-15" min="2025-03-15">
-        <div class="calendar-hint">Select a day for your walk</div>
-      </div>
-    </details>
-    <details class="filter-dropdown" data-node-id="6:178">
-      <summary class="filter-chip"><span>Any time</span></summary>
-      <div class="dropdown-menu"><a href="#" data-time="morning">Morning (8am - 12pm)</a><a href="#" data-time="afternoon">Afternoon (12pm - 4pm)</a><a
-          href="#" data-time="evening">Evening (4pm - 8pm)</a></div>
-    </details>
-    <details class="filter-dropdown" data-node-id="6:181">
-      <summary class="filter-chip"><span>Any rating</span></summary>
-      <div class="dropdown-menu rating-menu"><a href="#" data-rating="1">1 Star</a><a href="#" data-rating="1.5">1.5 Stars</a><a href="#" data-rating="2">2 Stars</a><a
-          href="#" data-rating="2.5">2.5 Stars</a><a href="#" data-rating="3">3 Stars</a><a href="#" data-rating="3.5">3.5 Stars</a><a href="#" data-rating="4">4 Stars</a><a href="#" data-rating="4.5">4.5
-          Stars</a><a href="#" data-rating="5">5 Stars</a></div>
-    </details>
-    <details class="filter-dropdown filter-sort" data-node-id="6:184">
-      <summary class="filter-chip"><span>Sort by: Best Match</span></summary>
-      <div class="dropdown-menu"><a href="#" data-sort="match">Best Match</a><a href="#" data-sort="rating">Highest Rated</a><a href="#" data-sort="rate">Lowest Hourly
-          Rate</a></div>
-    </details>
+  <section class="filter-bar" aria-label="Search filters">
+    <p class="filter-label">Filters:</p>
+    <details class="filter-dropdown date-dropdown"><summary class="filter-chip"><span>Today, March 15</span></summary><div class="dropdown-menu calendar-menu"><label for="walker-date">Choose a date</label><input id="walker-date" type="date" value="2025-03-15" min="2025-03-15"><div class="calendar-hint">Select a day for your walk</div></div></details>
+    <details class="filter-dropdown"><summary class="filter-chip"><span>Any time</span></summary><div class="dropdown-menu"><a href="#" data-time="morning">Morning (8am - 12pm)</a><a href="#" data-time="afternoon">Afternoon (12pm - 4pm)</a><a href="#" data-time="evening">Evening (4pm - 8pm)</a></div></details>
+    <details class="filter-dropdown"><summary class="filter-chip"><span>Any rating</span></summary><div class="dropdown-menu rating-menu"><a href="#" data-rating="1">1 Star</a><a href="#" data-rating="1.5">1.5 Stars</a><a href="#" data-rating="2">2 Stars</a><a href="#" data-rating="2.5">2.5 Stars</a><a href="#" data-rating="3">3 Stars</a><a href="#" data-rating="3.5">3.5 Stars</a><a href="#" data-rating="4">4 Stars</a><a href="#" data-rating="4.5">4.5 Stars</a><a href="#" data-rating="5">5 Stars</a></div></details>
+    <details class="filter-dropdown filter-sort"><summary class="filter-chip"><span>Sort by: Best Match</span></summary><div class="dropdown-menu"><a href="#" data-sort="match">Best Match</a><a href="#" data-sort="rating">Highest Rated</a><a href="#" data-sort="rate">Lowest Hourly Rate</a></div></details>
     <button class="clear-filters" type="button">Clear filters</button>
   </section>
-
-  <main class="results-content" data-node-id="6:187">
-    <section class="walker-heading" data-node-id="6:188">
-      <h1 data-node-id="6:189">Available Walkers in Your Area</h1>
-      <p data-node-id="6:190">5 active walkers found</p>
-    </section>
-
-    <section class="walker-grid" aria-label="Available walkers" data-node-id="6:191">
-      <article class="walker-card" data-node-id="6:218" data-dates="2025-03-15,2025-03-16" data-times="morning,afternoon" data-rating="5" data-rate="250" data-match="1">
-        <div class="card-top"><img class="avatar"
-            src="assets/walker.png" alt="" />
-          <div>
-            <h2>Priyanka</h2>
-            <div class="rating"><span class="stars"><img
-                  src="assets/star.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /></span>
-              (54)</div>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div><span>Hourly Rate</span><strong>₹250/hr</strong></div><a href="wakerinfo.html">View Profile</a>
-        </div>
-      </article>
-      <article class="walker-card" data-dates="2025-03-15,2025-03-17" data-times="afternoon,evening" data-rating="4.5" data-rate="180" data-match="2">
-        <div class="card-top"><img class="avatar"
-            src="https://www.figma.com/api/mcp/asset/34cf2ca1-330c-46f5-aa09-7e89fc267d35.png" alt="" />
-          <div>
-            <h2>Shubham Bhardwaj</h2>
-            <div class="rating"><span class="stars"><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="assets/star.svg" alt="" /></span>
-              (29)</div>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div><span>Hourly Rate</span><strong>₹180/hr</strong></div><a href="wakerinfo.html">View Profile</a>
-        </div>
-      </article>
-      <article class="walker-card" data-dates="2025-03-15,2025-03-16,2025-03-18" data-times="morning,evening" data-rating="4.5" data-rate="210" data-match="3">
-        <div class="card-top"><img class="avatar"
-            src="https://www.figma.com/api/mcp/asset/34cf2ca1-330c-46f5-aa09-7e89fc267d35.png" alt="" />
-          <div>
-            <h2>Anshul Sharma</h2>
-            <div class="rating"><span class="stars"><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/7df49086-c954-4972-ac31-8dc27c33ba54.svg" alt="" /></span>
-              (88)</div>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div><span>Hourly Rate</span><strong>₹210/hr</strong></div><a href="wakerinfo.html">View Profile</a>
-        </div>
-      </article>
-      <article class="walker-card" data-dates="2025-03-15,2025-03-16,2025-03-17" data-times="afternoon,evening" data-rating="5" data-rate="240" data-match="4">
-        <div class="card-top"><img class="avatar"
-            src="https://www.figma.com/api/mcp/asset/34cf2ca1-330c-46f5-aa09-7e89fc267d35.png" alt="" />
-          <div>
-            <h2>Thakur Gaurav Pratap Singh Chandel</h2>
-            <div class="rating"><span class="stars"><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /></span>
-              (67)</div>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div><span>Hourly Rate</span><strong>₹240/hr</strong></div><a href="wakerinfo.html">View Profile</a>
-        </div>
-      </article>
-      <article class="walker-card" data-dates="2025-03-15,2025-03-18" data-times="morning,afternoon" data-rating="5" data-rate="676" data-match="5">
-        <div class="card-top"><img class="avatar"
-            src="https://www.figma.com/api/mcp/asset/34cf2ca1-330c-46f5-aa09-7e89fc267d35.png" alt="" />
-          <div>
-            <h2>Aarav Chib</h2>
-            <div class="rating"><span class="stars"><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /><img
-                  src="https://www.figma.com/api/mcp/asset/c6aa7728-ac09-437d-b6ca-40ec6371f3a6.svg" alt="" /></span>
-              (15)</div>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div><span>Hourly Rate</span><strong>₹676/hr</strong></div><a href="wakerinfo.html">View Profile</a>
-        </div>
-      </article>
-    </section>
-    <section class="no-walkers" hidden aria-live="polite">
-      <h2>No walkers found</h2>
-      <p>Try choosing a different date, time, or rating.</p>
-      <button class="no-results-reset" type="button">Clear filters</button>
-    </section>
+  <main class="results-content">
+    <section class="walker-heading"><h1>Available Walkers in Your Area</h1><p aria-live="polite">Loading walkers…</p></section>
+    <section class="walker-grid" aria-label="Available walkers"></section>
+    <section class="no-walkers" hidden aria-live="polite"><h2>No walkers found</h2><p>Try choosing a different date, time, or rating.</p><button class="no-results-reset" type="button">Clear filters</button></section>
   </main>
-
-  <footer class="search-footer" data-node-id="38:33">
-    <div class="footer-brand" data-node-id="38:35">0
-      <h2 data-node-id="38:37">Snifr</h2>
-      <p data-node-id="38:38">Providing safe, professional on-demand pet care for modern families. Verified,
-        background-checked, and reliable.</p>
-    </div>
-    <nav class="footer-links" aria-label="Footer navigation" data-node-id="38:39">
-      <div data-node-id="38:40"><strong>Product</strong><a href="walkersearch.html">Find Walkers</a><a href="landingpage.html#how-it-works">How It Works</a><a
-          href="authpage.html?role=walker">Become a Walker</a></div>
-      <div data-node-id="38:45"><strong>Company</strong><a href="landingpage.html">About Us</a><a href="authpage.html">Sign In / Sign Up</a><a
-          href="landingpage.html#top">Back to top</a></div>
-    </nav>
-  </footer>
-<<<<<<< HEAD
+  <footer class="search-footer"><div class="footer-brand"><h2>Snifr</h2><p>Providing safe, professional on-demand pet care for modern families. Verified, background-checked, and reliable.</p></div><nav class="footer-links" aria-label="Footer navigation"><div><strong>Product</strong><a href="walkersearch.html">Find Walkers</a><a href="landingpage.html#how-it-works">How It Works</a><a href="authpage.html?role=walker">Become a Walker</a></div><div><strong>Company</strong><a href="landingpage.html">About Us</a><a href="authpage.html">Sign In / Sign Up</a><a href="landingpage.html#top">Back to top</a></div></nav></footer>
   <script src="landingpage.js"></script>
-=======
   <script src="walkersearch.js"></script>
->>>>>>> 2e2a07fde8d3e714904ca19d79fb2ace6c6c8c74
 </body>
-
 </html>
