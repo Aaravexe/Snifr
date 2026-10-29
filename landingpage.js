@@ -1,4 +1,4 @@
-/* Shared navigation behaviour for the static five-page prototype. */
+/* Shared navigation behaviour for the five-page prototype. */
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener('click', (event) => {
