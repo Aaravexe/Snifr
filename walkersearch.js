@@ -11,12 +11,29 @@ document.querySelectorAll('img[src*="figma.com/api/mcp/asset"]').forEach(image =
   const cards = [...document.querySelectorAll('.walker-card')];
   const grid = document.querySelector('.walker-grid');
   const count = document.querySelector('.walker-heading p');
-  const state = { date: dateInput.value, time: '', rating: 0, sort: 'match' };
+  const noWalkers = document.querySelector('.no-walkers');
+  const clearButtons = document.querySelectorAll('.clear-filters, .no-results-reset');
+  const defaults = { date: dateInput.value, time: '', rating: 0, sort: 'match' };
+  const state = { ...defaults };
 
   const close = dropdown => dropdown.removeAttribute('open');
   const label = (selector, value) => {
     document.querySelector(`${selector} summary span`).textContent = value;
   };
+
+  function formatDate(dateValue) {
+    const date = new Date(`${dateValue}T00:00:00`);
+    return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+
+  function updateFilterLabels() {
+    label('.date-dropdown', formatDate(state.date));
+    label('.filter-dropdown:nth-of-type(2)', state.time
+      ? document.querySelector(`[data-time="${state.time}"]`).textContent
+      : 'Any time');
+    label('.filter-dropdown:nth-of-type(3)', state.rating ? `${state.rating} Stars` : 'Any rating');
+    label('.filter-sort', `Sort by: ${document.querySelector(`[data-sort="${state.sort}"]`).textContent}`);
+  }
 
   function renderRatings() {
     cards.forEach(card => {
@@ -56,12 +73,13 @@ document.querySelectorAll('img[src*="figma.com/api/mcp/asset"]').forEach(image =
     cards.forEach(card => { card.hidden = !visible.includes(card); });
     visible.forEach(card => grid.appendChild(card));
     count.textContent = `${visible.length} active walker${visible.length === 1 ? '' : 's'} found`;
+    noWalkers.hidden = visible.length !== 0;
+    grid.hidden = visible.length === 0;
   }
 
   dateInput.addEventListener('change', () => {
     state.date = dateInput.value;
-    const date = new Date(`${state.date}T00:00:00`);
-    label('.date-dropdown', date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }));
+    updateFilterLabels();
     applyFilters();
   });
   document.querySelectorAll('[data-time]').forEach(link => link.addEventListener('click', event => {
@@ -76,6 +94,14 @@ document.querySelectorAll('img[src*="figma.com/api/mcp/asset"]').forEach(image =
     event.preventDefault(); state.sort = link.dataset.sort;
     label('.filter-sort', `Sort by: ${link.textContent}`); close(sortDropdown); applyFilters();
   }));
+  clearButtons.forEach(button => button.addEventListener('click', () => {
+    Object.assign(state, defaults);
+    dateInput.value = defaults.date;
+    document.querySelectorAll('.filter-dropdown').forEach(close);
+    updateFilterLabels();
+    applyFilters();
+  }));
   renderRatings();
+  updateFilterLabels();
   applyFilters();
 })();

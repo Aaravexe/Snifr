@@ -144,6 +144,8 @@ body {
   width: 100%;
 }
 
+.walker-grid[hidden] { display: none; }
+
 .walker-card {
   background: #fff;
   border: 1px solid #e8dec9;
@@ -156,9 +158,53 @@ body {
   padding: 20px 24px;
 }
 
+.clear-filters,
+.no-results-reset {
+  background: transparent;
+  border: 0;
+  color: #827148;
+  cursor: pointer;
+  font: 700 14px/normal "Figtree", sans-serif;
+  padding: 10px 4px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.clear-filters:hover,
+.no-results-reset:hover {
+  color: #a5af79;
+}
+
 /* The card layout rule must not override the HTML hidden state used by filters. */
 .walker-card[hidden] {
   display: none;
+}
+
+.no-walkers {
+  align-items: center;
+  background: #fff;
+  border: 1px dashed #d4c6aa;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  min-height: 240px;
+  padding: 32px;
+  text-align: center;
+}
+
+.no-walkers[hidden] { display: none; }
+
+.no-walkers h2 {
+  color: #827148;
+  font: 800 24px/normal "Outfit", sans-serif;
+  margin: 0;
+}
+
+.no-walkers p {
+  color: #6b5e43;
+  margin: 0;
 }
 
 .card-top {
