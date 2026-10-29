@@ -15,7 +15,8 @@
 
 <body>
     <header class="header" data-node-id="6:346">
-        <div class="brand"><img src="assets/snifr-logo.png" alt="Snifr logo"><b>Snifr</b></div>
+        <a class="brand" href="landingpage.html"><img src="assets/snifr-logo.png" alt="Snifr logo"><b>Snifr</b></a>
+        <nav class="page-nav" aria-label="Primary navigation"><a href="landingpage.html">Home</a><a href="Dashboard.HTML">Dashboard</a><a href="walkersearch.html">Find Walkers</a><a href="authpage.html?role=walker">Become a Walker</a></nav>
     </header>
     <a class="back-button" href="walkersearch.html">← Go Back to Walker Listing</a>
     <main class="split" data-node-id="6:360">
@@ -104,10 +105,10 @@
                 reliable.</p>
         </div>
         <nav>
-            <div><b>Product</b><a href="index.html">Find Walkers</a><a href="#safety-vetting">Safety Vetting</a><a
-                    href="#pricing">Pricing</a></div>
-            <div><b>Company</b><a href="#about">About Us</a><a href="#press">Press &amp; Media</a><a
-                    href="#careers">Careers</a></div>
+            <div><b>Product</b><a href="walkersearch.html">Find Walkers</a><a href="landingpage.html#how-it-works">How It Works</a><a
+                    href="authpage.html?role=walker">Become a Walker</a></div>
+            <div><b>Company</b><a href="landingpage.html">About Us</a><a href="authpage.html">Sign In / Sign Up</a><a
+                    href="landingpage.html#top">Back to top</a></div>
         </nav>
     </footer>
 
@@ -126,4 +127,14 @@
     <script src="wakerinfo.js"></script>
 </body>
 
+<<<<<<< HEAD
+<script>
+    const dateTime = document.querySelector('#booking-date-time'); let selectedDate = 'Mon, Mar 15', selectedTime = '2:00 PM';
+    document.querySelectorAll('.date-option').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.date-option').forEach(item => item.classList.remove('selected')); button.classList.add('selected'); selectedDate = button.dataset.date; dateTime.textContent = `${selectedDate} @ ${selectedTime}`; }));
+    document.querySelectorAll('.time-option').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.time-option').forEach(item => item.classList.remove('selected')); button.classList.add('selected'); selectedTime = button.textContent; dateTime.textContent = `${selectedDate} @ ${selectedTime}`; }));
+</script>
+<script src="landingpage.js"></script>
+
+=======
+>>>>>>> 2e2a07fde8d3e714904ca19d79fb2ace6c6c8c74
 </html>
