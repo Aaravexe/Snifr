@@ -160,6 +160,11 @@ body {
   padding: 20px 24px;
 }
 
+/* The card layout rule must not override the HTML hidden state used by filters. */
+.walker-card[hidden] {
+  display: none;
+}
+
 .card-top {
   align-items: center;
   display: flex;
@@ -200,6 +205,26 @@ body {
   height: 16px;
   width: 16px;
 }
+
+/* Ratings can use half-star increments without requiring another external asset. */
+.stars .rating-star {
+  color: #e8a07c;
+  display: inline-block;
+  font-size: 17px;
+  height: 17px;
+  line-height: 17px;
+  position: relative;
+  width: 16px;
+}
+
+.stars .rating-star.half {
+  background: linear-gradient(90deg, #e8a07c 50%, #e8dec9 50%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.stars .rating-star.empty { color: #e8dec9; }
 
 .card-footer {
   align-items: center;
