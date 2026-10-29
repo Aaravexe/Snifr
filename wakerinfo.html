@@ -75,9 +75,10 @@
                         class="time-option" type="button">3:30 PM</button><button class="time-option" type="button">5:00
                         PM</button></div>
             </section>
-            <section class="card summary">
+            <form class="card summary" id="booking-form" novalidate>
                 <h2>Booking Summary</h2>
                 <p>Select Pet <span class="pet-select-wrap"><select id="pet-select" aria-label="Select pet">
+                            <option value="">Choose a pet</option>
                             <option>Sheru</option>
                             <option>Pinky</option>
                         </select></span></p>
@@ -87,8 +88,13 @@
                 <p>Rate <span>₹250.00</span></p>
                 <p>Platform Service Fee <span>₹30.00</span></p>
                 <hr>
-                <h2>Total Cost <strong>₹280.00</strong></h2><button>Confirm Booking & Pay</button>
-            </section>
+                <h2>Total Cost <strong>₹280.00</strong></h2>
+                <p class="booking-message" id="booking-message" role="alert" aria-live="polite"></p>
+                <div class="booking-actions">
+                    <button class="cancel-booking" id="cancel-booking" type="button">Cancel</button>
+                    <button class="confirm-booking" type="submit">Confirm Booking &amp; Pay</button>
+                </div>
+            </form>
         </aside>
     </main>
     <footer class="footer" data-node-id="38:15">
@@ -104,12 +110,20 @@
                     href="#careers">Careers</a></div>
         </nav>
     </footer>
-</body>
 
-<script>
-    const dateTime = document.querySelector('#booking-date-time'); let selectedDate = 'Mon, Mar 15', selectedTime = '2:00 PM';
-    document.querySelectorAll('.date-option').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.date-option').forEach(item => item.classList.remove('selected')); button.classList.add('selected'); selectedDate = button.dataset.date; dateTime.textContent = `${selectedDate} @ ${selectedTime}`; }));
-    document.querySelectorAll('.time-option').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.time-option').forEach(item => item.classList.remove('selected')); button.classList.add('selected'); selectedTime = button.textContent; dateTime.textContent = `${selectedDate} @ ${selectedTime}`; }));
-</script>
+    <dialog class="confirmation-dialog" id="confirmation-dialog" aria-labelledby="confirmation-title">
+        <form method="dialog">
+            <h2 id="confirmation-title">Confirm your booking</h2>
+            <p id="confirmation-details"></p>
+            <p class="dialog-note">Your booking will be downloaded as a local JSON file.</p>
+            <div class="dialog-actions">
+                <button class="dialog-back" value="cancel">Go Back</button>
+                <button class="dialog-confirm" id="submit-booking" value="default">Confirm &amp; Download</button>
+            </div>
+        </form>
+    </dialog>
+
+    <script src="wakerinfo.js"></script>
+</body>
 
 </html>
