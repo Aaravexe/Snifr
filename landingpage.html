@@ -18,7 +18,7 @@
   <body> 
      <!-- ============================================================
          PAGE SHELL
-         This is the single landing page; there are no other routes.
+         This page is the starting point for the Snifr experience.
          ============================================================ -->
     <main class="site">
       <!-- ============================================================
@@ -26,14 +26,14 @@
            ============================================================ -->
       <header class="header">
         <div class="container header__inner">
-          <a class="brand" href="#top" aria-label="Snifr home">
+          <a class="brand" href="landingpage.html" aria-label="Snifr home">
             <img class="brand__logo" src="assets/Snifr-logo.png" alt="Snifr" />
             <span class="brand__name">Snifr</span>
           </a>
 
           <nav class="actions" aria-label="Account actions">
-            <a class="signin" href="#get-started">Sign In | Sign Up</a>
-            <a class="pill" href="#walker">Become a Walker</a>
+            <a class="signin" href="authpage.html">Sign In | Sign Up</a>
+            <a class="pill" href="authpage.html?role=walker">Become a Walker</a>
           </nav>
         </div>
       </header> 
@@ -56,7 +56,7 @@
               Connect instantly with verified care providers in your neighborhood.
             </p>
 
-            <a class="primary" id="get-started" href="#how-it-works">Get Started</a>
+            <a class="primary" id="get-started" href="authpage.html">Get Started</a>
           </div>
 
           <div class="hero-image">
@@ -221,6 +221,19 @@
           </div>
         </div>
       </section>
-    </main>      
+    </main>
+    <footer class="site-footer">
+      <div>
+        <a class="footer-brand" href="landingpage.html">Snifr</a>
+        <p>Safe, professional on-demand pet care for modern families.</p>
+      </div>
+      <nav aria-label="Footer navigation">
+        <a href="landingpage.html">Home</a>
+        <a href="Dashboard.HTML">Dashboard</a>
+        <a href="walkersearch.html">Find Walkers</a>
+        <a href="authpage.html?role=walker">Become a Walker</a>
+      </nav>
+    </footer>
+    <script src="landingpage.js"></script>
   </body>
 </html>

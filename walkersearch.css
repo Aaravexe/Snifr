@@ -57,9 +57,13 @@ body {
 }
 
 .nav-actions {
-  flex: 0 0 295px;
-  height: 37px;
+  flex: 0 1 auto;
+  height: auto;
 }
+
+.page-nav { display:flex; align-items:center; justify-content:flex-end; gap:18px; flex-wrap:wrap; }
+.page-nav a { color:#827148; font-weight:700; text-decoration:none; }
+.page-nav a:hover, .page-nav a[aria-current="page"] { color:#fff; }
 
 .filter-bar {
   align-items: center;

@@ -307,3 +307,11 @@ body {
         padding: 28px 22px
     }
 }
+
+.site-footer { display:flex; justify-content:space-between; gap:28px; padding:38px 7%; background:#ffeed6; border-top:1px solid #e8dec9; color:#6b5e43; }
+.footer-brand { color:#827148; font:800 28px Outfit,sans-serif; text-decoration:none; }
+.site-footer p { margin:10px 0 0; max-width:370px; }
+.site-footer nav { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.site-footer nav a { color:#827148; font-weight:700; text-decoration:none; }
+.site-footer nav a:hover { color:#e8a07c; }
+@media(max-width:700px) { .site-footer { flex-direction:column; } }

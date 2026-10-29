@@ -583,6 +583,25 @@ body {
    background: var(--cream);
 }
 
+.site-footer {
+   display: flex;
+   justify-content: space-between;
+   gap: 32px;
+   padding: 48px max(7%, 28px);
+   background: #ffeed6;
+   color: var(--muted);
+   border-top: 1px solid #e8dec9;
+}
+
+.footer-brand { color: var(--brown); font: 800 30px/1 Outfit, sans-serif; text-decoration: none; }
+.site-footer p { max-width: 380px; margin: 12px 0 0; }
+.site-footer nav, .page-nav { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.site-footer nav a, .page-nav a { color: var(--brown); font-weight: 700; text-decoration: none; transition: color .18s ease, transform .18s ease; }
+.site-footer nav a:hover, .page-nav a:hover, .page-nav a[aria-current="page"] { color: var(--peach); }
+.is-pressed { transform: translateY(1px); }
+
+@media (max-width: 700px) { .site-footer { flex-direction: column; } }
+
 .site {
    width: 100%;
    max-width: none;
