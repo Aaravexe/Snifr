@@ -1,10 +1,14 @@
 const http = require('node:http');
 const fs = require('node:fs/promises');
 const path = require('node:path');
+const crypto = require('node:crypto');
 
 const ROOT = __dirname;
 const BOOKINGS_FOLDER = path.join(ROOT, 'Snifr Bookings');
-const PORT = 3000;
+const ACCOUNTS_FOLDER = path.join(ROOT, 'Snifr Accounts');
+const ACCOUNTS_FILE = path.join(ACCOUNTS_FOLDER, 'accounts.json');
+const SAMPLE_ACCOUNTS_FILE = path.join(ROOT, 'accounts.json');
+const PORT = Number(process.env.PORT) || 3000;
 
 const contentTypes = {
   '.html': 'text/html; charset=utf-8',
@@ -31,6 +35,84 @@ async function readJson(request) {
     if (body.length > 1_000_000) throw new Error('Request is too large.');
   }
   return JSON.parse(body || '{}');
+}
+
+async function readAccountFile(file) {
+  try {
+    const data = JSON.parse(await fs.readFile(file, 'utf8'));
+    return Array.isArray(data.accounts) ? data.accounts : [];
+  } catch (error) {
+    if (error.code === 'ENOENT') return [];
+    throw error;
+  }
+}
+
+async function getAccounts() {
+  const sampleAccounts = await readAccountFile(SAMPLE_ACCOUNTS_FILE);
+  const localAccounts = await readAccountFile(ACCOUNTS_FILE);
+  return [...sampleAccounts, ...localAccounts];
+}
+
+function publicAccount(account) {
+  const { password, passwordHash, passwordSalt, ...safeAccount } = account;
+  return safeAccount;
+}
+
+function passwordMatches(password, account) {
+  if (account.passwordHash && account.passwordSalt) {
+    const savedHash = Buffer.from(account.passwordHash, 'hex');
+    const enteredHash = crypto.scryptSync(password, account.passwordSalt, savedHash.length);
+    return crypto.timingSafeEqual(savedHash, enteredHash);
+  }
+  return account.password === password;
+}
+
+async function registerAccount(request, response) {
+  const data = await readJson(request);
+  const email = String(data.email || '').trim().toLowerCase();
+  const password = String(data.password || '');
+  const role = data.role === 'walker' ? 'walker' : 'owner';
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return sendJson(response, 400, { message: 'Enter a valid email address.' });
+  }
+  if (password.length < 6) {
+    return sendJson(response, 400, { message: 'Password must contain at least 6 characters.' });
+  }
+
+  const accounts = await getAccounts();
+  if (accounts.some(account => account.email.toLowerCase() === email)) {
+    return sendJson(response, 409, { message: 'An account with this email already exists.' });
+  }
+
+  const passwordSalt = crypto.randomBytes(16).toString('hex');
+  const account = {
+    id: `user-${Date.now()}`,
+    displayName: email.split('@')[0],
+    email,
+    role,
+    passwordSalt,
+    passwordHash: crypto.scryptSync(password, passwordSalt, 64).toString('hex'),
+    createdAt: new Date().toISOString()
+  };
+
+  const localAccounts = await readAccountFile(ACCOUNTS_FILE);
+  localAccounts.push(account);
+  await fs.mkdir(ACCOUNTS_FOLDER, { recursive: true });
+  await fs.writeFile(ACCOUNTS_FILE, JSON.stringify({ accounts: localAccounts }, null, 2), 'utf8');
+  sendJson(response, 201, { account: publicAccount(account) });
+}
+
+async function loginAccount(request, response) {
+  const data = await readJson(request);
+  const email = String(data.email || '').trim().toLowerCase();
+  const password = String(data.password || '');
+  const account = (await getAccounts()).find(item => item.email.toLowerCase() === email);
+
+  if (!account || !passwordMatches(password, account)) {
+    return sendJson(response, 401, { message: 'Email or password is incorrect.' });
+  }
+  sendJson(response, 200, { account: publicAccount(account) });
 }
 
 function bookingFile(bookingId) {
@@ -107,7 +189,8 @@ async function serveFile(request, response, pathname) {
   const relativePath = pathname === '/' ? 'landingpage.html' : decodeURIComponent(pathname).replace(/^\/+/, '');
   const filePath = path.resolve(ROOT, relativePath);
   const privatePath = relativePath === 'server.js' || relativePath === 'package.json' ||
-    relativePath.startsWith('.git') || relativePath.startsWith('Snifr Bookings');
+    relativePath.startsWith('.git') || relativePath.startsWith('Snifr Bookings') ||
+    relativePath.startsWith('Snifr Accounts');
 
   if (privatePath || !filePath.startsWith(`${ROOT}${path.sep}`)) {
     response.writeHead(403);
@@ -131,6 +214,12 @@ const server = http.createServer(async (request, response) => {
   const url = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
 
   try {
+    if (request.method === 'POST' && url.pathname === '/api/accounts/register') {
+      return await registerAccount(request, response);
+    }
+    if (request.method === 'POST' && url.pathname === '/api/accounts/login') {
+      return await loginAccount(request, response);
+    }
     if (request.method === 'POST' && url.pathname === '/api/bookings') {
       return await createBooking(request, response);
     }
@@ -156,4 +245,5 @@ const server = http.createServer(async (request, response) => {
 server.listen(PORT, () => {
   console.log(`Snifr is running at http://localhost:${PORT}`);
   console.log(`Bookings will be saved in: ${BOOKINGS_FOLDER}`);
+  console.log(`New accounts will be saved in: ${ACCOUNTS_FILE}`);
 });
