@@ -16,6 +16,33 @@ function load(key, fallback) {
   return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
 }
 
+function bookingFromUrl() {
+  const value = new URLSearchParams(location.search).get('booking');
+  if (!value) return null;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
+  }
+}
+
+async function updateBookingFile(booking) {
+  if (!window.showDirectoryPicker) {
+    throw new Error('Folder saving is supported in Chrome and Edge.');
+  }
+
+  const selectedFolder = await window.showDirectoryPicker({
+    id: 'snifr-bookings',
+    mode: 'readwrite'
+  });
+  const bookingsFolder = await selectedFolder.getDirectoryHandle('Snifr Bookings');
+  const fileName = new URLSearchParams(location.search).get('file') || `booking-${booking.bookingId}.json`;
+  const file = await bookingsFolder.getFileHandle(fileName);
+  const writer = await file.createWritable();
+  await writer.write(JSON.stringify(booking, null, 2));
+  await writer.close();
+}
+
 function renderPets() {
   const pets = load('snifrPets', [
     { name: 'Sheru', breed: 'Golden Retriever', age: 2 },
@@ -29,7 +56,7 @@ function renderPets() {
 }
 
 function renderBooking() {
-  const booking = load('snifrLatestBooking', null);
+  const booking = bookingFromUrl();
   if (!booking) return;
   bookingBox.innerHTML = `
     <img src="assets/figma-user-img.png" alt="${booking.walker}">
@@ -39,11 +66,15 @@ function renderBooking() {
   bookingBox.querySelector('.cancel-latest').addEventListener('click', async () => {
     if (!confirm('Cancel this booking?')) return;
     booking.status = 'cancelled';
-    localStorage.setItem('snifrLatestBooking', JSON.stringify(booking));
-    const bookings = load('snifrBookings', []).map(item => item.bookingId === booking.bookingId ? booking : item);
-    localStorage.setItem('snifrBookings', JSON.stringify(bookings));
-    await saveJson('bookings.json', bookings).catch(() => {});
-    renderBooking();
+    try {
+      await updateBookingFile(booking);
+      const params = new URLSearchParams(location.search);
+      params.set('booking', JSON.stringify(booking));
+      history.replaceState(null, '', `${location.pathname}?${params}`);
+      renderBooking();
+    } catch (error) {
+      if (error.name !== 'AbortError') alert(error.message || 'The booking file could not be updated.');
+    }
   });
 }
 

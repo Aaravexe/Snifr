@@ -8,13 +8,22 @@ let selectedDate = '';
 let selectedTime = '';
 let walker = null;
 
-async function saveJson(name, data) {
-  if (!navigator.storage?.getDirectory) return;
-  const root = await navigator.storage.getDirectory();
-  const file = await root.getFileHandle(name, { create: true });
+async function saveBookingFile(booking) {
+  if (!window.showDirectoryPicker) {
+    throw new Error('Folder saving is supported in Chrome and Edge. Open the website with Live Server.');
+  }
+
+  const selectedFolder = await window.showDirectoryPicker({
+    id: 'snifr-bookings',
+    mode: 'readwrite'
+  });
+  const bookingsFolder = await selectedFolder.getDirectoryHandle('Snifr Bookings', { create: true });
+  const fileName = `booking-${booking.bookingId}.json`;
+  const file = await bookingsFolder.getFileHandle(fileName, { create: true });
   const writer = await file.createWritable();
-  await writer.write(JSON.stringify(data, null, 2));
+  await writer.write(JSON.stringify(booking, null, 2));
   await writer.close();
+  return fileName;
 }
 
 function stars(rating) {
@@ -114,15 +123,24 @@ document.querySelector('#submit-booking').addEventListener('click', async event 
     status: 'confirmed',
     submittedAt: new Date().toISOString()
   };
-  const bookings = JSON.parse(localStorage.getItem('snifrBookings') || '[]');
-  bookings.push(booking);
-  localStorage.setItem('snifrBookings', JSON.stringify(bookings));
-  localStorage.setItem('snifrLatestBooking', JSON.stringify(booking));
-  await saveJson('bookings.json', bookings).catch(() => {});
-  dialog.close();
-  message.textContent = 'Booking confirmed. Opening dashboard…';
-  message.className = 'booking-message success';
-  setTimeout(() => location.href = 'Dashboard.HTML', 700);
+  try {
+    const fileName = await saveBookingFile(booking);
+    dialog.close();
+    message.textContent = 'Booking saved in the Snifr Bookings folder. Opening dashboard...';
+    message.className = 'booking-message success';
+    const bookingData = encodeURIComponent(JSON.stringify(booking));
+    setTimeout(() => {
+      location.href = `Dashboard.HTML?booking=${bookingData}&file=${encodeURIComponent(fileName)}`;
+    }, 700);
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      message.textContent = 'Folder selection was cancelled. Your booking was not submitted.';
+    } else {
+      message.textContent = error.message || 'The booking file could not be saved.';
+    }
+    message.className = 'booking-message error';
+    dialog.close();
+  }
 });
 
 document.querySelector('#cancel-booking').addEventListener('click', () => {
