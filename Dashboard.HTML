@@ -19,7 +19,7 @@
     <main class="dashboard-main">
       <section class="welcome-row">
         <div>
-          <h1>Welcome back, Shankaracharya!</h1>
+          <h1 id="welcome-title">Welcome back!</h1>
           <p>What can we do for your furry friends today?</p>
         </div>
         <button class="profile-button" aria-label="Open profile">
@@ -28,21 +28,21 @@
       </section>
       <section class="search-section" data-node-id="6:84">
         <h2>Find a trusted local walker in seconds</h2>
-        <div class="search-row">
+        <form class="search-row" id="walker-search-form">
           <label class="search-input"
             ><img src="assets/figma-search.svg" alt="" /><input
               type="search"
-              placeholder="Enter your location, neighborhood, or pincode..." /></label
-          ><a class="search-button" href="walkersearch.html">Search</a>
-        </div>
+              id="location-search" required placeholder="Enter your location, neighborhood, or pincode..." /></label
+          ><button class="search-button" type="submit">Search</button>
+        </form>
       </section>
       <section class="quick-row">
         <article class="quick-card">
           <div class="card-heading">
             <h2>My Pets</h2>
-            <button>+ Add Pet</button>
+            <button id="open-pet-form" type="button">+ Add Pet</button>
           </div>
-          <div class="pets-row">
+          <div class="pets-row" id="pets-list">
             <div class="pet">
               <img src="assets/walker.png" alt="Sheru" />
               <div>
@@ -60,7 +60,7 @@
             <h2>Recent Booking</h2>
             <a href="#bookings">View All</a>
           </div>
-          <div class="booking">
+          <div class="booking" id="recent-booking">
             <img src="assets/figma-user-img.png" alt="Shubham Bhardwaj" />
             <div>
               <strong>Shubham Bhardwaj</strong
@@ -73,14 +73,14 @@
       <section class="recommended">
         <h2>Recommended Walkers Nearby</h2>
         <div class="walkers-row">
-          <a class="walker-card" href="wakerinfo.html"
+          <a class="walker-card" href="wakerinfo.html?walker=priyanka"
             ><img src="assets/figma-user-img.png" alt="Priyanka" />
             <div>
               <strong>Priyanka</strong>
               <div class="rating">☆ ☆ ☆ ☆ ☆ <small>(48 reviews)</small></div>
               <b>₹250/hr</b>
             </div></a
-          ><a class="walker-card" href="wakerinfo.html"
+          ><a class="walker-card" href="wakerinfo.html?walker=gaurav-pratap-singh"
             ><img src="assets/figma-user-img.png" alt="Gaurav Pratap Singh" />
             <div>
               <strong>Gaurav Pratap Singh</strong>
@@ -111,6 +111,16 @@
         </div>
       </nav>
     </footer>
-    <script src="landingpage.js"></script>
+    <dialog class="pet-dialog" id="pet-dialog">
+      <form id="pet-form" method="dialog" novalidate>
+        <h2>Add Pet</h2>
+        <label>Pet Name<input id="pet-name" required></label>
+        <label>Breed<input id="pet-breed" required></label>
+        <label>Age<input id="pet-age" type="number" min="0" max="30" required></label>
+        <p id="pet-message" role="alert"></p>
+        <div><button value="cancel">Cancel</button><button id="save-pet" type="submit">Save Pet</button></div>
+      </form>
+    </dialog>
+    <script src="dashboard.js"></script>
   </body>
 </html>

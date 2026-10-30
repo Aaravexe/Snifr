@@ -100,6 +100,25 @@ body {
     font: 800 28px Outfit
 }
 
+.profile-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.profile-stars {
+    display: flex;
+    gap: 4px;
+}
+
+.profile-stars img {
+    display: block;
+    width: 16px;
+    height: 16px;
+}
+
 .profile p {
     color: var(--muted);
     font-size: 15px;
@@ -150,6 +169,12 @@ z {
     margin-bottom: 0
 }
 
+#reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
 .review {
     padding: 16px 20px;
     border-radius: 16px;
@@ -178,6 +203,16 @@ z {
 .stars img {
     width: 16px;
     height: 16px
+}
+
+.profile-stars img.half,
+.stars img.half {
+    opacity: .55;
+}
+
+.profile-stars img.empty,
+.stars img.empty {
+    opacity: .18;
 }
 
 .calendar h2,
@@ -457,9 +492,6 @@ body {
     border-radius: 0;
     background-color: var(--peach);
 }
-<<<<<<< HEAD
-=======
-
 .booking-message {
     display: block !important;
     min-height: 18px;
@@ -574,4 +606,3 @@ body {
         grid-template-columns: 1fr;
     }
 }
->>>>>>> 2e2a07fde8d3e714904ca19d79fb2ace6c6c8c74

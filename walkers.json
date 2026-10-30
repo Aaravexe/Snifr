@@ -1,0 +1,99 @@
+{
+  "walkers": [
+    {
+      "id": "priyanka",
+      "name": "Priyanka",
+      "image": "assets/walker.png",
+      "rating": 5,
+      "reviewCount": 54,
+      "hourlyRate": 250,
+      "walksCompleted": 126,
+      "responseTime": "Under 10 min",
+      "about": "Friendly and dependable dog walker with experience caring for energetic, senior, and rescue dogs. I focus on safe routes, patient handling, and regular updates for every pet parent.",
+      "availableDates": ["2025-03-15", "2025-03-16"],
+      "availableTimes": ["morning", "afternoon"],
+      "matchRank": 1,
+      "profilePage": "wakerinfo.html",
+      "reviews": [
+        { "name": "Charan K.", "rating": 5, "text": "Priyanka was punctual, caring, and kept us updated throughout the walk." },
+        { "name": "Riddhi S.", "rating": 5, "text": "Sheru returned happy and relaxed. We will definitely book again." }
+      ]
+    },
+    {
+      "id": "shubham-bhardwaj",
+      "name": "Shubham Bhardwaj",
+      "image": "assets/walker.png",
+      "rating": 4.5,
+      "reviewCount": 29,
+      "hourlyRate": 180,
+      "walksCompleted": 74,
+      "responseTime": "Under 15 min",
+      "about": "Calm and attentive walker who enjoys structured walks and playful exercise. I am comfortable with different breeds and always follow the pet parent's routine.",
+      "availableDates": ["2025-03-15", "2025-03-17"],
+      "availableTimes": ["afternoon", "evening"],
+      "matchRank": 2,
+      "profilePage": "wakerinfo.html",
+      "reviews": [
+        { "name": "Mehak P.", "rating": 5, "text": "Very patient with our nervous puppy and easy to communicate with." },
+        { "name": "Karan J.", "rating": 4, "text": "Reliable service and clear updates after every walk." }
+      ]
+    },
+    {
+      "id": "anshul-sharma",
+      "name": "Anshul Sharma",
+      "image": "assets/walker.png",
+      "rating": 4,
+      "reviewCount": 88,
+      "hourlyRate": 210,
+      "walksCompleted": 193,
+      "responseTime": "Under 20 min",
+      "about": "Experienced with active dogs and longer walking routes. I provide consistent exercise while keeping every walk safe, positive, and suited to the dog's energy level.",
+      "availableDates": ["2025-03-15", "2025-03-16", "2025-03-18"],
+      "availableTimes": ["morning", "evening"],
+      "matchRank": 3,
+      "profilePage": "wakerinfo.html",
+      "reviews": [
+        { "name": "Dhruv D.", "rating": 4, "text": "Anshul handled our high-energy dog confidently and professionally." },
+        { "name": "Naina V.", "rating": 4, "text": "Good communication and always arrives on time." }
+      ]
+    },
+    {
+      "id": "gaurav-pratap-singh",
+      "name": "Gaurav Pratap Singh",
+      "image": "assets/walker.png",
+      "rating": 3.5,
+      "reviewCount": 67,
+      "hourlyRate": 240,
+      "walksCompleted": 145,
+      "responseTime": "Under 15 min",
+      "about": "Patient pet lover offering relaxed neighborhood walks and active exercise sessions. I pay close attention to safety, hydration, and each dog's comfort.",
+      "availableDates": ["2025-03-15", "2025-03-16", "2025-03-17"],
+      "availableTimes": ["afternoon", "evening"],
+      "matchRank": 4,
+      "profilePage": "wakerinfo.html",
+      "reviews": [
+        { "name": "Aditi M.", "rating": 4, "text": "Gaurav was friendly and our dog enjoyed the evening walk." },
+        { "name": "Rohan B.", "rating": 3, "text": "A good walker who followed all feeding and route instructions." }
+      ]
+    },
+    {
+      "id": "aarav-chib",
+      "name": "Aarav Chib",
+      "image": "assets/walker.png",
+      "rating": 3,
+      "reviewCount": 15,
+      "hourlyRate": 676,
+      "walksCompleted": 38,
+      "responseTime": "Under 30 min",
+      "about": "Weekend walker focused on one-on-one care and quiet routes. I work best with small and medium dogs that prefer a calm pace and extra attention.",
+      "availableDates": ["2025-03-15", "2025-03-18"],
+      "availableTimes": ["morning", "afternoon"],
+      "matchRank": 5,
+      "profilePage": "wakerinfo.html",
+      "reviews": [
+        { "name": "Simran A.", "rating": 3, "text": "Aarav was gentle with our Corgi and shared a helpful walk update." },
+        { "name": "Vivek N.", "rating": 3, "text": "Polite and careful with our pet's routine." }
+      ]
+    }
+  ]
+}

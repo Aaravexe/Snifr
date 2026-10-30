@@ -245,6 +245,9 @@ body {
     transition: background .18s ease, transform .18s ease
 }
 
+.form-message { min-height:18px; margin:-16px 0; font-size:13px; color:#b24d3e; }
+.form-message.success { color:#718044; }
+
 @media(max-width:900px) {
     .header {
         padding: 5px 24px

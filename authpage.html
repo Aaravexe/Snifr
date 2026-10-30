@@ -16,7 +16,7 @@
 <body>
     <header class="header"><a class="brand" href="landingpage.html"><img src="assets/auth-logo.png"
                 alt="Snifr logo"><span>Snifr</span></a>
-        <nav><a href="landingpage.html">Home</a><a href="walkersearch.html">Find Walkers</a><a class="walker-link" href="authpage.html?role=walker">Become a Walker</a></nav>
+        <nav><a href="landingpage.html">Home</a><a href="Dashboard.HTML">Dashboard</a><a href="walkersearch.html">Find Walkers</a><a class="walker-link" href="authpage.html?role=walker">Become a Walker</a></nav>
     </header>
     <main class="auth-container" id="auth">
         <section class="auth-copy">
@@ -24,24 +24,24 @@
             <p>Join thousands of pet parents who trust Snifr for on-demand walks.<br>Every walker is fully
                 background-checked.</p>
         </section>
-        <form class="auth-card">
-            <div class="auth-toggle"><button type="button" class="active">Create Account</button><button
-                    type="button">Sign In</button></div>
+        <form class="auth-card" id="auth-form" novalidate>
+            <div class="auth-toggle"><button type="button" class="active" data-mode="create">Create Account</button><button
+                    type="button" data-mode="signin">Sign In</button></div>
             <fieldset class="role">
                 <legend>I am a...</legend>
-                <div><label class="role-option selected"><input type="radio" name="role" checked>Pet Owner</label><label
-                        class="role-option"><input type="radio" name="role">Walker</label></div>
-            </fieldset><label>Email Address<input type="email" value="user@gmail.com"></label><label>Password<input
-                    type="password" value="password123"></label>
+                <div><label class="role-option selected"><input type="radio" name="role" value="owner" checked>Pet Owner</label><label
+                        class="role-option"><input type="radio" name="role" value="walker">Walker</label></div>
+            </fieldset><label>Email Address<input id="auth-email" type="email" placeholder="user@gmail.com" required></label><label>Password<input
+                    id="auth-password" type="password" placeholder="Minimum 6 characters" minlength="6" required></label>
             <div class="extras"><label class="remember"><input type="checkbox" checked>Remember Me</label><a
-                    href="#forgot">Forgot Password?</a></div><button class="submit" type="submit">Sign In</button>
+                    href="#forgot">Forgot Password?</a></div><p class="form-message" id="auth-message" role="alert"></p><button class="submit" type="submit">Create Account</button>
         </form>
     </main>
     <footer class="site-footer">
         <div><a class="footer-brand" href="landingpage.html">Snifr</a><p>Safe, professional on-demand pet care for modern families.</p></div>
         <nav aria-label="Footer navigation"><a href="landingpage.html">Home</a><a href="Dashboard.HTML">Dashboard</a><a href="walkersearch.html">Find Walkers</a><a href="authpage.html?role=walker">Become a Walker</a></nav>
     </footer>
-    <script src="landingpage.js"></script>
+    <script src="authpage.js"></script>
 </body>
 
 </html>

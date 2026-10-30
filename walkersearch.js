@@ -1,107 +1,96 @@
-// Use local assets instead of design-export URLs.
-document.querySelectorAll('img[src*="figma.com/api/mcp/asset"]').forEach(image => {
-  image.src = image.src.endsWith('.png') ? 'assets/walker.png' : 'assets/star.svg';
+const state = { date: '', time: '', rating: 0, sort: 'match' };
+const grid = document.querySelector('.walker-grid');
+const count = document.querySelector('.walker-heading p');
+const empty = document.querySelector('.no-walkers');
+const dateInput = document.querySelector('#walker-date');
+let walkers = [];
+
+const starIcons = rating => Array.from({ length: 5 }, (_, index) => {
+  const type = rating - index >= 1 ? 'full' : rating - index >= .5 ? 'half' : 'empty';
+  return `<span class="rating-star ${type}"><img src="assets/star.svg" alt=""></span>`;
+}).join('');
+
+function card(walker) {
+  const element = document.createElement('article');
+  element.className = 'walker-card';
+  element.innerHTML = `
+    <div class="card-top"><img class="avatar" src="${walker.image}" alt="${walker.name}">
+      <div><h2>${walker.name}</h2><div class="rating"><span class="stars">${starIcons(walker.rating)}</span> (${walker.reviewCount})</div></div>
+    </div>
+    <div class="card-footer"><div><span>Hourly Rate</span><strong>₹${walker.hourlyRate}/hr</strong></div>
+      <a href="${walker.profilePage}?walker=${walker.id}">View Profile</a></div>`;
+  return element;
+}
+
+function render() {
+  const results = walkers.filter(walker =>
+    (!state.date || walker.availableDates.includes(state.date)) &&
+    (!state.time || walker.availableTimes.includes(state.time)) &&
+    walker.rating >= state.rating
+  );
+
+  results.sort((a, b) => state.sort === 'rating'
+    ? b.rating - a.rating
+    : state.sort === 'rate'
+      ? a.hourlyRate - b.hourlyRate
+      : a.matchRank - b.matchRank);
+
+  grid.replaceChildren(...results.map(card));
+  grid.hidden = results.length === 0;
+  empty.hidden = results.length > 0;
+  count.textContent = `${results.length} active walker${results.length === 1 ? '' : 's'} found`;
+}
+
+function choose(selector, key, label) {
+  document.querySelectorAll(selector).forEach(option => option.addEventListener('click', event => {
+    event.preventDefault();
+    state[key] = key === 'rating' ? Number(option.dataset[key]) : option.dataset[key];
+    option.closest('details').querySelector('summary span').textContent = label(option);
+    option.closest('details').open = false;
+    render();
+  }));
+}
+
+dateInput.addEventListener('change', () => {
+  state.date = dateInput.value;
+  const label = state.date ? new Date(`${state.date}T00:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Any date';
+  document.querySelector('.date-dropdown summary span').textContent = label;
+  document.querySelector('.date-dropdown').open = false;
+  render();
 });
 
-(() => {
-  const dateInput = document.querySelector('#walker-date');
-  const timeDropdown = document.querySelectorAll('.filter-dropdown')[1];
-  const ratingDropdown = document.querySelectorAll('.filter-dropdown')[2];
-  const sortDropdown = document.querySelector('.filter-sort');
-  const cards = [...document.querySelectorAll('.walker-card')];
-  const grid = document.querySelector('.walker-grid');
-  const count = document.querySelector('.walker-heading p');
-  const noWalkers = document.querySelector('.no-walkers');
-  const clearButtons = document.querySelectorAll('.clear-filters, .no-results-reset');
-  const defaults = { date: dateInput.value, time: '', rating: 0, sort: 'match' };
-  const state = { ...defaults };
+choose('[data-time]', 'time', option => option.textContent);
+choose('[data-rating]', 'rating', option => `${option.dataset.rating} Stars & up`);
+choose('[data-sort]', 'sort', option => `Sort by: ${option.textContent}`);
 
-  const close = dropdown => dropdown.removeAttribute('open');
-  const label = (selector, value) => {
-    document.querySelector(`${selector} summary span`).textContent = value;
-  };
-
-  function formatDate(dateValue) {
-    const date = new Date(`${dateValue}T00:00:00`);
-    return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-  }
-
-  function updateFilterLabels() {
-    label('.date-dropdown', formatDate(state.date));
-    label('.filter-dropdown:nth-of-type(2)', state.time
-      ? document.querySelector(`[data-time="${state.time}"]`).textContent
-      : 'Any time');
-    label('.filter-dropdown:nth-of-type(3)', state.rating ? `${state.rating} Stars` : 'Any rating');
-    label('.filter-sort', `Sort by: ${document.querySelector(`[data-sort="${state.sort}"]`).textContent}`);
-  }
-
-  function renderRatings() {
-    cards.forEach(card => {
-      const stars = card.querySelector('.stars');
-      const rating = Number(card.dataset.rating);
-      stars.replaceChildren(...Array.from({ length: 5 }, (_, index) => {
-        const star = document.createElement('span');
-        const value = rating - index;
-        star.className = `rating-star ${value >= 1 ? 'full' : value >= 0.5 ? 'half' : 'empty'}`;
-        star.textContent = '★';
-        star.setAttribute('aria-hidden', 'true');
-        return star;
-      }));
-    });
-  }
-
-  function availabilityScore(card) {
-    const dateMatch = card.dataset.dates.split(',').includes(state.date) ? 2 : 0;
-    const timeMatch = state.time && card.dataset.times.split(',').includes(state.time) ? 1 : 0;
-    return dateMatch + timeMatch;
-  }
-
-  function applyFilters() {
-    const visible = cards.filter(card => {
-      const rating = Number(card.dataset.rating);
-      const ratingMatches = state.rating === 5 ? rating === 5 : rating >= state.rating;
-      return card.dataset.dates.split(',').includes(state.date)
-        && (!state.time || card.dataset.times.split(',').includes(state.time))
-        && ratingMatches;
-    });
-
-    visible.sort((a, b) => state.sort === 'rating'
-      ? Number(b.dataset.rating) - Number(a.dataset.rating) || availabilityScore(b) - availabilityScore(a)
-      : state.sort === 'rate'
-        ? Number(a.dataset.rate) - Number(b.dataset.rate)
-        : availabilityScore(b) - availabilityScore(a) || Number(b.dataset.rating) - Number(a.dataset.rating) || Number(a.dataset.match) - Number(b.dataset.match));
-    cards.forEach(card => { card.hidden = !visible.includes(card); });
-    visible.forEach(card => grid.appendChild(card));
-    count.textContent = `${visible.length} active walker${visible.length === 1 ? '' : 's'} found`;
-    noWalkers.hidden = visible.length !== 0;
-    grid.hidden = visible.length === 0;
-  }
-
-  dateInput.addEventListener('change', () => {
-    state.date = dateInput.value;
-    updateFilterLabels();
-    applyFilters();
+function clearFilters() {
+  Object.assign(state, { date: '', time: '', rating: 0, sort: 'match' });
+  dateInput.value = '';
+  document.querySelector('.date-dropdown summary span').textContent = 'Any date';
+  document.querySelectorAll('.filter-dropdown').forEach((box, index) => {
+    box.open = false;
+    if (index === 1) box.querySelector('summary span').textContent = 'Any time';
+    if (index === 2) box.querySelector('summary span').textContent = 'Any rating';
+    if (box.classList.contains('filter-sort')) box.querySelector('summary span').textContent = 'Sort by: Best Match';
   });
-  document.querySelectorAll('[data-time]').forEach(link => link.addEventListener('click', event => {
-    event.preventDefault(); state.time = link.dataset.time;
-    label('.filter-dropdown:nth-of-type(2)', link.textContent); close(timeDropdown); applyFilters();
-  }));
-  document.querySelectorAll('.rating-menu [data-rating]').forEach(link => link.addEventListener('click', event => {
-    event.preventDefault(); state.rating = Number(link.dataset.rating);
-    label('.filter-dropdown:nth-of-type(3)', `${link.dataset.rating} Stars`); close(ratingDropdown); applyFilters();
-  }));
-  document.querySelectorAll('[data-sort]').forEach(link => link.addEventListener('click', event => {
-    event.preventDefault(); state.sort = link.dataset.sort;
-    label('.filter-sort', `Sort by: ${link.textContent}`); close(sortDropdown); applyFilters();
-  }));
-  clearButtons.forEach(button => button.addEventListener('click', () => {
-    Object.assign(state, defaults);
-    dateInput.value = defaults.date;
-    document.querySelectorAll('.filter-dropdown').forEach(close);
-    updateFilterLabels();
-    applyFilters();
-  }));
-  renderRatings();
-  updateFilterLabels();
-  applyFilters();
-})();
+  render();
+}
+
+document.querySelectorAll('.clear-filters, .no-results-reset').forEach(button => button.addEventListener('click', clearFilters));
+
+fetch('walkers.json')
+  .then(response => {
+    if (!response.ok) throw new Error('Could not read walkers.json');
+    return response.json();
+  })
+  .then(data => {
+    walkers = data.walkers;
+    clearFilters();
+  })
+  .catch(() => {
+    grid.hidden = true;
+    empty.hidden = false;
+    empty.querySelector('h2').textContent = 'Walker data could not be loaded';
+    empty.querySelector('p').textContent = 'Open the project with Live Server to load the local JSON file.';
+    count.textContent = '0 active walkers found';
+  });

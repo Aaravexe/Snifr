@@ -1,153 +1,150 @@
 const dateButtons = [...document.querySelectorAll('.date-option')];
 const timeButtons = [...document.querySelectorAll('.time-option')];
-const bookingForm = document.querySelector('#booking-form');
-const dateTimeSummary = document.querySelector('#booking-date-time');
-const petSelect = document.querySelector('#pet-select');
-const bookingMessage = document.querySelector('#booking-message');
-const cancelBookingButton = document.querySelector('#cancel-booking');
-const confirmationDialog = document.querySelector('#confirmation-dialog');
-const confirmationDetails = document.querySelector('#confirmation-details');
-const submitBookingButton = document.querySelector('#submit-booking');
-
+const pet = document.querySelector('#pet-select');
+const summary = document.querySelector('#booking-date-time');
+const message = document.querySelector('#booking-message');
+const dialog = document.querySelector('#confirmation-dialog');
 let selectedDate = '';
 let selectedTime = '';
+let walker = null;
 
-function setSelectedButton(buttons, selectedButton) {
-    buttons.forEach(button => {
-        const isSelected = button === selectedButton;
-        button.classList.toggle('selected', isSelected);
-        button.setAttribute('aria-pressed', String(isSelected));
-    });
+async function saveJson(name, data) {
+  if (!navigator.storage?.getDirectory) return;
+  const root = await navigator.storage.getDirectory();
+  const file = await root.getFileHandle(name, { create: true });
+  const writer = await file.createWritable();
+  await writer.write(JSON.stringify(data, null, 2));
+  await writer.close();
 }
 
-function updateBookingSummary() {
-    dateTimeSummary.textContent = selectedDate && selectedTime
-        ? `${selectedDate} @ ${selectedTime}`
-        : 'Select a date and time';
+function stars(rating) {
+  return Array.from({ length: 5 }, (_, index) => {
+    const left = rating - index;
+    const type = left >= 1 ? 'full' : left >= .5 ? 'half' : 'empty';
+    return `<img class="${type}" src="assets/star.svg" alt="">`;
+  }).join('');
 }
 
-function showMessage(message, type = '') {
-    bookingMessage.textContent = message;
-    bookingMessage.className = `booking-message ${type}`.trim();
+function showWalker(data) {
+  walker = data;
+  document.title = `Snifr | Book ${data.name}`;
+  document.querySelector('#walker-name').textContent = data.name;
+  document.querySelector('#walker-photo').src = data.image;
+  document.querySelector('#walker-photo').alt = data.name;
+  document.querySelector('#walker-about').textContent = data.about;
+  document.querySelector('#walker-walks').textContent = `${data.walksCompleted}+ Walks`;
+  document.querySelector('#walker-response').textContent = data.responseTime;
+  document.querySelector('#walker-rating').innerHTML = `<span class="profile-stars">${stars(data.rating)}</span><span>${data.rating} (${data.reviewCount} reviews)</span>`;
+  document.querySelector('#reviews-list').innerHTML = data.reviews.map(review => `
+    <div class="review card"><b>${review.name}</b><span class="stars">${stars(review.rating)}</span><p>${review.text}</p></div>
+  `).join('');
+
+  const total = data.hourlyRate + 30;
+  document.querySelector('#booking-rate').textContent = `₹${data.hourlyRate.toFixed(2)}`;
+  document.querySelector('#booking-total').textContent = `₹${total.toFixed(2)}`;
+
+  dateButtons.forEach((button, index) => {
+    const value = data.availableDates[index];
+    button.hidden = !value;
+    if (!value) return;
+    const date = new Date(`${value}T00:00:00`);
+    button.dataset.date = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    button.innerHTML = `${date.toLocaleDateString('en-US', { weekday: 'short' })}<strong>${date.getDate()}</strong>`;
+  });
 }
 
-dateButtons.forEach(button => {
-    button.setAttribute('aria-pressed', 'false');
-    button.addEventListener('click', () => {
-        setSelectedButton(dateButtons, button);
-        selectedDate = button.dataset.date;
-        updateBookingSummary();
-        showMessage('');
-    });
-});
-
-timeButtons.forEach(button => {
-    button.setAttribute('aria-pressed', 'false');
-    button.addEventListener('click', () => {
-        setSelectedButton(timeButtons, button);
-        selectedTime = button.textContent.trim();
-        updateBookingSummary();
-        showMessage('');
-    });
-});
-
-petSelect.addEventListener('change', () => {
-    showMessage(petSelect.value ? `Selected pet: ${petSelect.value}` : '', 'success');
-});
-
-function validateBooking() {
-    const missingFields = [];
-
-    if (!petSelect.value) missingFields.push('a pet');
-    if (!selectedDate) missingFields.push('a date');
-    if (!selectedTime) missingFields.push('a time slot');
-
-    if (missingFields.length > 0) {
-        showMessage(`Please select ${missingFields.join(', ')} before confirming.`, 'error');
-        return false;
-    }
-
-    showMessage('');
-    return true;
+function select(buttons, chosen) {
+  buttons.forEach(button => {
+    const active = button === chosen;
+    button.classList.toggle('selected', active);
+    button.setAttribute('aria-pressed', active);
+  });
 }
 
-function getBookingData() {
-    return {
-        bookingId: `SNIFR-${Date.now()}`,
-        walker: 'Priyanka',
-        pet: petSelect.value,
-        duration: '60 Minute Walk',
-        date: selectedDate,
-        time: selectedTime,
-        rate: 250,
-        platformServiceFee: 30,
-        totalCost: 280,
-        currency: 'INR',
-        status: 'confirmed',
-        submittedAt: new Date().toISOString()
-    };
+function updateSummary() {
+  summary.textContent = selectedDate && selectedTime ? `${selectedDate} @ ${selectedTime}` : 'Select a date and time';
+  message.textContent = '';
 }
 
-function downloadBookingJson(booking) {
-    const jsonFile = new Blob([JSON.stringify(booking, null, 2)], {
-        type: 'application/json'
-    });
-    const fileUrl = URL.createObjectURL(jsonFile);
-    const downloadLink = document.createElement('a');
+dateButtons.forEach(button => button.addEventListener('click', () => {
+  selectedDate = button.dataset.date;
+  select(dateButtons, button);
+  updateSummary();
+}));
 
-    downloadLink.href = fileUrl;
-    downloadLink.download = `snifr-booking-${booking.bookingId}.json`;
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    downloadLink.remove();
-    URL.revokeObjectURL(fileUrl);
+timeButtons.forEach(button => button.addEventListener('click', () => {
+  selectedTime = button.textContent.trim();
+  select(timeButtons, button);
+  updateSummary();
+}));
+
+function valid() {
+  const missing = [];
+  if (!walker) missing.push('walker');
+  if (!pet.value) missing.push('pet');
+  if (!selectedDate) missing.push('date');
+  if (!selectedTime) missing.push('time slot');
+  message.textContent = missing.length ? `Please select a ${missing.join(', ')}.` : '';
+  message.className = `booking-message${missing.length ? ' error' : ''}`;
+  return missing.length === 0;
 }
 
-bookingForm.addEventListener('submit', event => {
-    event.preventDefault();
-
-    if (!validateBooking()) return;
-
-    confirmationDetails.textContent =
-        `${petSelect.value} with Priyanka on ${selectedDate} at ${selectedTime}. Total cost: ₹280.00.`;
-    confirmationDialog.showModal();
+document.querySelector('#booking-form').addEventListener('submit', event => {
+  event.preventDefault();
+  if (!valid()) return;
+  const total = walker.hourlyRate + 30;
+  document.querySelector('#confirmation-details').textContent = `${pet.value} with ${walker.name} on ${selectedDate} at ${selectedTime}. Total cost: ₹${total.toFixed(2)}.`;
+  dialog.showModal();
 });
 
-submitBookingButton.addEventListener('click', event => {
-    event.preventDefault();
-
-    if (!validateBooking()) {
-        confirmationDialog.close();
-        return;
-    }
-
-    const booking = getBookingData();
-
-    localStorage.setItem('snifrLatestBooking', JSON.stringify(booking));
-    downloadBookingJson(booking);
-    confirmationDialog.close();
-    showMessage('Booking confirmed. Redirecting to your dashboard…', 'success');
-
-    window.setTimeout(() => {
-        window.location.href = 'Dashboard.HTML';
-    }, 1000);
+document.querySelector('#submit-booking').addEventListener('click', async event => {
+  event.preventDefault();
+  if (!valid()) return dialog.close();
+  const booking = {
+    bookingId: `SNIFR-${Date.now()}`,
+    walkerId: walker.id,
+    walker: walker.name,
+    pet: pet.value,
+    duration: '60 Minute Walk',
+    date: selectedDate,
+    time: selectedTime,
+    rate: walker.hourlyRate,
+    platformServiceFee: 30,
+    totalCost: walker.hourlyRate + 30,
+    status: 'confirmed',
+    submittedAt: new Date().toISOString()
+  };
+  const bookings = JSON.parse(localStorage.getItem('snifrBookings') || '[]');
+  bookings.push(booking);
+  localStorage.setItem('snifrBookings', JSON.stringify(bookings));
+  localStorage.setItem('snifrLatestBooking', JSON.stringify(booking));
+  await saveJson('bookings.json', bookings).catch(() => {});
+  dialog.close();
+  message.textContent = 'Booking confirmed. Opening dashboard…';
+  message.className = 'booking-message success';
+  setTimeout(() => location.href = 'Dashboard.HTML', 700);
 });
 
-cancelBookingButton.addEventListener('click', () => {
-    const shouldCancel = window.confirm('Cancel and clear your current booking selections?');
-    if (!shouldCancel) return;
-
-    selectedDate = '';
-    selectedTime = '';
-    petSelect.value = '';
-    setSelectedButton(dateButtons, null);
-    setSelectedButton(timeButtons, null);
-    updateBookingSummary();
-    showMessage('Booking selections cleared.', 'success');
+document.querySelector('#cancel-booking').addEventListener('click', () => {
+  if (!confirm('Clear your booking selections?')) return;
+  selectedDate = '';
+  selectedTime = '';
+  pet.value = '';
+  select(dateButtons, null);
+  select(timeButtons, null);
+  updateSummary();
 });
 
-// Start with no hidden assumptions so every required choice is validated.
-setSelectedButton(dateButtons, null);
-setSelectedButton(timeButtons, null);
-petSelect.value = '';
-updateBookingSummary();
+const walkerId = new URLSearchParams(location.search).get('walker') || 'priyanka';
+fetch('walkers.json')
+  .then(response => response.json())
+  .then(data => showWalker(data.walkers.find(item => item.id === walkerId) || data.walkers[0]))
+  .catch(() => {
+    message.textContent = 'Walker information could not be loaded. Open this project with Live Server.';
+    message.className = 'booking-message error';
+  });
+
+select(dateButtons, null);
+select(timeButtons, null);
+pet.value = '';
+updateSummary();

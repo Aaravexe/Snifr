@@ -252,25 +252,22 @@ body {
   width: 16px;
 }
 
-/* Ratings can use half-star increments without requiring another external asset. */
+/* Match the exported star icon used on Walker Information. */
 .stars .rating-star {
-  color: #e8a07c;
-  display: inline-block;
-  font-size: 17px;
-  height: 17px;
-  line-height: 17px;
-  position: relative;
+  display: block;
+  height: 16px;
   width: 16px;
 }
 
-.stars .rating-star.half {
-  background: linear-gradient(90deg, #e8a07c 50%, #e8dec9 50%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+.stars .rating-star img {
+  display: block;
+  height: 16px;
+  width: 16px;
 }
 
-.stars .rating-star.empty { color: #e8dec9; }
+.stars .rating-star.full img { opacity: 1; }
+.stars .rating-star.half img { opacity: .55; }
+.stars .rating-star.empty img { opacity: .18; }
 
 .card-footer {
   align-items: center;

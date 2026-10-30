@@ -1,5 +1,15 @@
 /* Shared navigation behaviour for the five-page prototype. */
 document.addEventListener('DOMContentLoaded', () => {
+  const session = JSON.parse(localStorage.getItem('snifrSession') || 'null');
+  const startButton = document.querySelector('#get-started');
+  const signInLink = document.querySelector('.signin');
+
+  if (session) {
+    startButton.href = 'Dashboard.HTML';
+    signInLink.href = 'Dashboard.HTML';
+    signInLink.textContent = 'My Dashboard';
+  }
+
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener('click', (event) => {
       const target = document.querySelector(link.getAttribute('href'));

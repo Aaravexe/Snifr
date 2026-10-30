@@ -22,49 +22,29 @@
     <main class="split" data-node-id="6:360">
         <div class="profile">
             <section class="intro card">
-                <div class="profile-head"><img class="profile-pic" src="assets/walker.png" alt="Priyanka">
+                <div class="profile-head"><img class="profile-pic" id="walker-photo" src="assets/walker.png" alt="Priyanka">
                     <div>
-                        <h1>Priyanka</h1>
-                        <p>★ 5.0 (54 reviews)</p>
+                        <h1 id="walker-name">Priyanka</h1>
+                        <div class="profile-rating" id="walker-rating" aria-label="5 out of 5 stars, 54 reviews">
+                        </div>
                     </div>
                 </div>
                 <div class="about">
                     <h2>About Me</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                        non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <p id="walker-about"></p>
                 </div>
-                <div class="stats"><span>Walks Completed<strong>x+ Walks</strong></span><span>Response Time<strong>&lt;
-                            x min</strong></span></div>
+                <div class="stats"><span>Walks Completed<strong id="walker-walks"></strong></span><span>Response Time<strong id="walker-response"></strong></span></div>
             </section>
             <section class="reviews">
                 <h2>Client Reviews</h2>
-                <div class="review card"><b>Charan K.</b><span class="stars"><img src="assets/star.svg"><img
-                            src="assets/star.svg"><img src="assets/star.svg"><img src="assets/star.svg"><img
-                            src="assets/star.svg"></span>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
-                </div>
-                <div class="review card"><b>Dhruv D.</b><span class="stars"><img src="assets/star.svg"><img
-                            src="assets/star.svg"><img src="assets/star.svg"><img src="assets/star.svg"><img
-                            src="assets/star.svg"></span>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore ma</p>
-                </div>
-                <div class="review card"><b>Riddhi S.</b><span class="stars"><img src="assets/star.svg"><img
-                            src="assets/star.svg"><img src="assets/star.svg"><img src="assets/star.svg"><img
-                            src="assets/star.svg"></span>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut la
-                    </p>
-                </div>
+                <div id="reviews-list"></div>
             </section>
         </div>
         <aside class="booking">
             <section class="card calendar">
                 <h2>Select Date</h2>
                 <div class="days">
-                    <button class="date-option selected" type="button"
+                    <button class="date-option" type="button"
                         data-date="Mon, Mar 15">Mon<strong>15</strong></button><button class="date-option" type="button"
                         data-date="Tue, Mar 16">Tue<strong>16</strong></button><button class="date-option" type="button"
                         data-date="Wed, Mar 17">Wed<strong>17</strong></button><button class="date-option" type="button"
@@ -72,7 +52,7 @@
                         data-date="Fri, Mar 19">Fri<strong>19</strong></button>
                 </div>
                 <h3>Available Time Slots</h3>
-                <div class="times"><button class="time-option selected" type="button">2:00 PM</button><button
+                <div class="times"><button class="time-option" type="button">2:00 PM</button><button
                         class="time-option" type="button">3:30 PM</button><button class="time-option" type="button">5:00
                         PM</button></div>
             </section>
@@ -84,12 +64,12 @@
                             <option>Pinky</option>
                         </select></span></p>
                 <p>Duration <b>60 Minute Walk</b></p>
-                <p>Date &amp; Time <b id="booking-date-time">Mon, Mar 15 @ 2:00 PM</b></p>
+                <p>Date &amp; Time <b id="booking-date-time">Select a date and time</b></p>
                 <hr>
-                <p>Rate <span>₹250.00</span></p>
+                <p>Rate <span id="booking-rate">₹250.00</span></p>
                 <p>Platform Service Fee <span>₹30.00</span></p>
                 <hr>
-                <h2>Total Cost <strong>₹280.00</strong></h2>
+                <h2>Total Cost <strong id="booking-total">₹280.00</strong></h2>
                 <p class="booking-message" id="booking-message" role="alert" aria-live="polite"></p>
                 <div class="booking-actions">
                     <button class="cancel-booking" id="cancel-booking" type="button">Cancel</button>
@@ -107,7 +87,7 @@
         <nav>
             <div><b>Product</b><a href="walkersearch.html">Find Walkers</a><a href="landingpage.html#how-it-works">How It Works</a><a
                     href="authpage.html?role=walker">Become a Walker</a></div>
-            <div><b>Company</b><a href="landingpage.html">About Us</a><a href="authpage.html">Sign In / Sign Up</a><a
+            <div><b>Company</b><a href="Dashboard.HTML">Dashboard</a><a href="landingpage.html">About Us</a><a href="authpage.html">Sign In / Sign Up</a><a
                     href="landingpage.html#top">Back to top</a></div>
         </nav>
     </footer>
@@ -116,10 +96,10 @@
         <form method="dialog">
             <h2 id="confirmation-title">Confirm your booking</h2>
             <p id="confirmation-details"></p>
-            <p class="dialog-note">Your booking will be downloaded as a local JSON file.</p>
+            <p class="dialog-note">Your booking will be saved automatically in local browser storage.</p>
             <div class="dialog-actions">
                 <button class="dialog-back" value="cancel">Go Back</button>
-                <button class="dialog-confirm" id="submit-booking" value="default">Confirm &amp; Download</button>
+                <button class="dialog-confirm" id="submit-booking" value="default">Confirm Booking</button>
             </div>
         </form>
     </dialog>
@@ -127,14 +107,4 @@
     <script src="wakerinfo.js"></script>
 </body>
 
-<<<<<<< HEAD
-<script>
-    const dateTime = document.querySelector('#booking-date-time'); let selectedDate = 'Mon, Mar 15', selectedTime = '2:00 PM';
-    document.querySelectorAll('.date-option').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.date-option').forEach(item => item.classList.remove('selected')); button.classList.add('selected'); selectedDate = button.dataset.date; dateTime.textContent = `${selectedDate} @ ${selectedTime}`; }));
-    document.querySelectorAll('.time-option').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.time-option').forEach(item => item.classList.remove('selected')); button.classList.add('selected'); selectedTime = button.textContent; dateTime.textContent = `${selectedDate} @ ${selectedTime}`; }));
-</script>
-<script src="landingpage.js"></script>
-
-=======
->>>>>>> 2e2a07fde8d3e714904ca19d79fb2ace6c6c8c74
 </html>

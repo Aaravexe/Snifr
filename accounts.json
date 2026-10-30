@@ -1,0 +1,10 @@
+{
+  "accounts": [
+    { "id": "owner-demo", "displayName": "Shankaracharya", "email": "owner@snifr.test", "password": "owner123", "role": "owner" },
+    { "id": "walker-priyanka", "displayName": "Priyanka", "email": "priyanka@snifr.test", "password": "walker123", "role": "walker", "walkerId": "priyanka" },
+    { "id": "walker-shubham", "displayName": "Shubham Bhardwaj", "email": "shubham@snifr.test", "password": "walker123", "role": "walker", "walkerId": "shubham-bhardwaj" },
+    { "id": "walker-anshul", "displayName": "Anshul Sharma", "email": "anshul@snifr.test", "password": "walker123", "role": "walker", "walkerId": "anshul-sharma" },
+    { "id": "walker-gaurav", "displayName": "Gaurav Pratap Singh", "email": "gaurav@snifr.test", "password": "walker123", "role": "walker", "walkerId": "gaurav-pratap-singh" },
+    { "id": "walker-aarav", "displayName": "Aarav Chib", "email": "aarav@snifr.test", "password": "walker123", "role": "walker", "walkerId": "aarav-chib" }
+  ]
+}

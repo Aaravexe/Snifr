@@ -146,6 +146,18 @@ h3 {
    white-space: nowrap;
 }
 
+.header-link {
+   color: var(--brown);
+   font-weight: 700;
+   text-decoration: none;
+   white-space: nowrap;
+   transition: color 180ms ease;
+}
+
+.header-link:hover {
+   color: var(--white);
+}
+
 /* ================================================================
    5. BUTTONS AND INTERACTION STATES
    ================================================================ */
@@ -508,6 +520,10 @@ h3 {
       gap: 10px;
    }
 
+   .header-link {
+      display: none;
+   }
+
    .signin {
       font-size: 13px;
    }
@@ -606,4 +622,10 @@ body {
    width: 100%;
    max-width: none;
    margin: 0;
+}
+
+@media (max-width: 900px) {
+   .header-link {
+      display: none;
+   }
 }
