@@ -9,21 +9,14 @@ let selectedTime = '';
 let walker = null;
 
 async function saveBookingFile(booking) {
-  if (!window.showDirectoryPicker) {
-    throw new Error('Folder saving is supported in Chrome and Edge. Open the website with Live Server.');
-  }
-
-  const selectedFolder = await window.showDirectoryPicker({
-    id: 'snifr-bookings',
-    mode: 'readwrite'
+  const response = await fetch('/api/bookings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(booking)
   });
-  const bookingsFolder = await selectedFolder.getDirectoryHandle('Snifr Bookings', { create: true });
-  const fileName = `booking-${booking.bookingId}.json`;
-  const file = await bookingsFolder.getFileHandle(fileName, { create: true });
-  const writer = await file.createWritable();
-  await writer.write(JSON.stringify(booking, null, 2));
-  await writer.close();
-  return fileName;
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.message || 'The booking could not be saved.');
+  return result.booking;
 }
 
 function stars(rating) {
@@ -124,20 +117,15 @@ document.querySelector('#submit-booking').addEventListener('click', async event 
     submittedAt: new Date().toISOString()
   };
   try {
-    const fileName = await saveBookingFile(booking);
+    const savedBooking = await saveBookingFile(booking);
     dialog.close();
     message.textContent = 'Booking saved in the Snifr Bookings folder. Opening dashboard...';
     message.className = 'booking-message success';
-    const bookingData = encodeURIComponent(JSON.stringify(booking));
     setTimeout(() => {
-      location.href = `Dashboard.HTML?booking=${bookingData}&file=${encodeURIComponent(fileName)}`;
+      location.href = `Dashboard.HTML?bookingId=${encodeURIComponent(savedBooking.bookingId)}`;
     }, 700);
   } catch (error) {
-    if (error.name === 'AbortError') {
-      message.textContent = 'Folder selection was cancelled. Your booking was not submitted.';
-    } else {
-      message.textContent = error.message || 'The booking file could not be saved.';
-    }
+    message.textContent = error.message || 'The booking file could not be saved. Start the website with npm start.';
     message.className = 'booking-message error';
     dialog.close();
   }

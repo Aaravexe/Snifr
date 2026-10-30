@@ -16,31 +16,13 @@ function load(key, fallback) {
   return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
 }
 
-function bookingFromUrl() {
-  const value = new URLSearchParams(location.search).get('booking');
-  if (!value) return null;
-  try {
-    return JSON.parse(value);
-  } catch {
-    return null;
-  }
-}
-
-async function updateBookingFile(booking) {
-  if (!window.showDirectoryPicker) {
-    throw new Error('Folder saving is supported in Chrome and Edge.');
-  }
-
-  const selectedFolder = await window.showDirectoryPicker({
-    id: 'snifr-bookings',
-    mode: 'readwrite'
-  });
-  const bookingsFolder = await selectedFolder.getDirectoryHandle('Snifr Bookings');
-  const fileName = new URLSearchParams(location.search).get('file') || `booking-${booking.bookingId}.json`;
-  const file = await bookingsFolder.getFileHandle(fileName);
-  const writer = await file.createWritable();
-  await writer.write(JSON.stringify(booking, null, 2));
-  await writer.close();
+async function getBooking() {
+  const bookingId = new URLSearchParams(location.search).get('bookingId');
+  const endpoint = bookingId ? `/api/bookings/${encodeURIComponent(bookingId)}` : '/api/bookings/latest';
+  const response = await fetch(endpoint);
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.message || 'Booking could not be loaded.');
+  return result.booking;
 }
 
 function renderPets() {
@@ -55,8 +37,7 @@ function renderPets() {
     </div>`).join('');
 }
 
-function renderBooking() {
-  const booking = bookingFromUrl();
+function showBooking(booking) {
   if (!booking) return;
   bookingBox.innerHTML = `
     <img src="assets/figma-user-img.png" alt="${booking.walker}">
@@ -65,17 +46,27 @@ function renderBooking() {
     <button class="cancel-latest" type="button">Cancel</button>`;
   bookingBox.querySelector('.cancel-latest').addEventListener('click', async () => {
     if (!confirm('Cancel this booking?')) return;
-    booking.status = 'cancelled';
     try {
-      await updateBookingFile(booking);
-      const params = new URLSearchParams(location.search);
-      params.set('booking', JSON.stringify(booking));
-      history.replaceState(null, '', `${location.pathname}?${params}`);
-      renderBooking();
+      const response = await fetch(`/api/bookings/${encodeURIComponent(booking.bookingId)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'cancelled' })
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || 'Booking could not be cancelled.');
+      showBooking(result.booking);
     } catch (error) {
-      if (error.name !== 'AbortError') alert(error.message || 'The booking file could not be updated.');
+      alert(error.message || 'The booking file could not be updated.');
     }
   });
+}
+
+async function renderBooking() {
+  try {
+    showBooking(await getBooking());
+  } catch {
+    bookingBox.innerHTML = '<small>Start this website with <b>npm start</b> to load bookings.</small>';
+  }
 }
 
 document.querySelector('#walker-search-form').addEventListener('submit', event => {
