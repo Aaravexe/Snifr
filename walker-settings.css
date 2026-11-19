@@ -1,0 +1,31 @@
+@import url('walker-onboarding.css');
+
+.settings-layout { grid-template-columns: 260px minmax(0, 1fr); }
+.settings-nav { padding: 24px; display: grid; gap: 6px; }
+.settings-nav .eyebrow { margin-bottom: 14px; }
+.settings-nav a { text-decoration: none; padding: 12px 14px; border-radius: 10px; font-weight: 600; }
+.settings-nav a:hover, .settings-nav a:focus-visible { background: #eff2e6; color: var(--olive); }
+.settings-tip { margin-top: 24px; padding: 24px; border-radius: 20px; background: #e6e8d2; }
+.settings-tip img { width: 100%; height: 140px; object-fit: contain; margin-bottom: 18px; }
+.settings-tip h2 { font-size: 23px; margin-bottom: 12px; }
+.settings-tip p { font-size: 14px; margin: 0; color: #555d40; }
+.settings-section { scroll-margin-top: 24px; border-bottom: 1px solid var(--border); padding-bottom: 18px; margin-bottom: 30px; }
+.settings-section:last-of-type { border: 0; margin-bottom: 0; padding-bottom: 0; }
+.settings-actions { gap: 12px; }
+#last-saved { color: var(--muted); font-size: 13px; margin-right: auto; }
+.incomplete-notice { background: #fff7e9; border-left: 3px solid #af713a; padding: 14px 18px; font-size: 14px; }
+.incomplete-notice a { font-weight: 700; }
+@media (max-width: 1000px) {
+  .settings-layout { grid-template-columns: 210px minmax(0, 1fr); }
+  .settings-nav { padding: 18px 12px; }
+  .settings-nav .eyebrow { padding-left: 12px; }
+  .settings-actions { flex-wrap: wrap; }
+  #last-saved { width: 100%; }
+}
+@media (max-width: 720px) {
+  .settings-layout { grid-template-columns: minmax(0, 1fr); }
+  .settings-tip, .settings-nav .eyebrow { display: none; }
+  .settings-nav { display: flex; flex-wrap: wrap; gap: 4px; padding: 10px; border-radius: 14px; }
+  .settings-nav a { padding: 8px 10px; font-size: 14px; }
+  .settings-actions .button { flex: 1; padding: 11px 14px; }
+}

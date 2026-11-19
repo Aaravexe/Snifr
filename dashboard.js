@@ -103,7 +103,7 @@ const session = load('snifrSession', null);
 if (session) {
   document.querySelector('#welcome-title').textContent = `Welcome back, ${session.displayName || session.email.split('@')[0]}!`;
   document.querySelector('.profile-button').addEventListener('click', () => {
-    location.href = session.walkerId ? `wakerinfo.html?walker=${session.walkerId}` : 'authpage.html';
+    location.href = session.role === 'walker' ? 'walker-settings.html' : 'authpage.html';
   });
 } else {
   document.querySelector('.profile-button').addEventListener('click', () => location.href = 'authpage.html?mode=signin');

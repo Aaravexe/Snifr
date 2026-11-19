@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Walker Settings | Snifr</title>
+  <link rel="stylesheet" href="walker-settings.css">
+  <script src="walker-profile.js" defer></script>
+  <script src="walker-settings.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="landingpage.html"><img src="assets/snifr-logo.png" alt=""><span>Snifr</span></a>
+    <nav aria-label="Primary navigation"><a href="landingpage.html">Home</a><a href="Dashboard.HTML">Dashboard</a><a href="walkersearch.html">Find Walkers</a><a href="walker-settings.html" aria-current="page">Walker Settings</a></nav>
+  </header>
+  <main id="main" class="page-shell">
+    <section id="account-gate" class="gate card" hidden>
+      <span class="eyebrow">YOUR WALKER ACCOUNT</span><h1>A home for your profile.</h1><p>Sign in with a walker account to update your details.</p>
+      <a class="button primary" href="authpage.html?role=walker&amp;mode=signin">Sign in as a walker</a><a class="text-link" href="authpage.html?role=walker">Create a walker account</a>
+    </section>
+    <div id="walker-workspace" hidden>
+      <div class="page-heading"><div><span class="eyebrow">YOUR WALKER PROFILE</span><h1>Walker Settings</h1><p>Keep your profile as welcoming as your walks.</p></div><span id="profile-status" class="draft-badge">Browser draft</span></div>
+      <div class="workspace-grid settings-layout">
+        <aside class="settings-aside">
+          <nav class="card settings-nav" aria-label="Settings sections"><span class="eyebrow">PROFILE DETAILS</span><a href="#about-section">About you</a><a href="#services-section">Services &amp; rate</a><a href="#location-section">Service area</a><a href="#photo-section">Profile photo</a></nav>
+          <div class="settings-tip"><img src="assets/dog-walk.png" alt=""><h2>A profile that feels like you</h2><p>Share your experience, keep your service area current, and use a photo where your face is easy to recognise.</p></div>
+        </aside>
+        <div class="editor-column">
+          <p class="storage-note"><strong>Browser draft</strong> Changes are saved on this browser only. They do not update your public listing yet. Server saving, availability and publishing are coming in the next stage.</p>
+          <p id="incomplete-notice" class="incomplete-notice" hidden>Your setup is incomplete. <a href="walker-onboarding.html">Continue step-by-step onboarding</a> or complete all fields below.</p>
+          <form id="settings-form" class="card editor-card" novalidate>
+            <fieldset id="about-section" class="settings-section">
+              <legend>About you</legend><p class="section-intro">Introduce yourself and the experience you bring. All fields are required.</p>
+              <label for="name">Display name</label><input id="name" name="name" autocomplete="name" maxlength="80" required aria-describedby="name-error"><small class="field-error" id="name-error" data-error="name"></small>
+              <label for="about">Biography</label><textarea id="about" name="about" rows="5" minlength="40" maxlength="1200" required aria-describedby="about-help bio-count about-error"></textarea><div class="field-meta"><small id="about-help">At least 40 characters. What makes a walk with you special?</small><small id="bio-count">0 / 1,200 characters</small></div><small class="field-error" id="about-error" data-error="about"></small>
+              <label for="experience">Years of dog-care experience</label><input class="short-input" id="experience" name="experience" type="number" min="0" max="60" step="1" required aria-describedby="experience-error"><small class="field-error" id="experience-error" data-error="experience"></small>
+            </fieldset>
+            <fieldset id="services-section" class="settings-section">
+              <legend>Services &amp; rate</legend><p class="section-intro">Offer the care you’re comfortable providing.</p>
+              <fieldset class="service-group"><legend>Services <span>(choose at least one)</span></legend>
+                <label class="service-option"><input type="checkbox" name="services" value="walking" aria-describedby="services-error"><span><strong>Dog walking</strong><small>Fresh air, exercise and a happy dog.</small></span></label>
+                <label class="service-option"><input type="checkbox" name="services" value="sitting" aria-describedby="services-error"><span><strong>Pet sitting</strong><small>Company and care while parents are away.</small></span></label>
+                <label class="service-option"><input type="checkbox" name="services" value="drop-in" aria-describedby="services-error"><span><strong>Drop-in visits</strong><small>A check-in, a meal and a little playtime.</small></span></label>
+                <small class="field-error" id="services-error" data-error="services"></small>
+              </fieldset>
+              <label for="hourlyRate">Hourly rate (INR)</label><div class="rate-input"><span aria-hidden="true">₹</span><input id="hourlyRate" name="hourlyRate" type="number" min="1" max="10000" step="0.01" required aria-describedby="rate-help hourlyRate-error"><span>/ hour</span></div><small id="rate-help">Your base hourly rate for the services selected above.</small><small class="field-error" id="hourlyRate-error" data-error="hourlyRate"></small>
+            </fieldset>
+            <fieldset id="location-section" class="settings-section">
+              <legend>Service area</legend><p class="section-intro">Where would you like to walk? A neighbourhood is enough; keep your street address private.</p>
+              <div class="field-grid"><div><label for="area">Neighbourhood / area</label><input id="area" name="area" maxlength="80" required aria-describedby="area-error"><small class="field-error" id="area-error" data-error="area"></small></div><div><label for="city">City</label><input id="city" name="city" autocomplete="address-level2" maxlength="80" required aria-describedby="city-error"><small class="field-error" id="city-error" data-error="city"></small></div></div>
+              <label for="pincode">PIN code</label><input class="short-input" id="pincode" name="pincode" inputmode="numeric" autocomplete="postal-code" pattern="[1-9][0-9]{5}" maxlength="6" required aria-describedby="pincode-error"><small class="field-error" id="pincode-error" data-error="pincode"></small>
+            </fieldset>
+            <fieldset id="photo-section" class="settings-section">
+              <legend>Profile photo</legend><p class="section-intro">A friendly, clear photo helps pet parents recognise you.</p>
+              <label for="profile-image">Upload a photo</label><div class="photo-upload"><div class="photo-frame"><img id="photo-preview" alt="Your selected profile photo" hidden><span id="photo-placeholder" aria-hidden="true">You</span></div><div class="photo-controls"><input id="profile-image" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="image-help image-error"><small id="image-help">JPG, PNG or WebP, up to 2 MB.</small><button id="remove-photo" class="text-button" type="button" hidden>Remove photo</button></div></div><small class="field-error" id="image-error" data-error="image"></small>
+            </fieldset>
+            <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+            <div class="form-actions settings-actions"><span id="last-saved">No changes saved yet</span><button id="discard-changes" class="button secondary" type="button">Discard changes</button><button id="save-settings" class="button primary" type="submit">Save changes</button></div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <noscript><p class="card">Please enable JavaScript to edit your walker profile.</p></noscript>
+  </main>
+  <footer class="site-footer"><a href="landingpage.html">Snifr</a><span>Good walks. Great company.</span></footer>
+</body>
+</html>

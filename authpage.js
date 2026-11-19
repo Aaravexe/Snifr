@@ -47,8 +47,9 @@ form.addEventListener('submit', async event => {
     if (!response.ok) return show(result.message || 'Account request failed.');
 
     localStorage.setItem('snifrSession', JSON.stringify(result.account));
-    show(mode === 'create' ? 'Account created. Opening dashboard...' : 'Signed in. Opening dashboard...', true);
-    setTimeout(() => location.href = 'Dashboard.HTML', 700);
+    const destination = result.account.role === 'walker' ? 'walker-onboarding.html' : 'Dashboard.HTML';
+    show(result.account.role === 'walker' ? 'Signed in. Opening your walker profile...' : 'Signed in. Opening dashboard...', true);
+    setTimeout(() => location.href = destination, 700);
   } catch {
     show('Account server is unavailable. Start the website with npm start.');
   }
