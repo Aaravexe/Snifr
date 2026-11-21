@@ -9,3 +9,6 @@ node_modules/
 .env
 .env.*
 !.env.example
+
+# Person 1 local JSON API records
+server/data/*.json

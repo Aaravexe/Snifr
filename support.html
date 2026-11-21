@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Send feedback to Snifr.">
+  <title>Support | Snifr</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="support.css">
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="/">Snifr</a><nav aria-label="Primary navigation"><a href="/">Home</a><a href="/walkers">Find Walkers</a><a href="/auth">Sign in</a></nav></header>
+  <main class="page-shell"><section class="intro"><span>SUPPORT</span><h1>How can we improve Snifr?</h1><p>Your message is saved locally by the Express server for this classroom project.</p></section>
+    <form id="feedback-form" class="feedback-card" novalidate>
+      <label for="feedback-name">Name</label><input id="feedback-name" name="name" autocomplete="name" maxlength="80" required>
+      <label for="feedback-email">Email</label><input id="feedback-email" name="email" type="email" autocomplete="email" required>
+      <label for="feedback-message">Message</label><textarea id="feedback-message" name="message" rows="6" minlength="10" maxlength="1000" required></textarea>
+      <p id="feedback-status" role="status" aria-live="polite"></p><button type="submit">Send feedback</button>
+    </form>
+  </main>
+  <footer><a href="/">Snifr</a><span>Good walks. Great company.</span></footer>
+  <script src="support.js"></script>
+</body>
+</html>
