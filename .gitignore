@@ -3,3 +3,9 @@ Snifr Bookings/
 
 # Locally registered accounts
 Snifr Accounts/
+
+# Installed dependencies and local configuration
+node_modules/
+.env
+.env.*
+!.env.example

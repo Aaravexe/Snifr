@@ -188,9 +188,11 @@ async function getLatestBooking(response) {
 async function serveFile(request, response, pathname) {
   const relativePath = pathname === '/' ? 'landingpage.html' : decodeURIComponent(pathname).replace(/^\/+/, '');
   const filePath = path.resolve(ROOT, relativePath);
-  const privatePath = relativePath === 'server.js' || relativePath === 'package.json' ||
-    relativePath.startsWith('.git') || relativePath.startsWith('Snifr Bookings') ||
-    relativePath.startsWith('Snifr Accounts');
+  const normalizedPath = path.relative(ROOT, filePath).split(path.sep).join('/').toLowerCase();
+  const firstPart = normalizedPath.split('/')[0];
+  const privatePath = firstPart.startsWith('.') ||
+    ['server', 'node_modules', 'tests', 'snifr bookings', 'snifr accounts'].includes(firstPart) ||
+    ['server.js', 'package.json', 'package-lock.json'].includes(normalizedPath);
 
   if (privatePath || !filePath.startsWith(`${ROOT}${path.sep}`)) {
     response.writeHead(403);
