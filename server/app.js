@@ -7,6 +7,8 @@ const blockPrivateFiles = require('./middleware/blockPrivateFiles');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 const createLocalDataRouter = require('./routes/localDataRoutes');
 const createLegacyRouter = require('./routes/legacyRoutes');
+const createMongoFeedbackRouter = require('./routes/mongoFeedbackRoutes');
+const { databaseStatus, requireDatabase } = require('./config/database');
 
 const ROOT = path.resolve(__dirname, '..');
 const page = file => (req, res) => res.sendFile(file, { root: ROOT });
@@ -18,8 +20,9 @@ function createApp() {
   app.use(express.json({ limit: '1mb' }));
   app.use(express.urlencoded({ extended: false, limit: '1mb' }));
 
-  app.get('/health', (req, res) => res.json({ success: true, data: { status: 'ok' }, message: 'Snifr Express server is running.' }));
+  app.get('/health', (req, res) => res.json({ success: true, data: { status: 'ok', mongodb: databaseStatus() }, message: 'Snifr Express server is running.' }));
   app.use('/api/local', createLocalDataRouter());
+  app.use('/api/feedback', requireDatabase, createMongoFeedbackRouter());
   app.use('/api', createLegacyRouter(ROOT));
 
   app.get('/', page('landingpage.html'));

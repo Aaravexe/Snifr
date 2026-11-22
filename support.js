@@ -10,14 +10,14 @@ form.addEventListener('submit', async event => {
     return;
   }
   try {
-    const response = await fetch('/api/local/feedback', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+    const response = await fetch('/api/feedback', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
     const result = await response.json();
     if (!response.ok) throw new Error(result.message || 'Feedback could not be saved.');
     form.reset();
     status.textContent = result.message;
     status.className = 'success';
   } catch (error) {
-    status.textContent = error.message || 'Feedback server is unavailable.';
+    status.textContent = error.message || 'Local MongoDB is unavailable. Start it, then try again.';
     status.className = 'error';
   }
 });
