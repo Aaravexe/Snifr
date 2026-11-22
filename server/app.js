@@ -23,6 +23,8 @@ function createApp() {
   app.use(require('./routes/dashboardRoutes')(page));
   app.use('/api/local', createLocalDataRouter());
   app.use('/api', bookingRoutes);
+  app.use('/api/auth', require('./routes/authRoutes'));
+  app.use('/api/consumer-profiles', require('./routes/consumerProfileRoutes'));
   app.use('/api/users', require('./routes/userRoutes'));
   app.use('/api/walkers', require('./routes/walkerRoutes'));
   app.use('/api', createLegacyRouter(ROOT));

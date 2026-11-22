@@ -198,6 +198,8 @@ body {
     font: 700 13px Figtree
 }
 
+.auth-card [hidden] { display: none !important; }
+
 .auth-card>label input:not([type=checkbox]) {
     height: 48px;
     padding: 14px;

@@ -27,7 +27,7 @@ function dashboardRoutes(page) {
       page(slug + '.html')(req, res);
     });
   }
-  for (const [role, paths] of [['consumer',['my-bookings']],['walker',['walker-bookings','walker-onboarding','walker-settings','walker-availability']]]) {
+  for (const [role, paths] of [['consumer',['my-bookings','consumer-settings']],['walker',['walker-bookings','walker-onboarding','walker-settings','walker-availability']]]) {
     for (const slug of paths) router.get(['/'+slug,'/'+slug+'.html'], (req,res) => {
       res.set('Cache-Control','private, no-store');
       if (req.user?.role !== role) return res.redirect(home(req.user?.role));

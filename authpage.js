@@ -14,53 +14,58 @@ function show(text, success = false) {
 
 function setMode(nextMode) {
   mode = nextMode;
-  modeButtons.forEach(button => button.classList.toggle('active', button.dataset.mode === mode));
-  submit.textContent = mode === 'create' ? 'Create Account' : 'Sign In';
+  modeButtons.forEach(button => {
+    const active = button.dataset.mode === mode;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+  const creating = mode === 'create';
+  document.querySelector('#name-field').hidden = !creating;
+  document.querySelector('#city-field').hidden = !creating || selectedRole() !== 'consumer';
+  document.querySelector('#role-field').hidden = !creating;
+  document.querySelector('#auth-name').required = creating;
+  submit.textContent = creating ? 'Create Account' : 'Sign In';
   show('');
 }
 
-modeButtons.forEach(button => button.addEventListener('click', () => setMode(button.dataset.mode)));
+function selectedRole() { return document.querySelector('[name="role"]:checked')?.value || 'consumer'; }
 
+modeButtons.forEach(button => button.addEventListener('click', () => setMode(button.dataset.mode)));
 roleInputs.forEach(input => input.addEventListener('change', () => {
-  document.querySelectorAll('.role-option').forEach(label => {
-    label.classList.toggle('selected', label.contains(input));
-  });
+  document.querySelectorAll('.role-option').forEach(label => label.classList.toggle('selected', label.contains(input)));
+  document.querySelector('#city-field').hidden = mode !== 'create' || selectedRole() !== 'consumer';
 }));
 
 form.addEventListener('submit', async event => {
   event.preventDefault();
-  const emailValue = email.value.trim().toLowerCase();
-  const role = document.querySelector('[name="role"]:checked').value;
-
+  if (!form.reportValidity()) return;
   if (!email.validity.valid) return show('Enter a valid email address.');
-  if (password.value.length < 6) return show('Password must contain at least 6 characters.');
+  if (password.value.length < 6 || password.value.length > 200) return show('Password must contain 6–200 characters.');
 
+  const creating = mode === 'create';
+  const payload = { email: email.value.trim().toLowerCase(), password: password.value };
+  if (creating) Object.assign(payload, {
+    displayName: document.querySelector('#auth-name').value.trim(),
+    role: selectedRole(),
+    ...(selectedRole() === 'consumer' ? { city: document.querySelector('#auth-city').value.trim() } : {})
+  });
+  submit.disabled = true;
   try {
-    const endpoint = mode === 'create' ? '/api/accounts/register' : '/api/accounts/login';
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: emailValue, password: password.value, role })
+    const response = await fetch(creating ? '/api/auth/register' : '/api/auth/login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
     });
     const result = await response.json();
-
     if (!response.ok) return show(result.message || 'Account request failed.');
-
-    localStorage.setItem('snifrSession', JSON.stringify(result.account));
-    let destination = '/dashboard';
-    if (result.account.role === 'walker') {
-      const profile = await fetch('/api/dashboard/walker').then(response => response.json());
-      if (profile.success && !profile.data.profile?.profileComplete) destination = '/walker-onboarding';
-    }
-    show(result.account.role === 'walker' ? 'Signed in. Opening your walker profile...' : 'Signed in. Opening dashboard...', true);
-    setTimeout(() => location.href = destination, 700);
+    show(creating ? 'Account created. Opening your Snifr account…' : 'Signed in. Opening your Snifr account…', true);
+    setTimeout(() => location.replace(result.data.destination), 300);
   } catch {
     show('Account server is unavailable. Start the website with npm start.');
+  } finally {
+    submit.disabled = false;
   }
 });
 
-const parameters = new URLSearchParams(location.search);
-if (parameters.get('role') === 'walker') {
+if (new URLSearchParams(location.search).get('role') === 'walker') {
   document.querySelector('[name="role"][value="walker"]').click();
 }
-if (parameters.get('mode') === 'signin') setMode('signin');
+setMode(new URLSearchParams(location.search).get('mode') === 'signin' ? 'signin' : 'create');
