@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const User = require('../models/User');
 const Walker = require('../models/WalkerProfile');
+const ConsumerProfile = require('../models/ConsumerProfile');
 const Pet = require('../models/Pet');
 const Booking = require('../models/Booking');
 const { allow, requireMongo, fields, validId, fail, revoke } = require('../middleware/dashboardAccess');
@@ -29,7 +30,7 @@ router.post('/', save);
 router.patch('/:id', save);
 router.delete('/:id', async (req,res) => {
   const id = req.account.id;
-  if (id === req.user.id || await Walker.exists({ userId: id }) || await Pet.exists({ consumerId: id }) || await Booking.exists({ consumerId: id }))
+  if (id === req.user.id || await Walker.exists({ userId: id }) || await ConsumerProfile.exists({ userId: id }) || await Pet.exists({ consumerId: id }) || await Booking.exists({ consumerId: id }))
     throw fail(409, 'This account is in use. Deactivate it or remove its associated records first.');
   await req.account.deleteOne();
   revoke(id);
