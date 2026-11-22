@@ -21,6 +21,8 @@ const bookingSchema = new mongoose.Schema({
   notes: { type: String, trim: true, maxlength: 500, default: '' }
 }, { timestamps: true, versionKey: false });
 
-bookingSchema.index({ walkerId: 1, date: 1, time: 1, status: 1 });
+bookingSchema.index({ walkerId: 1, date: 1, time: 1 }, {
+  unique: true, partialFilterExpression: { status: { $in: ['pending','accepted'] } }
+});
 
 module.exports = mongoose.models.Booking || mongoose.model('Booking', bookingSchema);

@@ -25,12 +25,12 @@
   function renderStatus() {
     const complete = saved.completed && !Object.keys(profile.validate(saved.profile)).length;
     document.querySelector('#incomplete-notice').hidden = complete;
-    document.querySelector('#profile-status').textContent = complete ? 'Profile draft complete' : 'Setup incomplete';
+    document.querySelector('#profile-status').textContent = complete ? 'Profile complete' : 'Setup incomplete';
     document.querySelector('#last-saved').textContent = saved.savedAt
       ? `Saved ${new Date(saved.savedAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}` : 'No changes saved yet';
   }
 
-  form.addEventListener('submit', event => {
+  form.addEventListener('submit', async event => {
     event.preventDefault();
     if (!controller.imageReady()) return;
     const values = controller.read();
@@ -40,10 +40,10 @@
     }
     submit.disabled = true;
     try {
-      saved = profile.save(account, values, true, 3);
+      saved = await profile.publish(account,values);
       controller.markSaved();
       renderStatus();
-      profile.message('Changes saved in this browser. Your public listing has not changed.', 'success');
+      profile.message('Your profile has been published.', 'success');
     } catch (error) { profile.message(error.message, 'error'); }
     finally { submit.disabled = false; }
   });

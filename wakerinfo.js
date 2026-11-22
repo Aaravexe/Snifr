@@ -11,7 +11,7 @@ let availability = [];
 
 const session = JSON.parse(localStorage.getItem('snifrSession') || 'null');
 const consumerId = session?.id || session?._id || 'demo-consumer';
-const readPets = () => JSON.parse(localStorage.getItem('snifrPets') || '[{"id":"sheru","name":"Sheru"},{"id":"pinky","name":"Pinky"}]');
+
 
 function stars(rating) {
   return Array.from({ length: 5 }, (_, index) => `<img class="${rating - index >= 1 ? 'full' : rating - index >= .5 ? 'half' : 'empty'}" src="assets/star.svg" alt="">`).join('');
@@ -19,9 +19,16 @@ function stars(rating) {
 
 function setMessage(text = '', kind = '') { message.textContent = text; message.className = `booking-message${kind ? ` ${kind}` : ''}`; }
 
-function populatePets() {
-  pet.replaceChildren(new Option('Choose a pet', ''));
-  readPets().forEach((item, index) => pet.add(new Option(item.name, item.id || `pet-${index + 1}`)));
+async function populatePets() {
+  pet.replaceChildren(new Option('Loading pets…',''));
+  const res = await fetch('/api/pets');
+  const result = await res.json();
+  if (!res.ok) {
+    pet.replaceChildren(new Option('No pet selected',''));
+    throw new Error(res.status === 401 ? 'Sign in as a consumer to choose your pet.' : result.message);
+  }
+  pet.replaceChildren(new Option(result.data.length ? 'Choose a pet' : 'Add a pet on your dashboard first',''));
+  for (const item of result.data) pet.add(new Option(item.name,item._id));
 }
 
 function showWalker(data) {
@@ -34,7 +41,14 @@ function showWalker(data) {
   document.querySelector('#walker-walks').textContent = `${data.walksCompleted || 0}+ Walks`;
   document.querySelector('#walker-response').textContent = data.responseTime || 'Usually within an hour';
   document.querySelector('#walker-rating').innerHTML = `<span class="profile-stars">${stars(data.rating || 0)}</span><span>${data.rating || 0} (${data.reviewCount || 0} reviews)</span>`;
-  document.querySelector('#reviews-list').innerHTML = (data.reviews || []).map(review => `<div class="review card"><b>${review.name}</b><span class="stars">${stars(review.rating)}</span><p>${review.text}</p></div>`).join('') || '<p>No reviews yet.</p>';
+  const list = document.querySelector('#reviews-list');
+  list.replaceChildren();
+  for (const review of data.reviews || []) {
+    const card = document.createElement('article'), title = document.createElement('b'), comment = document.createElement('p');
+    card.className = 'review card'; title.textContent = review.name + ' · ' + review.rating + '/5'; comment.textContent = review.text;
+    card.append(title,comment); list.append(card);
+  }
+  if (!list.children.length) list.textContent = 'No reviews yet.';
   const rate = Number(data.hourlyRate || 0);
   document.querySelector('#booking-rate').textContent = `₹${rate.toFixed(2)}`;
   document.querySelector('#booking-total').textContent = `₹${(rate + 30).toFixed(2)}`;
@@ -100,4 +114,4 @@ async function loadBookingDetails() {
   showWalker(result.data.walker); availability = result.data.availability; renderDates();
 }
 
-populatePets(); updateSummary(); loadBookingDetails().catch(error => setMessage(error.message || 'Start the project with npm start.', 'error'));
+populatePets().catch(error => setMessage(error.message,'error')); updateSummary(); loadBookingDetails().catch(error => setMessage(error.message || 'Start the project with npm start.', 'error'));

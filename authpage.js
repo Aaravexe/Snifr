@@ -47,7 +47,11 @@ form.addEventListener('submit', async event => {
     if (!response.ok) return show(result.message || 'Account request failed.');
 
     localStorage.setItem('snifrSession', JSON.stringify(result.account));
-    const destination = result.account.role === 'walker' ? 'walker-onboarding.html' : 'Dashboard.HTML';
+    let destination = '/dashboard';
+    if (result.account.role === 'walker') {
+      const profile = await fetch('/api/dashboard/walker').then(response => response.json());
+      if (profile.success && !profile.data.profile?.profileComplete) destination = '/walker-onboarding';
+    }
     show(result.account.role === 'walker' ? 'Signed in. Opening your walker profile...' : 'Signed in. Opening dashboard...', true);
     setTimeout(() => location.href = destination, 700);
   } catch {

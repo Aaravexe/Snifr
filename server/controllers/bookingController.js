@@ -2,6 +2,11 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const mongoose = require('mongoose');
 const Booking = require('../models/Booking');
+const WalkerProfile = require('../models/WalkerProfile');
+const Availability = require('../models/WalkerAvailability');
+const Review = require('../models/Review');
+const rules = require('../../shared/availability');
+const { fail } = require('../middleware/dashboardAccess');
 const { readAll, saveAll } = require('../services/bookingStore');
 const { readBackups, writeBackup, removeBackup } = require('../services/bookingJsonBackup');
 
@@ -37,14 +42,14 @@ async function allBookings() {
 }
 
 async function findBooking(id) {
-  if (mongoReady()) return Booking.findById(id).lean();
+  if (mongoReady()) return mongoose.isObjectIdOrHexString(id) ? Booking.findById(id).lean() : null;
   return (await readAll()).find(item => idOf(item) === String(id)) || null;
 }
 
 async function persistBooking(booking, isNew = false) {
   let saved;
   if (mongoReady()) {
-    saved = isNew ? await Booking.create(booking) : await Booking.findByIdAndUpdate(booking._id, booking, { new: true, runValidators: true });
+    saved = isNew ? await Booking.create(booking) : await Booking.findByIdAndUpdate(booking._id, booking, { returnDocument:'after', runValidators: true });
     saved = serialize(saved);
   } else {
     const bookings = await readAll();
@@ -65,12 +70,13 @@ async function loadFallbackWalker(walkerId) {
 }
 
 async function getWalkerDetails(walkerId) {
-  // A WalkerProfile model is owned by Person 3. Use its collection when it is present.
-  if (mongoReady()) {
-    const raw = await mongoose.connection.db.collection('walkerprofiles').findOne({
-      $or: [{ _id: mongoose.isValidObjectId(walkerId) ? new mongoose.Types.ObjectId(walkerId) : null }, { userId: walkerId }, { slug: walkerId }].filter(Boolean)
-    });
-    if (raw) return { id: String(raw._id), name: raw.displayName || raw.name || 'Walker', hourlyRate: Number(raw.hourlyRate), image: raw.profileImage, about: raw.bio, rating: raw.rating || 0, reviewCount: raw.reviewCount || 0 };
+  if (mongoReady() && mongoose.isObjectIdOrHexString(walkerId)) {
+    const w = await WalkerProfile.findOne({ _id: walkerId, status: 'published' });
+    if (!w) return null;
+    const reviews = await Review.find({ walkerId }).select('rating comment').sort({ createdAt: -1 }).limit(20).lean();
+    return { id: w.id, name:w.name, hourlyRate:w.hourlyRate, image:w.image, about:w.about,
+      walksCompleted:w.walksCompleted, rating:w.rating, reviewCount:w.reviewCount,
+      reviews:reviews.map(r => ({ name:'Verified consumer', rating:r.rating, text:r.comment })) };
   }
   const walker = await loadFallbackWalker(walkerId);
   return walker && { id: walker.id, name: walker.name, hourlyRate: walker.hourlyRate, image: walker.image, about: walker.about, rating: walker.rating, reviewCount: walker.reviewCount, reviews: walker.reviews || [] };
@@ -83,25 +89,24 @@ async function timeIsAvailable(walkerId, date, time, exceptId = '') {
   );
   if (conflicting) return false;
 
-  if (!mongoReady()) return true;
-  const availability = await mongoose.connection.db.collection('walkeravailabilities').findOne({
-    walkerId: { $in: [walkerId, mongoose.isValidObjectId(walkerId) ? new mongoose.Types.ObjectId(walkerId) : walkerId] },
-    date
-  });
-  if (!availability) return true; // Person 3 may use a separate availability shape; conflict protection remains active.
-  if (availability.isAvailable === false) return false;
-  const slot = Array.isArray(availability.slots) && availability.slots.find(item => (typeof item === 'string' ? item : item.time) === time);
-  return !slot || typeof slot === 'string' || slot.isAvailable !== false;
+  if (!mongoReady() || !mongoose.isObjectIdOrHexString(walkerId)) return true;
+  const day = await Availability.findOne({ walkerId, date }).lean();
+  return day?.slots.some(s => displayTime(s.startTime) === time && (s.status === 'available' || String(s.bookingId) === exceptId));
+}
+
+function displayTime(value) {
+  const [h,m] = value.split(':');
+  return (Number(h) % 12 || 12) + ':' + m + (Number(h) < 12 ? ' AM' : ' PM');
 }
 
 async function updateAvailability(booking, available) {
-  if (!mongoReady()) return;
-  const walkerIds = [booking.walkerId];
-  if (mongoose.isValidObjectId(booking.walkerId)) walkerIds.push(new mongoose.Types.ObjectId(booking.walkerId));
-  await mongoose.connection.db.collection('walkeravailabilities').updateOne(
-    { walkerId: { $in: walkerIds }, date: booking.date, 'slots.time': booking.time },
-    { $set: { 'slots.$.isAvailable': available, updatedAt: new Date() } }
-  );
+  if (!mongoReady() || !mongoose.isObjectIdOrHexString(booking.walkerId)) return;
+  const [clock,period] = booking.time.split(' '), [h,m] = clock.split(':');
+  const startTime = String(Number(h) % 12 + (period === 'PM' ? 12 : 0)).padStart(2,'0') + ':' + m;
+  const slot = available ? { startTime, bookingId:booking._id } : { startTime, $or:[{ status:'available' },{ bookingId:booking._id }] };
+  const result = await Availability.updateOne({ walkerId:booking.walkerId, date:booking.date, slots:{ $elemMatch:slot } },
+    { $set:{ 'slots.$.status':available ? 'available' : 'booked','slots.$.bookingId':available ? null : booking._id }, $inc:{ __v:1 } });
+  if (!available && !result.matchedCount) throw fail(409, 'This time slot is unavailable.');
 }
 
 async function createBooking(req, res, next) {
@@ -118,8 +123,9 @@ async function createBooking(req, res, next) {
         mongoose.connection.db.collection('users').findOne(idQuery(String(consumerId))),
         mongoose.connection.db.collection('pets').findOne(idQuery(String(petId)))
       ]);
-      if (!consumer) return response(res, 404, null, 'Consumer account could not be found.');
+      if (!consumer && req.user?.id !== consumerId) return response(res, 404, null, 'Consumer account could not be found.');
       if (!savedPet) return response(res, 404, null, 'Pet could not be found.');
+      if (String(savedPet.consumerId) !== String(consumerId)) return response(res, 403, null, 'Choose a pet belonging to this consumer.');
     }
     if (!(await timeIsAvailable(String(walkerId), date, time))) return response(res, 409, null, 'That time slot has just been booked. Please choose another slot.');
     const rate = Number((walker.hourlyRate * Number(durationMinutes) / 60).toFixed(2));
@@ -131,7 +137,7 @@ async function createBooking(req, res, next) {
 
 async function listBookings(req, res, next) {
   try {
-    let bookings = await allBookings();
+    let bookings = (await allBookings()).filter(item => !req.bookingScope || req.bookingScope(item));
     const { consumerId, walkerId, status } = req.query;
     if (consumerId) bookings = bookings.filter(item => String(item.consumerId) === String(consumerId));
     if (walkerId) bookings = bookings.filter(item => String(item.walkerId) === String(walkerId));
@@ -151,7 +157,7 @@ async function getBooking(req, res, next) {
 
 async function getLatestBooking(req, res, next) {
   try {
-    const bookings = await allBookings();
+    const bookings = (await allBookings()).filter(item => !req.bookingScope || req.bookingScope(item));
     const latest = bookings.sort((a, b) => Date.parse(b.createdAt || b.updatedAt || 0) - Date.parse(a.createdAt || a.updatedAt || 0))[0] || null;
     response(res, 200, latest, latest ? 'Latest booking loaded.' : 'No bookings found.');
   } catch (error) { next(error); }
@@ -190,6 +196,7 @@ async function deleteBooking(req, res, next) {
   try {
     const booking = await findBooking(req.params.id);
     if (!booking) return response(res, 404, null, 'Booking not found.');
+    if (mongoReady() && await Review.exists({ bookingId: req.params.id })) return response(res,409,null,'Remove the booking review before deleting this booking.');
     if (mongoReady()) await Booking.findByIdAndDelete(req.params.id);
     else await saveAll((await readAll()).filter(item => idOf(item) !== String(req.params.id)));
     await updateAvailability(booking, true);
@@ -202,6 +209,11 @@ async function getBookingDetails(req, res, next) {
   try {
     const walker = await getWalkerDetails(req.params.walkerId);
     if (!walker) return response(res, 404, null, 'Walker profile could not be found.');
+    if (mongoReady() && mongoose.isObjectIdOrHexString(walker.id)) {
+      const days = await Availability.find({ walkerId:walker.id, date:{ $gt:rules.today() } }).sort({ date:1 }).lean();
+      const availability = days.map(d => ({ date:d.date, slots:d.slots.filter(s => s.status === 'available').map(s => displayTime(s.startTime)) }));
+      return response(res,200,{walker,availability},'Walker and available times loaded.');
+    }
     const localDate = value => `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, '0')}-${String(value.getDate()).padStart(2, '0')}`;
     const dates = Array.from({ length: 5 }, (_, index) => {
       const date = new Date(); date.setHours(0, 0, 0, 0); date.setDate(date.getDate() + index + 1);
@@ -217,4 +229,38 @@ async function localBackups(req, res, next) {
   try { response(res, 200, await readBackups(), 'Local JSON booking backup loaded.'); } catch (error) { next(error); }
 }
 
-module.exports = { createBooking, listBookings, getBooking, getLatestBooking, updateBooking, deleteBooking, getBookingDetails, localBackups };
+// Scope the existing booking handlers to the identity verified at sign-in.
+async function bindBookingScope(req, res, next) {
+  const user = req.user;
+  if (user.role === 'admin') return next();
+  const consumer = user.role === 'consumer';
+  let owner = user.id;
+  if (!consumer) {
+    const profile = mongoReady() && mongoose.isObjectIdOrHexString(owner)
+      ? await WalkerProfile.findOne({ userId: owner }).select('_id') : null;
+    owner = profile?.id || user.walkerId || owner;
+  }
+  const owners = [owner,consumer ? user.legacyId : user.walkerId].filter(Boolean).map(String);
+  req.bookingScope = item => owners.includes(String(consumer ? item.consumerId : item.walkerId));
+  if (req.method === 'POST') {
+    if (!consumer) return response(res, 403, null, 'Only consumers can request a walk.');
+    if (!req.body) return response(res, 400, null, 'Enter the booking details.');
+    req.body.consumerId = owner;
+  }
+  const id = req.path.split('/')[1];
+  if (id && id !== 'latest') {
+    const booking = await findBooking(id);
+    if (!booking || !req.bookingScope(booking)) return response(res, 404, null, 'Booking not found.');
+    if (req.method === 'PATCH') {
+      const body = req.body || {};
+      const allowed = consumer ? ['date','time','notes','status'] : ['status'];
+      const transitions = consumer ? ['cancelled'] : booking.status === 'pending' ? ['accepted','rejected'] : ['completed','cancelled'];
+      if (!ACTIVE_STATUSES.includes(booking.status) || Object.keys(body).some(key => !allowed.includes(key)) ||
+          (body.status && !transitions.includes(body.status))) return response(res, 403, null, 'This booking change is unavailable.');
+    }
+    if (req.method === 'DELETE' && (!consumer || !['rejected','cancelled'].includes(booking.status)))
+      return response(res, 403, null, 'Only a cancelled or rejected booking can be removed.');
+  }
+  next();
+}
+module.exports = { createBooking, listBookings, getBooking, getLatestBooking, updateBooking, deleteBooking, getBookingDetails, localBackups, bindBookingScope };

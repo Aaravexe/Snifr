@@ -4,6 +4,8 @@ const express = require('express');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const { startSession } = require('../middleware/dashboardAccess');
+const User = require('../models/User');
 
 async function readAccounts(file) {
   try {
@@ -52,12 +54,21 @@ function createLegacyRouter(root) {
       if (password.length < 6) return res.status(400).json({ message: 'Password must contain at least 6 characters.' });
       const allAccounts = [...await readAccounts(sampleAccounts), ...await readAccounts(localAccounts)];
       if (allAccounts.some(account => account.email.toLowerCase() === email)) return res.status(409).json({ message: 'An account with this email already exists.' });
+      if (User.db.readyState === 1) {
+        const user = new User({ email, displayName: email.split('@')[0], role: role === 'owner' ? 'consumer' : role });
+        await user.setPassword(password);
+        await user.save();
+        const account = user.publicAccount();
+        startSession(req, res, account);
+        return res.status(201).json({ account });
+      }
       const passwordSalt = crypto.randomBytes(16).toString('hex');
       const account = { id: `user-${Date.now()}`, displayName: email.split('@')[0], email, role, passwordSalt, passwordHash: crypto.scryptSync(password, passwordSalt, 64).toString('hex'), createdAt: new Date().toISOString() };
       const accounts = await readAccounts(localAccounts);
       accounts.push(account);
       await fs.mkdir(accountsDirectory, { recursive: true });
       await fs.writeFile(localAccounts, JSON.stringify({ accounts }, null, 2), 'utf8');
+      startSession(req, res, account);
       res.status(201).json({ account: publicAccount(account) });
     } catch (error) { next(error); }
   });
@@ -66,8 +77,27 @@ function createLegacyRouter(root) {
     try {
       const email = String(req.body?.email || '').trim().toLowerCase();
       const password = String(req.body?.password || '');
+      if (User.db.readyState === 1) {
+        const user = await User.findOne({ email }).select('+passwordHash +passwordSalt');
+        if (user) {
+          if (!user.isActive || !await user.matches(password)) return res.status(401).json({ message: 'Email or password is incorrect.' });
+          const account = user.publicAccount();
+          startSession(req, res, account);
+          return res.json({ account });
+        }
+      }
       const account = [...await readAccounts(sampleAccounts), ...await readAccounts(localAccounts)].find(item => item.email.toLowerCase() === email);
       if (!account || !passwordMatches(password, account)) return res.status(401).json({ message: 'Email or password is incorrect.' });
+      if (User.db.readyState === 1) {
+        const user = new User({ email, displayName:account.displayName, role:account.role === 'owner' ? 'consumer' : account.role,
+          legacyId:account.id, legacyWalkerId:account.walkerId });
+        await user.setPassword(password);
+        await user.save();
+        const migrated = user.publicAccount();
+        startSession(req,res,migrated);
+        return res.json({ account:migrated });
+      }
+      startSession(req, res, account);
       res.json({ account: publicAccount(account) });
     } catch (error) { next(error); }
   });

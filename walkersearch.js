@@ -13,19 +13,19 @@ const starIcons = rating => Array.from({ length: 5 }, (_, index) => {
 function card(walker) {
   const element = document.createElement('article');
   element.className = 'walker-card';
-  element.innerHTML = `
-    <div class="card-top"><img class="avatar" src="${walker.image}" alt="${walker.name}">
-      <div><h2>${walker.name}</h2><div class="rating"><span class="stars">${starIcons(walker.rating)}</span> (${walker.reviewCount})</div></div>
-    </div>
-    <div class="card-footer"><div><span>Hourly Rate</span><strong>₹${walker.hourlyRate}/hr</strong></div>
-      <a href="${walker.profilePage}?walker=${walker.id}">View Profile</a></div>`;
+  element.innerHTML = '<div class="card-top"><img class="avatar" alt=""><div><h2></h2><div class="rating"></div></div></div><div class="card-footer"><div><span>Hourly Rate</span><strong></strong></div><a>View Profile</a></div>';
+  element.querySelector('img').src = walker.image;
+  element.querySelector('h2').textContent = walker.name;
+  const rating = element.querySelector('.rating'); rating.innerHTML = starIcons(walker.rating);
+  rating.append(' (' + walker.reviewCount + ')');
+  element.querySelector('strong').textContent = '₹' + walker.hourlyRate + '/hr';
+  element.querySelector('a').href = '/walker/' + encodeURIComponent(walker._id);
   return element;
 }
 
 function render() {
   const results = walkers.filter(walker =>
-    (!state.date || walker.availableDates.includes(state.date)) &&
-    (!state.time || walker.availableTimes.includes(state.time)) &&
+    ((!state.date && !state.time) || walker.times.some(s => (!state.date || state.date === s.date) && (!state.time || state.time === s.period))) &&
     walker.rating >= state.rating
   );
 
@@ -33,7 +33,7 @@ function render() {
     ? b.rating - a.rating
     : state.sort === 'rate'
       ? a.hourlyRate - b.hourlyRate
-      : a.matchRank - b.matchRank);
+      : b.reviewCount - a.reviewCount);
 
   grid.replaceChildren(...results.map(card));
   grid.hidden = results.length === 0;
@@ -78,19 +78,29 @@ function clearFilters() {
 
 document.querySelectorAll('.clear-filters, .no-results-reset').forEach(button => button.addEventListener('click', clearFilters));
 
-fetch('walkers.json')
-  .then(response => {
-    if (!response.ok) throw new Error('Could not read walkers.json');
-    return response.json();
-  })
-  .then(data => {
-    walkers = data.walkers;
+async function read(path) {
+  const response = await fetch(path);
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.message);
+  return result.data;
+}
+grid.replaceChildren(); count.textContent = 'Loading walkers…';
+read('/api/walkers')
+  .then(async data => {
+    walkers = await Promise.all(data.filter(w => w.status === 'published').map(async w => {
+      const dates = await read('/api/walkers/' + encodeURIComponent(w._id) + '/availability');
+      const times = dates.flatMap(d => d.slots.filter(s => s.status === 'available' && new Date(d.date+'T'+s.startTime+':00+05:30') > new Date()).map(s => {
+        const h = Number(s.startTime.slice(0,2));
+        return { date:d.date,period:h >= 8 && h < 12 ? 'morning' : h >= 12 && h < 16 ? 'afternoon' : h >= 16 && h < 20 ? 'evening' : '' };
+      }));
+      return {...w,times};
+    }));
     clearFilters();
   })
-  .catch(() => {
+  .catch(error => {
     grid.hidden = true;
     empty.hidden = false;
     empty.querySelector('h2').textContent = 'Walker data could not be loaded';
-    empty.querySelector('p').textContent = 'Open the project with Live Server to load the local JSON file.';
+    empty.querySelector('p').textContent = error.message || 'Reload to try again.';
     count.textContent = '0 active walkers found';
   });
