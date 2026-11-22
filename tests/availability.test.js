@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const rules = require('../shared/availability');
+const rules = require('../server/services/availabilityRules');
 
 const now = new Date('2030-01-01T06:00:00Z'); // 11:30 IST
 const date = '2030-01-02';

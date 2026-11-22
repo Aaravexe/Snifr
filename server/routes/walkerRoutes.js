@@ -18,7 +18,31 @@ router.param('id', async (req,res,next,id) => {
 });
 router.get('/', async (req,res) => {
   const query = req.user?.role === 'admin' ? {} : { status: 'published' };
-  const walkers = await Walker.find(query).sort({ rating: -1, reviewCount: -1, name: 1 });
+  if (req.query.city) query.city = new RegExp(`^${String(req.query.city).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i');
+  if (req.query.minRating !== undefined) {
+    const rating = Number(req.query.minRating);
+    if (!Number.isFinite(rating) || rating < 0 || rating > 5 || !Number.isInteger(rating * 2)) throw fail(400, 'Minimum rating must use 0.5-star steps from 0 to 5.');
+    query.rating = { $gte: rating };
+  }
+  if (req.query.maxRate !== undefined) {
+    const rate = Number(req.query.maxRate);
+    if (!Number.isFinite(rate) || rate <= 0) throw fail(400, 'Maximum rate must be a positive number.');
+    query.hourlyRate = { $lte: rate };
+  }
+  if (req.query.date || req.query.time) {
+    const availability = { 'slots.status': 'available' };
+    if (req.query.date) availability.date = String(req.query.date);
+    if (req.query.time) {
+      const time = String(req.query.time);
+      if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) throw fail(400, 'Time must use HH:mm.');
+      availability.slots = { $elemMatch: { status: 'available', startTime: time } };
+      delete availability['slots.status'];
+    }
+    query._id = { $in: await Availability.distinct('walkerId', availability) };
+  }
+  const sorts = { rating: { rating: -1, reviewCount: -1 }, rate: { hourlyRate: 1, rating: -1 }, newest: { createdAt: -1 } };
+  const sort = sorts[req.query.sort] || { reviewCount: -1, rating: -1, name: 1 };
+  const walkers = await Walker.find(query).sort(sort);
   res.json({ success: true, data: walkers, message: 'Walkers loaded.' });
 });
 router.get('/:id', (req,res) => res.json({ success: true, data: req.walker, message: 'Walker loaded.' }));

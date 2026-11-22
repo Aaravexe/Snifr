@@ -24,7 +24,7 @@ function createMongoFeedbackRouter() {
         email: req.body?.email,
         message: req.body?.message
       });
-      res.status(201).json({ success: true, data: { feedback: output(feedback) }, message: 'Feedback saved in local MongoDB.' });
+      res.status(201).json({ success: true, data: { feedback: output(feedback) }, message: 'Feedback saved in MongoDB Atlas.' });
     } catch (error) { next(error); }
   });
 

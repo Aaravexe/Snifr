@@ -1,0 +1,250 @@
+@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap");
+
+:root {
+  --snifr-cream: #ffeed6;
+  --snifr-peach: #e8a07c;
+  --snifr-olive: #a5af79;
+  --snifr-olive-dark: #909b68;
+  --snifr-brown: #827148;
+  --snifr-copy: #6b5e43;
+  --snifr-line: #e8dec9;
+  --snifr-white: #fff;
+  --snifr-blush: #fbf2ed;
+  --snifr-shadow: 0 14px 34px rgb(130 113 72 / 8%);
+}
+
+/* Shared application header. Page styles can still control their own content,
+   but navigation should feel like one product everywhere. */
+body > header,
+.site > header.header {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px clamp(22px, 5.55vw, 80px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border: 0;
+  border-bottom: 1px solid rgb(130 113 72 / 12%);
+  background: var(--snifr-peach);
+}
+
+body > header .brand,
+.site > header .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  flex: 0 0 auto;
+  color: var(--snifr-brown);
+  font: 800 29px/1 Outfit, sans-serif;
+  text-decoration: none;
+}
+
+body > header .brand img,
+.site > header .brand img,
+body > header .brand-mark {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+body > header .brand-mark {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+body > header .brand-mark img { width: 100%; height: 100%; object-fit: cover; }
+
+body > header nav,
+.site > header nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+body > header nav > a,
+.site > header nav > a,
+body > header nav > button {
+  min-height: 40px;
+  padding: 10px 14px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--snifr-brown);
+  font: 700 14px/1.2 Figtree, sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 160ms ease, background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+body > header nav > a:hover,
+.site > header nav > a:hover,
+body > header nav > button:hover {
+  color: var(--snifr-brown);
+  border-color: rgb(255 255 255 / 45%);
+  background: rgb(255 255 255 / 24%);
+  transform: translateY(-1px);
+}
+
+body > header nav > a[aria-current],
+.site > header nav > a[aria-current],
+body > header nav > .walker-link,
+.site > header nav > .pill {
+  border-color: var(--snifr-olive);
+  background: var(--snifr-olive);
+  color: white;
+  box-shadow: 0 7px 16px rgb(91 102 59 / 13%);
+}
+
+body > header nav > button.quiet {
+  border-color: rgb(130 113 72 / 25%);
+  background: rgb(255 255 255 / 12%);
+  color: var(--snifr-brown);
+  box-shadow: none;
+}
+
+.design-footer {
+  display: grid;
+  grid-template-columns: minmax(250px, 1fr) auto;
+  gap: clamp(48px, 12vw, 180px);
+  padding: 64px max(7vw, 32px);
+  border-top: 1px solid var(--snifr-line);
+  background: var(--snifr-cream);
+  color: var(--snifr-copy);
+  font-family: Figtree, sans-serif;
+}
+
+.design-footer__brand {
+  max-width: 340px;
+}
+
+.design-footer__brand a {
+  color: var(--snifr-brown);
+  font: 800 32px/1 Outfit, sans-serif;
+  text-decoration: none;
+}
+
+.design-footer__brand p {
+  margin: 18px 0 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.design-footer__links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 64px;
+}
+
+.design-footer__links div {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+
+.design-footer__links strong {
+  color: var(--snifr-brown);
+  font: 800 14px Outfit, sans-serif;
+}
+
+.design-footer__links a {
+  color: var(--snifr-copy);
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.design-footer__links a:hover {
+  color: var(--snifr-peach);
+  transform: translateX(2px);
+}
+
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 110px;
+  padding: 30px clamp(24px, 7vw, 100px);
+  border-top: 1px solid var(--snifr-line);
+  background: var(--snifr-cream);
+  color: var(--snifr-copy);
+  font-family: Figtree, sans-serif;
+}
+
+.site-footer a {
+  color: var(--snifr-brown);
+  font: 800 28px Outfit, sans-serif;
+  text-decoration: none;
+}
+
+.account-menu {
+  position: relative;
+}
+
+.account-menu summary {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  list-style: none;
+}
+
+.account-menu summary::-webkit-details-marker { display: none; }
+.account-menu summary img { width: 52px; height: 52px; }
+
+.account-menu nav {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 10px);
+  right: 0;
+  display: grid;
+  width: 210px;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid var(--snifr-line);
+  border-radius: 14px;
+  background: white;
+  box-shadow: var(--snifr-shadow);
+}
+
+.account-menu nav a,
+.account-menu nav button {
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--snifr-brown);
+  font: 700 14px Figtree, sans-serif;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.account-menu nav a:hover,
+.account-menu nav button:hover { background: var(--snifr-cream); }
+
+@media (max-width: 720px) {
+  body > header,
+  .site > header.header { min-height: auto; padding: 10px 20px; flex-wrap: wrap; }
+  body > header .brand img,
+  .site > header .brand img,
+  body > header .brand-mark { width: 52px; height: 52px; }
+  body > header nav,
+  .site > header nav { width: 100%; margin-left: 0; justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 2px; }
+  body > header nav > a,
+  .site > header nav > a,
+  body > header nav > button { flex: 0 0 auto; }
+  .design-footer { grid-template-columns: 1fr; gap: 36px; padding: 48px 24px; }
+  .design-footer__links { gap: 32px; }
+}

@@ -36,7 +36,7 @@ function createLocalDataRouter() {
 
   router.get('/walkers', async (req, res, next) => {
     try {
-      const data = await readJson(path.join(__dirname, '..', '..'), 'walkers.json', { walkers: [] });
+      const data = await readJson(DATA_DIRECTORY, 'walkers.seed.json', { walkers: [] });
       res.json({ success: true, data, message: 'Local walker seed data loaded.' });
     } catch (error) { next(error); }
   });

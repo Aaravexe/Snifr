@@ -88,6 +88,9 @@ function recommendations() {
   });
 }
 try {
-  user = await start(); $('add-pet').onclick = () => editPet();
+  user = await start();
+  const welcomeName = $('welcome-name');
+  if (welcomeName) welcomeName.textContent = user.displayName;
+  $('add-pet').onclick = () => editPet();
   await Promise.all([pets(),recommendations(),bookings(),reviews()]);
 } catch (error) { notice(error.message); }

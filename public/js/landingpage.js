@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const signInLink = document.querySelector('.signin');
 
   if (session) {
-    startButton.href = 'Dashboard.HTML';
-    signInLink.href = 'Dashboard.HTML';
+    startButton.href = '/dashboard';
+    signInLink.href = '/dashboard';
     signInLink.textContent = 'My Dashboard';
   }
 

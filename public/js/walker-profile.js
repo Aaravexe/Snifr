@@ -1,5 +1,5 @@
-/* Shared frontend draft storage and form helpers. Replace the store with the
-   authenticated Walker API when that backend is implemented. */
+/* Shared Walker form helpers. MongoDB stores published profiles; localStorage
+   is used only for an unfinished browser draft. */
 window.WalkerProfile = (() => {
   const services = { walking: 'Dog walking', sitting: 'Pet sitting', 'drop-in': 'Drop-in visits' };
   const fields = ['name', 'about', 'experience', 'hourlyRate', 'area', 'city', 'pincode'];
@@ -18,7 +18,7 @@ window.WalkerProfile = (() => {
     const profile = empty();
     fields.forEach(field => { profile[field] = typeof value[field] === 'string' || typeof value[field] === 'number' ? String(value[field]) : ''; });
     profile.services = Array.isArray(value.services) ? [...new Set(value.services.filter(item => Object.hasOwn(services, item)))] : [];
-    if (typeof value.image === 'string' && (/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(value.image) || /^assets\/[\w-]+\.(png|jpg|jpeg|webp)$/.test(value.image))) profile.image = value.image;
+    if (typeof value.image === 'string' && (/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(value.image) || /^\/?assets\/[\w-]+\.(png|jpg|jpeg|webp)$/.test(value.image))) profile.image = value.image;
     return profile;
   }
 
@@ -73,13 +73,6 @@ window.WalkerProfile = (() => {
     if (stored) return stored;
     const profile = empty();
     profile.name = account.displayName || '';
-    if (account.walkerId) {
-      const response = await fetch('walkers.json');
-      if (!response.ok) throw new Error('Your existing profile could not be loaded. Reload this page to try again.');
-      const data = await response.json();
-      const walker = data.walkers.find(item => item.id === account.walkerId);
-      if (walker) Object.assign(profile, clean({ name: walker.name, about: walker.about, hourlyRate: walker.hourlyRate, image: walker.image }));
-    }
     return { profile, completed: false, step: 0 };
   }
 

@@ -5,7 +5,7 @@ const Booking = require('../models/Booking');
 const WalkerProfile = require('../models/WalkerProfile');
 const Availability = require('../models/WalkerAvailability');
 const Review = require('../models/Review');
-const rules = require('../../shared/availability');
+const rules = require('../services/availabilityRules');
 const { fail } = require('../middleware/dashboardAccess');
 const { readAll, saveAll } = require('../services/bookingStore');
 const { readBackups, writeBackup, removeBackup } = require('../services/bookingJsonBackup');
@@ -13,7 +13,7 @@ const { readBackups, writeBackup, removeBackup } = require('../services/bookingJ
 const ACTIVE_STATUSES = ['pending', 'accepted'];
 const ALLOWED_STATUSES = ['accepted', 'rejected', 'completed', 'cancelled'];
 const PLATFORM_FEE = 30;
-const fallbackWalkersFile = path.join(__dirname, '..', '..', 'walkers.json');
+const fallbackWalkersFile = path.join(__dirname, '..', 'data', 'walkers.seed.json');
 const response = (res, status, data = null, message = '') => res.status(status).json({ success: status < 400, data, message });
 const serialize = item => item && typeof item.toObject === 'function' ? item.toObject() : item;
 const idOf = item => String(item?._id || item?.id || item?.bookingId || '');

@@ -2,8 +2,15 @@
   "name": "snifr",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=22 <23"
+  },
   "scripts": {
     "start": "node server.js",
+    "dev": "node --watch server.js",
+    "db:check": "node server/checkDatabase.js",
+    "db:seed": "node server/seed.js",
+    "admin:create": "node server/createAdmin.js",
     "test": "node --test tests/*.test.js"
   },
   "dependencies": {

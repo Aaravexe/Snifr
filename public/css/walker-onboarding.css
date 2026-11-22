@@ -39,6 +39,9 @@ p { margin: 0 0 16px; }
 .step-list small { display: block; font-size: 13px; font-weight: 400; color: #e5e8dc; }
 .aside-art { display: block; width: 100%; height: 155px; object-fit: contain; margin: 24px auto 10px; }
 .setup-aside .aside-note { font-size: 14px; margin: 12px 0 0; }
+.aside-highlight { display: grid; gap: 5px; margin-top: 28px; padding: 18px; border: 1px solid rgb(255 255 255 / 28%); border-radius: 16px; background: rgb(255 255 255 / 12%); }
+.aside-highlight strong { font: 800 16px Outfit, sans-serif; }
+.aside-highlight span { color: #f0eddf; font-size: 13px; line-height: 1.5; }
 .editor-column { min-width: 0; }
 .storage-note { background: #fff7e9; border: 1px solid #e3ceb0; border-radius: 12px; padding: 13px 17px; font-size: 14px; color: #635238; }
 .storage-note strong { display: block; }

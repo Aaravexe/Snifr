@@ -4,22 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Become a Walker | Snifr</title>
-  <link rel="stylesheet" href="walker-onboarding.css">
-  <script src="walker-profile.js" defer></script>
-  <script src="walker-onboarding.js" defer></script>
+  <link rel="stylesheet" href="/css/walker-onboarding.css">
+  <script src="/js/walker-profile.js" defer></script>
+  <script src="/js/walker-onboarding.js" defer></script>
+  <link rel="stylesheet" href="/css/theme.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
-    <a class="brand" href="landingpage.html"><img src="assets/snifr-logo.png" alt=""><span>Snifr</span></a>
-    <nav aria-label="Primary navigation"><a href="landingpage.html">Home</a><a href="Dashboard.HTML">Dashboard</a><a href="walkersearch.html">Find Walkers</a><a href="walker-settings.html">Walker Settings</a><a href="walker-availability.html">Availability</a></nav>
+    <a class="brand" href="/"><img src="/assets/snifr-logo.png" alt=""><span>Snifr</span></a>
+    <nav aria-label="Primary navigation"><a href="/">Home</a><a href="/dashboard">Dashboard</a><a href="/walkers">Find Walkers</a><a href="/walker-settings">Walker Settings</a><a href="/walker-availability">Availability</a></nav>
   </header>
   <main id="main" class="page-shell">
     <section id="account-gate" class="gate card" hidden>
       <span class="eyebrow">YOUR WALKER ACCOUNT</span><h1>Great walks start here.</h1>
       <p>Sign in with a walker account to create and save your profile.</p>
-      <a class="button primary" href="authpage.html?role=walker&amp;mode=signin">Sign in as a walker</a>
-      <a class="text-link" href="authpage.html?role=walker">Create a walker account</a>
+      <a class="button primary" href="/auth?role=walker&amp;mode=signin">Sign in as a walker</a>
+      <a class="text-link" href="/auth?role=walker">Create a walker account</a>
     </section>
     <div id="walker-workspace" hidden>
       <div class="page-heading"><div><span class="eyebrow">BECOME A SNIFR WALKER</span><h1>A little about you.<br>A lot of happy tails.</h1><p>Build a profile that helps pet parents get to know you.</p></div><span class="draft-badge">Profile setup</span></div>
@@ -32,8 +33,7 @@
             <li><span>3</span><div>Location &amp; photo<small>Help people find you</small></div></li>
             <li><span>4</span><div>Review<small>Make a great first impression</small></div></li>
           </ol>
-          <img class="aside-art" src="assets/dog-walk.png" alt="" loading="lazy">
-          <p class="aside-note">A thoughtful profile is the first step to a trusted connection.</p>
+          <div class="aside-highlight"><strong>Trusted profiles get noticed</strong><span>A thoughtful profile is the first step to a trusted connection.</span></div>
         </aside>
         <div class="editor-column">
           <p class="storage-note">Save a draft to finish later, or publish your completed profile to appear in walker search.</p>
@@ -70,12 +70,12 @@
             <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
             <div class="form-actions"><button id="back-step" class="button secondary" type="button" hidden>Back</button><button id="save-draft" class="text-button" type="button">Save draft</button><button id="next-step" class="button primary" type="submit">Continue</button></div>
           </form>
-          <p class="bottom-note">Already set up? <a href="walker-settings.html">Open Walker Settings</a></p>
+          <p class="bottom-note">Already set up? <a href="/walker-settings">Open Walker Settings</a></p>
         </div>
       </div>
     </div>
     <noscript><p class="card">Please enable JavaScript to set up your walker profile.</p></noscript>
   </main>
-  <footer class="site-footer"><a href="landingpage.html">Snifr</a><span>Good walks. Great company.</span></footer>
+  <footer class="site-footer"><a href="/">Snifr</a><span>Good walks. Great company.</span></footer>
 </body>
 </html>

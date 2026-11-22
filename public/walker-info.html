@@ -10,19 +10,20 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Outfit:wght@700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="wakerinfo.css">
+    <link rel="stylesheet" href="/css/wakerinfo.css">
+    <link rel="stylesheet" href="/css/theme.css">
 </head>
 
 <body>
     <header class="header" data-node-id="6:346">
-        <a class="brand" href="landingpage.html"><img src="assets/snifr-logo.png" alt="Snifr logo"><b>Snifr</b></a>
-        <nav class="page-nav" aria-label="Primary navigation"><a href="landingpage.html">Home</a><a href="Dashboard.HTML">Dashboard</a><a href="walkersearch.html">Find Walkers</a><a href="my-bookings.html">My Bookings</a><a href="authpage.html?role=walker">Become a Walker</a></nav>
+        <a class="brand" href="/"><img src="/assets/snifr-logo.png" alt="Snifr logo"><b>Snifr</b></a>
+        <nav class="page-nav" aria-label="Primary navigation"><a href="/">Home</a><a href="/dashboard">Dashboard</a><a href="/walkers">Find Walkers</a><a href="/my-bookings">My Bookings</a><a href="/auth?role=walker">Become a Walker</a></nav>
     </header>
-    <a class="back-button" href="walkersearch.html">← Go Back to Walker Listing</a>
+    <a class="back-button" href="/walkers">← Go Back to Walker Listing</a>
     <main class="split" data-node-id="6:360">
         <div class="profile">
             <section class="intro card">
-                <div class="profile-head"><img class="profile-pic" id="walker-photo" src="assets/walker.png" alt="Priyanka">
+                <div class="profile-head"><img class="profile-pic" id="walker-photo" src="/assets/walker.png" alt="Priyanka">
                     <div>
                         <h1 id="walker-name">Priyanka</h1>
                         <div class="profile-rating" id="walker-rating" aria-label="5 out of 5 stars, 54 reviews">
@@ -69,18 +70,9 @@
             </form>
         </aside>
     </main>
-    <footer class="footer" data-node-id="38:15">
-        <div>
-            <h2>Snifr</h2>
-            <p>Providing safe, professional on-demand pet care for modern families. Verified, background-checked, and
-                reliable.</p>
-        </div>
-        <nav>
-            <div><b>Product</b><a href="walkersearch.html">Find Walkers</a><a href="landingpage.html#how-it-works">How It Works</a><a
-                    href="authpage.html?role=walker">Become a Walker</a></div>
-            <div><b>Company</b><a href="Dashboard.HTML">Dashboard</a><a href="my-bookings.html">My Bookings</a><a href="walker-bookings.html">Walker Requests</a><a href="authpage.html">Sign In / Sign Up</a><a
-                    href="landingpage.html#top">Back to top</a></div>
-        </nav>
+    <footer class="design-footer" data-node-id="38:15">
+        <div class="design-footer__brand"><a href="/">Snifr</a><p>Providing safe, professional on-demand pet care for modern families. Verified, background-checked, and reliable.</p></div>
+        <nav class="design-footer__links"><div><strong>Product</strong><a href="/walkers">Find Walkers</a><a href="/#how-it-works">Safety Vetting</a><a href="/walkers">Pricing</a></div><div><strong>Company</strong><a href="/support">About Us</a><a href="/support">Press &amp; Media</a><a href="/auth?role=walker">Careers</a></div></nav>
     </footer>
 
     <dialog class="confirmation-dialog" id="confirmation-dialog" aria-labelledby="confirmation-title">
@@ -95,7 +87,7 @@
         </form>
     </dialog>
 
-    <script src="wakerinfo.js"></script>
+    <script src="/js/wakerinfo.js"></script>
 </body>
 
 </html>

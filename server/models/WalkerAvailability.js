@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const rules = require('../../shared/availability');
+const rules = require('../services/availabilityRules');
 
 const slotSchema = new mongoose.Schema({
   startTime: { type: String, required: true, validate: { validator: rules.validTime, message: 'Use HH:mm for the start time.' } },

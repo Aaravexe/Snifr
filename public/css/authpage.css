@@ -91,7 +91,7 @@ body {
     left: -20%;
     top: -265px;
     border-radius: 50%;
-    background: url("assets/auth-illustration.png") center/cover no-repeat;
+    background: url("/assets/auth-illustration.png") center/cover no-repeat;
     opacity: .18;
     mix-blend-mode: multiply
 }

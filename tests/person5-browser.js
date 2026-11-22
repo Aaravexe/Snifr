@@ -84,7 +84,7 @@ module.exports = async function browserChecks(base,{password}) {
         await page.locator('#pet-select').selectOption({label:'Milo'});
         await page.locator('.days button').first().click(); await page.locator('.times button').first().click();
         await page.locator('#booking-form [type=submit]').click(); await page.locator('#submit-booking').click();
-        await page.waitForURL('**/my-bookings.html?**',{waitUntil:'domcontentloaded'});
+        await page.waitForURL('**/my-bookings',{waitUntil:'domcontentloaded'});
         await login('newwalker','walker-dashboard');
         await page.locator('#requests').getByRole('button',{name:'Accept'}).click();
         await page.locator('#upcoming').getByRole('button',{name:'Mark completed'}).click();

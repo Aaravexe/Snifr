@@ -8,11 +8,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="support.css">
+  <link rel="stylesheet" href="/css/support.css">
+  <link rel="stylesheet" href="/css/theme.css">
 </head>
 <body>
-  <header class="site-header"><a class="brand" href="/">Snifr</a><nav aria-label="Primary navigation"><a href="/">Home</a><a href="/walkers">Find Walkers</a><a href="/auth">Sign in</a></nav></header>
-  <main class="page-shell"><section class="intro"><span>SUPPORT</span><h1>How can we improve Snifr?</h1><p>Your message is saved in the local offline MongoDB database through the Express API.</p></section>
+  <header class="site-header"><a class="brand" href="/"><img src="/assets/snifr-logo.png" alt=""><span>Snifr</span></a><nav aria-label="Primary navigation"><a href="/">Home</a><a href="/walkers">Find Walkers</a><a href="/auth" aria-current="page">Sign in</a></nav></header>
+  <main class="page-shell"><section class="intro"><span>SUPPORT</span><h1>How can we improve Snifr?</h1><p>Your message is securely saved in MongoDB Atlas through the Express API.</p></section>
     <form id="feedback-form" class="feedback-card" novalidate>
       <label for="feedback-name">Name</label><input id="feedback-name" name="name" autocomplete="name" maxlength="80" required>
       <label for="feedback-email">Email</label><input id="feedback-email" name="email" type="email" autocomplete="email" required>
@@ -20,7 +21,7 @@
       <p id="feedback-status" role="status" aria-live="polite"></p><button type="submit">Send feedback</button>
     </form>
   </main>
-  <footer><a href="/">Snifr</a><span>Good walks. Great company.</span></footer>
-  <script src="support.js"></script>
+  <footer class="design-footer"><div class="design-footer__brand"><a href="/">Snifr</a><p>Providing safe, professional on-demand pet care for modern families. Verified, background-checked, and reliable.</p></div><nav class="design-footer__links" aria-label="Footer navigation"><div><strong>Product</strong><a href="/walkers">Find Walkers</a><a href="/#how-it-works">Safety Vetting</a><a href="/walkers">Pricing</a></div><div><strong>Company</strong><a href="/support">About Us</a><a href="/support">Press &amp; Media</a><a href="/auth?role=walker">Careers</a></div></nav></footer>
+  <script src="/js/support.js"></script>
 </body>
 </html>

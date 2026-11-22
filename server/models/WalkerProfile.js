@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const services = ['walking', 'sitting', 'drop-in'];
 const validRate = value => Number.isFinite(value) && Math.abs(value * 100 - Math.round(value * 100)) < 1e-8;
 const validImage = value => typeof value === 'string' && value.length <= 1500000 && (
-  /^assets\/[\w-]+\.(png|jpe?g|webp)$/.test(value) ||
+  /^\/?assets\/[\w-]+\.(png|jpe?g|webp)$/.test(value) ||
   /^\/uploads\/[\w/-]+\.(png|jpe?g|webp)$/.test(value) ||
   /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(value) || (() => {
     try { return new URL(value).protocol === 'https:'; } catch { return false; }

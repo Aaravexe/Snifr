@@ -1,5 +1,11 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs/promises');
+const os = require('node:os');
+const path = require('node:path');
+const temporaryRoot = path.join(os.tmpdir(), `snifr-booking-test-${process.pid}`);
+process.env.SNIFR_DATA_DIR = path.join(temporaryRoot, 'data');
+process.env.SNIFR_BACKUP_DIR = path.join(temporaryRoot, 'backups');
 const booking = require('../server/controllers/bookingController');
 
 function call(handler, request) {
@@ -13,7 +19,8 @@ function call(handler, request) {
   });
 }
 
-test('booking lifecycle rejects a duplicate slot and reopens it after cancellation', async () => {
+test('booking lifecycle rejects a duplicate slot and reopens it after cancellation', async t => {
+  t.after(() => fs.rm(temporaryRoot, { recursive: true, force: true }));
   const details = await call(booking.getBookingDetails, { params: { walkerId: 'priyanka' } });
   assert.equal(details.status, 200);
   const day = details.body.data.availability.find(item => item.slots.length);

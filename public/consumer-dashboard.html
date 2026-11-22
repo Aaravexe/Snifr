@@ -1,36 +1,33 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Consumer dashboard | Snifr</title><link rel="stylesheet" href="/Dashboard.CSS">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Manage pets, bookings, and trusted walkers from your Snifr dashboard.">
+  <title>Dashboard | Snifr</title>
+  <link rel="stylesheet" href="/css/Dashboard.CSS">
+  <link rel="stylesheet" href="/css/theme.css">
 </head>
 <body>
-  <header><a class="brand" href="/"><img src="/assets/snifr-logo.png" alt="">Snifr</a>
-    <nav aria-label="Main navigation"><a href="/walkers">Find walkers</a><a href="/my-bookings">My bookings</a><a href="/consumer-settings">Account settings</a><button id="logout" class="quiet">Sign out</button></nav>
+  <header class="dashboard-header">
+    <a class="brand" href="/" aria-label="Snifr home"><img src="/assets/snifr-logo.png" alt=""><span>Snifr</span></a>
   </header>
-  <main>
-    <div class="intro"><div><h1>Consumer dashboard</h1><p id="greeting" aria-live="polite"></p></div><img src="/assets/dog-walk.png" alt=""></div>
+  <main class="dashboard-main">
+    <section class="welcome" aria-labelledby="dashboard-title"><div><h1 id="dashboard-title">Welcome back, <span id="welcome-name">pet parent</span>!</h1><p>What can we do for your furry friends today?</p><p id="greeting" class="sr-only" aria-live="polite"></p></div><details class="account-menu"><summary aria-label="Open account menu"><img src="/assets/figma-user-img.png" alt="Account"></summary><nav aria-label="Account navigation"><a href="/walkers">Find walkers</a><a href="/my-bookings">My bookings</a><a href="/consumer-settings">Account settings</a><button id="logout" type="button">Sign out</button></nav></details></section>
     <p id="notice" role="status"></p>
-    <div class="grid">
-      <section class="panel" aria-labelledby="pets-title"><div class="panel-head"><h2 id="pets-title">My pets</h2><button id="add-pet">Add pet</button></div>
-        <div id="pets" aria-live="polite">Loading…</div>
-      </section>
-      <section class="panel" aria-labelledby="upcoming-title"><div class="panel-head"><h2 id="upcoming-title">Upcoming bookings</h2></div>
-        <div id="upcoming" aria-live="polite">Loading…</div>
-      </section>
-      <section class="panel" aria-labelledby="walkers-title"><div class="panel-head"><h2 id="walkers-title">Recommended walkers</h2></div>
-        <div id="walkers" aria-live="polite">Loading…</div>
-      </section>
-      <section class="panel" aria-labelledby="history-title"><div class="panel-head"><h2 id="history-title">Booking history</h2></div>
-        <div id="history" aria-live="polite">Loading…</div>
-      </section>
-      <section class="panel" aria-labelledby="reviews-title"><div class="panel-head"><h2 id="reviews-title">My reviews</h2></div>
-        <div id="reviews" aria-live="polite">Loading…</div>
-      </section>
+    <form class="search-panel" action="/walkers" method="get"><label for="city">Find a trusted local walker in seconds</label><div class="search-row"><div class="search-field"><img src="/assets/figma-search.svg" alt=""><input id="city" name="city" type="search" placeholder="Enter your location, neighborhood, or pincode..."></div><button type="submit">Search</button></div></form>
+    <div class="quick-grid">
+      <section class="panel" aria-labelledby="pets-title"><div class="panel-head"><h2 id="pets-title">My Pets</h2><button id="add-pet" class="text-action" type="button">+ Add Pet</button></div><div id="pets" class="compact-list" aria-live="polite">Loading…</div></section>
+      <section class="panel" aria-labelledby="upcoming-title"><div class="panel-head"><h2 id="upcoming-title">Recent Booking</h2><a class="text-action olive" href="/my-bookings">View All</a></div><div id="upcoming" class="compact-list booking-list" aria-live="polite">Loading…</div></section>
+    </div>
+    <section class="recommended" aria-labelledby="walkers-title"><div class="section-head"><h2 id="walkers-title">Recommended Walkers Nearby</h2><a href="/walkers">View all walkers</a></div><div id="walkers" class="walker-grid" aria-live="polite">Loading…</div></section>
+    <div class="quick-grid lower-grid">
+      <section class="panel" aria-labelledby="history-title"><div class="panel-head"><h2 id="history-title">Booking History</h2><a class="text-action olive" href="/my-bookings">Manage</a></div><div id="history" aria-live="polite">Loading…</div></section>
+      <section class="panel" aria-labelledby="reviews-title"><div class="panel-head"><h2 id="reviews-title">My Reviews</h2></div><div id="reviews" aria-live="polite">Loading…</div></section>
     </div>
   </main>
-  <dialog id="editor" aria-labelledby="editor-title"><form id="editor-form"><h2 id="editor-title"></h2>
-    <div id="fields"></div><p id="editor-error" role="alert"></p><div class="actions"><button type="button" id="close" class="quiet">Cancel</button><button id="save">Save</button></div>
-  </form></dialog>
-  <script type="module" src="/consumer-dashboard.js"></script>
-</body></html>
+  <dialog id="editor" aria-labelledby="editor-title"><form id="editor-form"><h2 id="editor-title"></h2><div id="fields"></div><p id="editor-error" role="alert"></p><div class="actions"><button type="button" id="close" class="quiet">Cancel</button><button id="save">Save</button></div></form></dialog>
+  <footer class="design-footer"><div class="design-footer__brand"><a href="/">Snifr</a><p>Providing safe, professional on-demand pet care for modern families. Verified, background-checked, and reliable.</p></div><nav class="design-footer__links" aria-label="Footer navigation"><div><strong>Product</strong><a href="/walkers">Find Walkers</a><a href="/#how-it-works">Safety Vetting</a><a href="/walkers">Pricing</a></div><div><strong>Company</strong><a href="/support">About Us</a><a href="/support">Press &amp; Media</a><a href="/auth?role=walker">Careers</a></div></nav></footer>
+  <script type="module" src="/js/consumer-dashboard.js"></script>
+</body>
+</html>

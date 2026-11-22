@@ -17,7 +17,7 @@ form.addEventListener('submit', async event => {
     status.textContent = result.message;
     status.className = 'success';
   } catch (error) {
-    status.textContent = error.message || 'Local MongoDB is unavailable. Start it, then try again.';
+    status.textContent = error.message || 'MongoDB Atlas is unavailable. Check the server configuration and try again.';
     status.className = 'error';
   }
 });

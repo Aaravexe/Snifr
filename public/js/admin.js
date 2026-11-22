@@ -28,7 +28,7 @@ async function formFields(name,r) {
         text('experience','Years of experience',{type:'number',min:0,max:60}),text('hourlyRate','Hourly rate (₹)',{type:'number',min:1,max:10000,step:.01}),
         text('services','Services (walking, sitting, drop-in)',{format:v => v.join(', '),parse:v => v.split(',').map(x => x.trim())}),
         text('area','Area'),text('city','City'),text('pincode','PIN code',{pattern:'[1-9][0-9]{5}'}),
-        text('image','Profile image URL or asset path',{value:'assets/walker.png'}),text('status','Listing status',{options:['draft','published']})];
+        text('image','Profile image URL or asset path',{value:'/assets/walker.png'}),text('status','Listing status',{options:['draft','published']})];
     }
     case 'Availability': return [text('date','Date',{type:'date',min:today()}),
       text('slots','Time slots, one per line (09:00–10:00)',{type:'textarea',optional:true,format:slots => slots.map(s => s.startTime+'–'+s.endTime).join('\n'),

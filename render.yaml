@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: snifr
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: MONGO_REQUIRED
+        value: "true"
+      - key: MONGODB_ATLAS_ONLY
+        value: "true"
+      - key: MONGODB_URI
+        sync: false

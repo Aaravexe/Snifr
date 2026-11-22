@@ -30,10 +30,10 @@ test('consumer, walker and admin journeys over HTTP and MongoDB', {skip:!process
   const adminUser = new User({email:'admin@example.test',displayName:'Admin',role:'admin'});
   const password=randomUUID();
   await adminUser.setPassword(password); await adminUser.save();
-  await admin('/api/accounts/login','POST',{email:adminUser.email,password});
-  const register = (c,email,role) => c('/api/accounts/register','POST',{email,password,role},201).then(r => r.account);
-  const consumer = await register(owner,'owner@example.test','owner');
-  await register(stranger,'other@example.test','owner');
+  await admin('/api/auth/login','POST',{email:adminUser.email,password});
+  const register = (c,email,role) => c('/api/auth/register','POST',{email,password,role,displayName:email.split('@')[0]},201).then(r => r.data.user);
+  const consumer = await register(owner,'owner@example.test','consumer');
+  await register(stranger,'other@example.test','consumer');
   const account = await register(walker,'walker@example.test','walker');
   assert.equal(await client()('/admin','GET',undefined,302),'/auth?mode=signin');
   assert.equal(await owner('/admin.html','GET',undefined,302),'/consumer-dashboard');
@@ -46,9 +46,10 @@ test('consumer, walker and admin journeys over HTTP and MongoDB', {skip:!process
   await admin('/api/users/'+user.id,'DELETE');
   assert.equal((await admin('/api/users')).data.some(u => 'passwordHash' in u || 'passwordSalt' in u),false);
 
-  const profile={userId:account.id,name:'QA Walker',about:'Experienced walker offering friendly daily walks in the local neighbourhood.',
+  const profile={name:'QA Walker',about:'Experienced walker offering friendly daily walks in the local neighbourhood.',
     experience:3,hourlyRate:250,services:['walking'],area:'City Centre',city:'Jaipur',pincode:'302001',image:'assets/walker.png',status:'published'};
-  const w=(await admin('/api/walkers','POST',profile,201)).data;
+  const marker=(await walker('/api/dashboard/walker')).data;
+  const w=(await admin('/api/walkers/'+marker.walkerId,'PATCH',profile)).data;
   const wp='/api/walkers/'+w._id, days=wp+'/availability';
   await admin(wp,'PATCH',{hourlyRate:275});
   assert.ok((await owner('/api/walkers')).data.some(row => row._id === w._id));

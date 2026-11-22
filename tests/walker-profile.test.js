@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 
-const source = fs.readFileSync(path.join(__dirname, '..', 'walker-profile.js'), 'utf8');
+const source = fs.readFileSync(path.join(__dirname, '..', 'public', 'js', 'walker-profile.js'), 'utf8');
 const walker = { id: 'test-walker', role: 'walker', displayName: 'Test Walker' };
 const valid = {
   name: 'Test Walker', about: 'Patient dog walker who follows each pet parent’s routine and provides regular updates.',

@@ -14,7 +14,7 @@ const consumerId = session?.id || session?._id || 'demo-consumer';
 
 
 function stars(rating) {
-  return Array.from({ length: 5 }, (_, index) => `<img class="${rating - index >= 1 ? 'full' : rating - index >= .5 ? 'half' : 'empty'}" src="assets/star.svg" alt="">`).join('');
+  return Array.from({ length: 5 }, (_, index) => `<img class="${rating - index >= 1 ? 'full' : rating - index >= .5 ? 'half' : 'empty'}" src="/assets/star.svg" alt="">`).join('');
 }
 
 function setMessage(text = '', kind = '') { message.textContent = text; message.className = `booking-message${kind ? ` ${kind}` : ''}`; }
@@ -35,7 +35,7 @@ function showWalker(data) {
   walker = data;
   document.title = `Snifr | Book ${data.name}`;
   document.querySelector('#walker-name').textContent = data.name;
-  document.querySelector('#walker-photo').src = data.image || 'assets/walker.png';
+  document.querySelector('#walker-photo').src = data.image || '/assets/walker.png';
   document.querySelector('#walker-photo').alt = data.name;
   document.querySelector('#walker-about').textContent = data.about || 'A verified Snifr walker.';
   document.querySelector('#walker-walks').textContent = `${data.walksCompleted || 0}+ Walks`;
@@ -101,7 +101,7 @@ document.querySelector('#submit-booking').addEventListener('click', async event 
     const response = await fetch('/api/bookings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ consumerId, walkerId: walker.id, petId: pet.value, petName: pet.selectedOptions[0].text, date: selectedDate, time: selectedTime, durationMinutes: 60 }) });
     const result = await response.json(); if (!response.ok) throw new Error(result.message || 'The booking could not be saved.');
     dialog.close(); setMessage('Booking request saved. Redirecting to My Bookings…', 'success');
-    setTimeout(() => { location.href = `my-bookings.html?consumerId=${encodeURIComponent(consumerId)}`; }, 700);
+    setTimeout(() => { location.href = '/my-bookings'; }, 700);
   } catch (error) { dialog.close(); setMessage(error.message, 'error'); }
 });
 

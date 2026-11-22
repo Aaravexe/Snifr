@@ -2,22 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin dashboard | Snifr</title><link rel="stylesheet" href="/Dashboard.CSS">
+  <title>Admin dashboard | Snifr</title><link rel="stylesheet" href="/css/Dashboard.CSS"><link rel="stylesheet" href="/css/theme.css">
 </head>
 <body>
   <header><a class="brand" href="/"><img src="/assets/snifr-logo.png" alt="">Snifr</a>
-    <nav aria-label="Main navigation"><a href="/">Home</a><button id="logout" class="quiet">Sign out</button></nav>
+    <nav aria-label="Main navigation"><a href="/">Home</a><a href="/admin" aria-current="page">Admin</a><button id="logout" class="quiet">Sign out</button></nav>
   </header>
   <main>
-    <div class="intro"><div><h1>Admin dashboard</h1><p id="greeting" aria-live="polite"></p></div><img src="/assets/dog-walk.png" alt=""></div>
+    <div class="intro"><div><span class="eyebrow">SNIFR ADMINISTRATION</span><h1>Admin dashboard</h1><p id="greeting" aria-live="polite"></p></div><div class="intro-badge" aria-hidden="true">Platform controls</div></div>
     <p id="notice" role="status"></p>
     <section class="panel"><nav id="tabs" aria-label="Collections"></nav>
       <div class="panel-head"><h2 id="collection">Users</h2><button id="add">Add record</button></div>
       <div id="parent"></div><div id="records" aria-live="polite">Loading…</div>
     </section>
   </main>
+  <footer class="design-footer"><div class="design-footer__brand"><a href="/">Snifr</a><p>Providing safe, professional on-demand pet care for modern families. Verified, background-checked, and reliable.</p></div><nav class="design-footer__links" aria-label="Footer navigation"><div><strong>Product</strong><a href="/walkers">Find Walkers</a><a href="/#how-it-works">Safety Vetting</a><a href="/walkers">Pricing</a></div><div><strong>Company</strong><a href="/support">About Us</a><a href="/support">Press &amp; Media</a><a href="/auth?role=walker">Careers</a></div></nav></footer>
   <dialog id="editor" aria-labelledby="editor-title"><form id="editor-form"><h2 id="editor-title"></h2>
     <div id="fields"></div><p id="editor-error" role="alert"></p><div class="actions"><button type="button" id="close" class="quiet">Cancel</button><button id="save">Save</button></div>
   </form></dialog>
-  <script type="module" src="/admin.js"></script>
+  <script type="module" src="/js/admin.js"></script>
 </body></html>

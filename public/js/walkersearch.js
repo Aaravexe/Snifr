@@ -1,13 +1,23 @@
-const state = { date: '', time: '', rating: 0, sort: 'match' };
+const params = new URLSearchParams(location.search);
+const state = { date: '', time: '', rating: 0, sort: 'match', city: (params.get('city') || '').trim().toLowerCase() };
 const grid = document.querySelector('.walker-grid');
 const count = document.querySelector('.walker-heading p');
 const empty = document.querySelector('.no-walkers');
 const dateInput = document.querySelector('#walker-date');
 let walkers = [];
 
+if (state.city) {
+  document.querySelector('.walker-heading h1').textContent = `Available Walkers near ${params.get('city').trim()}`;
+}
+
+const indiaToday = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit'
+}).format(new Date());
+dateInput.min = indiaToday;
+
 const starIcons = rating => Array.from({ length: 5 }, (_, index) => {
   const type = rating - index >= 1 ? 'full' : rating - index >= .5 ? 'half' : 'empty';
-  return `<span class="rating-star ${type}"><img src="assets/star.svg" alt=""></span>`;
+  return `<span class="rating-star ${type}"><img src="/assets/star.svg" alt=""></span>`;
 }).join('');
 
 function card(walker) {
@@ -26,7 +36,8 @@ function card(walker) {
 function render() {
   const results = walkers.filter(walker =>
     ((!state.date && !state.time) || walker.times.some(s => (!state.date || state.date === s.date) && (!state.time || state.time === s.period))) &&
-    walker.rating >= state.rating
+    walker.rating >= state.rating &&
+    (!state.city || [walker.city, walker.name].some(value => String(value || '').toLowerCase().includes(state.city)))
   );
 
   results.sort((a, b) => state.sort === 'rating'
@@ -36,6 +47,7 @@ function render() {
       : b.reviewCount - a.reviewCount);
 
   grid.replaceChildren(...results.map(card));
+  grid.setAttribute('aria-busy', 'false');
   grid.hidden = results.length === 0;
   empty.hidden = results.length > 0;
   count.textContent = `${results.length} active walker${results.length === 1 ? '' : 's'} found`;

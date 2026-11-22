@@ -1,9 +1,9 @@
-function notFound(root) {
+function notFound(publicDirectory) {
   return (req, res) => {
     if (req.path.startsWith('/api/')) {
       return res.status(404).json({ success: false, data: null, message: 'API route not found.' });
     }
-    return res.status(404).sendFile('404.html', { root });
+    return res.status(404).sendFile('404.html', { root: publicDirectory });
   };
 }
 

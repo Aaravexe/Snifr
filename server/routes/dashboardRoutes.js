@@ -2,16 +2,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Walker = require('../models/WalkerProfile');
 const Availability = require('../models/WalkerAvailability');
-const { identify, logout, allow, requireMongo, home } = require('../middleware/dashboardAccess');
+const { logout, allow, requireMongo, home } = require('../middleware/dashboardAccess');
 
 function dashboardRoutes(page) {
   const router = express.Router();
-  router.use(identify);
   router.get('/api/dashboard/session', allow('consumer','walker','admin'), (req, res) =>
     res.json({ success: true, data: req.user, message: 'Signed in.' }));
   router.post('/api/dashboard/logout', logout);
-  router.use('/api/pets', require('./petRoutes'));
-  router.use('/api/reviews', require('./reviewRoutes'));
   router.get('/api/dashboard/walker', allow('walker'), requireMongo, async (req, res) => {
     const profile = mongoose.isObjectIdOrHexString(req.user.id) ? await Walker.findOne({ userId: req.user.id }) : null;
     const walkerId = profile?.id || req.user.walkerId || req.user.id;
