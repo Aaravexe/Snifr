@@ -1,6 +1,6 @@
 const path = require('node:path');
 
-const blockedTopLevel = new Set(['server', 'node_modules', 'tests', 'snifr bookings', 'snifr accounts']);
+const blockedTopLevel = new Set(['server', 'data', 'node_modules', 'tests', 'snifr bookings', 'snifr accounts']);
 const blockedFiles = new Set(['server.js', 'package.json', 'package-lock.json', 'accounts.json', '.env', '.env.example']);
 
 function blockPrivateFiles(root) {

@@ -1,5 +1,5 @@
-const dateButtons = [...document.querySelectorAll('.date-option')];
-const timeButtons = [...document.querySelectorAll('.time-option')];
+const dateButtons = document.querySelector('.days');
+const timeButtons = document.querySelector('.times');
 const pet = document.querySelector('#pet-select');
 const summary = document.querySelector('#booking-date-time');
 const message = document.querySelector('#booking-message');
@@ -7,150 +7,111 @@ const dialog = document.querySelector('#confirmation-dialog');
 let selectedDate = '';
 let selectedTime = '';
 let walker = null;
+let availability = [];
 
-async function saveBookingFile(booking) {
-  const response = await fetch('/api/bookings', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(booking)
-  });
-  const result = await response.json();
-  if (!response.ok) throw new Error(result.message || 'The booking could not be saved.');
-  return result.booking;
-}
+const session = JSON.parse(localStorage.getItem('snifrSession') || 'null');
+const consumerId = session?.id || session?._id || 'demo-consumer';
+
 
 function stars(rating) {
-  return Array.from({ length: 5 }, (_, index) => {
-    const left = rating - index;
-    const type = left >= 1 ? 'full' : left >= .5 ? 'half' : 'empty';
-    return `<img class="${type}" src="assets/star.svg" alt="">`;
-  }).join('');
+  return Array.from({ length: 5 }, (_, index) => `<img class="${rating - index >= 1 ? 'full' : rating - index >= .5 ? 'half' : 'empty'}" src="assets/star.svg" alt="">`).join('');
+}
+
+function setMessage(text = '', kind = '') { message.textContent = text; message.className = `booking-message${kind ? ` ${kind}` : ''}`; }
+
+async function populatePets() {
+  pet.replaceChildren(new Option('Loading pets…',''));
+  const res = await fetch('/api/pets');
+  const result = await res.json();
+  if (!res.ok) {
+    pet.replaceChildren(new Option('No pet selected',''));
+    throw new Error(res.status === 401 ? 'Sign in as a consumer to choose your pet.' : result.message);
+  }
+  pet.replaceChildren(new Option(result.data.length ? 'Choose a pet' : 'Add a pet on your dashboard first',''));
+  for (const item of result.data) pet.add(new Option(item.name,item._id));
 }
 
 function showWalker(data) {
   walker = data;
   document.title = `Snifr | Book ${data.name}`;
   document.querySelector('#walker-name').textContent = data.name;
-  document.querySelector('#walker-photo').src = data.image;
+  document.querySelector('#walker-photo').src = data.image || 'assets/walker.png';
   document.querySelector('#walker-photo').alt = data.name;
-  document.querySelector('#walker-about').textContent = data.about;
-  document.querySelector('#walker-walks').textContent = `${data.walksCompleted}+ Walks`;
-  document.querySelector('#walker-response').textContent = data.responseTime;
-  document.querySelector('#walker-rating').innerHTML = `<span class="profile-stars">${stars(data.rating)}</span><span>${data.rating} (${data.reviewCount} reviews)</span>`;
-  document.querySelector('#reviews-list').innerHTML = data.reviews.map(review => `
-    <div class="review card"><b>${review.name}</b><span class="stars">${stars(review.rating)}</span><p>${review.text}</p></div>
-  `).join('');
+  document.querySelector('#walker-about').textContent = data.about || 'A verified Snifr walker.';
+  document.querySelector('#walker-walks').textContent = `${data.walksCompleted || 0}+ Walks`;
+  document.querySelector('#walker-response').textContent = data.responseTime || 'Usually within an hour';
+  document.querySelector('#walker-rating').innerHTML = `<span class="profile-stars">${stars(data.rating || 0)}</span><span>${data.rating || 0} (${data.reviewCount || 0} reviews)</span>`;
+  const list = document.querySelector('#reviews-list');
+  list.replaceChildren();
+  for (const review of data.reviews || []) {
+    const card = document.createElement('article'), title = document.createElement('b'), comment = document.createElement('p');
+    card.className = 'review card'; title.textContent = review.name + ' · ' + review.rating + '/5'; comment.textContent = review.text;
+    card.append(title,comment); list.append(card);
+  }
+  if (!list.children.length) list.textContent = 'No reviews yet.';
+  const rate = Number(data.hourlyRate || 0);
+  document.querySelector('#booking-rate').textContent = `₹${rate.toFixed(2)}`;
+  document.querySelector('#booking-total').textContent = `₹${(rate + 30).toFixed(2)}`;
+}
 
-  const total = data.hourlyRate + 30;
-  document.querySelector('#booking-rate').textContent = `₹${data.hourlyRate.toFixed(2)}`;
-  document.querySelector('#booking-total').textContent = `₹${total.toFixed(2)}`;
+function updateSummary() { summary.textContent = selectedDate && selectedTime ? `${new Date(`${selectedDate}T00:00:00`).toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' })} @ ${selectedTime}` : 'Select a date and time'; }
 
-  dateButtons.forEach((button, index) => {
-    const value = data.availableDates[index];
-    button.hidden = !value;
-    if (!value) return;
-    const date = new Date(`${value}T00:00:00`);
-    button.dataset.date = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+function renderTimes() {
+  const day = availability.find(item => item.date === selectedDate);
+  selectedTime = '';
+  timeButtons.replaceChildren(...(day?.slots || []).map(time => {
+    const button = document.createElement('button');
+    button.type = 'button'; button.textContent = time;
+    button.addEventListener('click', () => { selectedTime = time; [...timeButtons.children].forEach(item => item.classList.toggle('selected', item === button)); updateSummary(); });
+    return button;
+  }));
+  if (!day?.slots?.length) timeButtons.innerHTML = '<span>No open slots for this date.</span>';
+  updateSummary();
+}
+
+function renderDates() {
+  dateButtons.replaceChildren(...availability.map(item => {
+    const date = new Date(`${item.date}T00:00:00`);
+    const button = document.createElement('button');
+    button.type = 'button'; button.dataset.date = item.date;
     button.innerHTML = `${date.toLocaleDateString('en-US', { weekday: 'short' })}<strong>${date.getDate()}</strong>`;
-  });
+    button.disabled = !item.slots.length;
+    button.addEventListener('click', () => { selectedDate = item.date; [...dateButtons.children].forEach(element => element.classList.toggle('selected', element === button)); renderTimes(); });
+    return button;
+  }));
 }
 
-function select(buttons, chosen) {
-  buttons.forEach(button => {
-    const active = button === chosen;
-    button.classList.toggle('selected', active);
-    button.setAttribute('aria-pressed', active);
-  });
-}
-
-function updateSummary() {
-  summary.textContent = selectedDate && selectedTime ? `${selectedDate} @ ${selectedTime}` : 'Select a date and time';
-  message.textContent = '';
-}
-
-dateButtons.forEach(button => button.addEventListener('click', () => {
-  selectedDate = button.dataset.date;
-  select(dateButtons, button);
-  updateSummary();
-}));
-
-timeButtons.forEach(button => button.addEventListener('click', () => {
-  selectedTime = button.textContent.trim();
-  select(timeButtons, button);
-  updateSummary();
-}));
-
-function valid() {
+function isValid() {
   const missing = [];
-  if (!walker) missing.push('walker');
-  if (!pet.value) missing.push('pet');
-  if (!selectedDate) missing.push('date');
-  if (!selectedTime) missing.push('time slot');
-  message.textContent = missing.length ? `Please select a ${missing.join(', ')}.` : '';
-  message.className = `booking-message${missing.length ? ' error' : ''}`;
-  return missing.length === 0;
+  if (!walker) missing.push('walker'); if (!pet.value) missing.push('pet'); if (!selectedDate) missing.push('date'); if (!selectedTime) missing.push('time slot');
+  if (missing.length) setMessage(`Please select a ${missing.join(', ')}.`, 'error');
+  return !missing.length;
 }
 
 document.querySelector('#booking-form').addEventListener('submit', event => {
-  event.preventDefault();
-  if (!valid()) return;
-  const total = walker.hourlyRate + 30;
-  document.querySelector('#confirmation-details').textContent = `${pet.value} with ${walker.name} on ${selectedDate} at ${selectedTime}. Total cost: ₹${total.toFixed(2)}.`;
+  event.preventDefault(); if (!isValid()) return;
+  const cost = Number(walker.hourlyRate) + 30;
+  document.querySelector('#confirmation-details').textContent = `${pet.selectedOptions[0].text} with ${walker.name} on ${summary.textContent}. Estimated total: ₹${cost.toFixed(2)}. The server confirms the final rate.`;
   dialog.showModal();
 });
 
 document.querySelector('#submit-booking').addEventListener('click', async event => {
-  event.preventDefault();
-  if (!valid()) return dialog.close();
-  const booking = {
-    bookingId: `SNIFR-${Date.now()}`,
-    walkerId: walker.id,
-    walker: walker.name,
-    pet: pet.value,
-    duration: '60 Minute Walk',
-    date: selectedDate,
-    time: selectedTime,
-    rate: walker.hourlyRate,
-    platformServiceFee: 30,
-    totalCost: walker.hourlyRate + 30,
-    status: 'confirmed',
-    submittedAt: new Date().toISOString()
-  };
+  event.preventDefault(); if (!isValid()) return;
   try {
-    const savedBooking = await saveBookingFile(booking);
-    dialog.close();
-    message.textContent = 'Booking saved in the Snifr Bookings folder. Opening dashboard...';
-    message.className = 'booking-message success';
-    setTimeout(() => {
-      location.href = `Dashboard.HTML?bookingId=${encodeURIComponent(savedBooking.bookingId)}`;
-    }, 700);
-  } catch (error) {
-    message.textContent = error.message || 'The booking file could not be saved. Start the website with npm start.';
-    message.className = 'booking-message error';
-    dialog.close();
-  }
+    const response = await fetch('/api/bookings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ consumerId, walkerId: walker.id, petId: pet.value, petName: pet.selectedOptions[0].text, date: selectedDate, time: selectedTime, durationMinutes: 60 }) });
+    const result = await response.json(); if (!response.ok) throw new Error(result.message || 'The booking could not be saved.');
+    dialog.close(); setMessage('Booking request saved. Redirecting to My Bookings…', 'success');
+    setTimeout(() => { location.href = `my-bookings.html?consumerId=${encodeURIComponent(consumerId)}`; }, 700);
+  } catch (error) { dialog.close(); setMessage(error.message, 'error'); }
 });
 
-document.querySelector('#cancel-booking').addEventListener('click', () => {
-  if (!confirm('Clear your booking selections?')) return;
-  selectedDate = '';
-  selectedTime = '';
-  pet.value = '';
-  select(dateButtons, null);
-  select(timeButtons, null);
-  updateSummary();
-});
+document.querySelector('#cancel-booking').addEventListener('click', () => { selectedDate = ''; selectedTime = ''; pet.value = ''; renderDates(); timeButtons.replaceChildren(); updateSummary(); setMessage(); });
 
-const walkerId = new URLSearchParams(location.search).get('walker') || 'priyanka';
-fetch('walkers.json')
-  .then(response => response.json())
-  .then(data => showWalker(data.walkers.find(item => item.id === walkerId) || data.walkers[0]))
-  .catch(() => {
-    message.textContent = 'Walker information could not be loaded. Open this project with Live Server.';
-    message.className = 'booking-message error';
-  });
+async function loadBookingDetails() {
+  const walkerId = new URLSearchParams(location.search).get('walker') || 'priyanka';
+  const response = await fetch(`/api/walkers/${encodeURIComponent(walkerId)}/booking-details`);
+  const result = await response.json(); if (!response.ok) throw new Error(result.message || 'Walker information could not be loaded.');
+  showWalker(result.data.walker); availability = result.data.availability; renderDates();
+}
 
-select(dateButtons, null);
-select(timeButtons, null);
-pet.value = '';
-updateSummary();
+populatePets().catch(error => setMessage(error.message,'error')); updateSummary(); loadBookingDetails().catch(error => setMessage(error.message || 'Start the project with npm start.', 'error'));

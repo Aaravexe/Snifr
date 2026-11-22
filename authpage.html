@@ -27,14 +27,15 @@
         <form class="auth-card" id="auth-form" novalidate>
             <div class="auth-toggle"><button type="button" class="active" data-mode="create">Create Account</button><button
                     type="button" data-mode="signin">Sign In</button></div>
-            <fieldset class="role">
+            <label id="name-field">Full Name<input id="auth-name" type="text" placeholder="Your name" minlength="2" maxlength="80" autocomplete="name" required></label>
+            <fieldset class="role" id="role-field">
                 <legend>I am a...</legend>
-                <div><label class="role-option selected"><input type="radio" name="role" value="owner" checked>Pet Owner</label><label
+                        <div><label class="role-option selected"><input type="radio" name="role" value="consumer" checked>Consumer</label><label
                         class="role-option"><input type="radio" name="role" value="walker">Walker</label></div>
-            </fieldset><label>Email Address<input id="auth-email" type="email" placeholder="user@gmail.com" required></label><label>Password<input
+            </fieldset><label id="city-field">City<input id="auth-city" type="text" placeholder="Your city" maxlength="80" autocomplete="address-level2"></label><label>Email Address<input id="auth-email" type="email" placeholder="user@gmail.com" autocomplete="email" required></label><label>Password<input
                     id="auth-password" type="password" placeholder="Minimum 6 characters" minlength="6" required></label>
             <div class="extras"><label class="remember"><input type="checkbox" checked>Remember Me</label><a
-                    href="#forgot">Forgot Password?</a></div><p class="form-message" id="auth-message" role="alert"></p><button class="submit" type="submit">Create Account</button>
+                    href="/support">Account support</a></div><p class="form-message" id="auth-message" role="alert"></p><button class="submit" type="submit">Create Account</button>
         </form>
     </main>
     <footer class="site-footer">

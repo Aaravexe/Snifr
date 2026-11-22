@@ -12,3 +12,5 @@ node_modules/
 
 # Person 1 local JSON API records
 server/data/*.json
+# Person 4 local booking fallback data
+data/

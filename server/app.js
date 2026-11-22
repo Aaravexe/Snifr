@@ -7,6 +7,7 @@ const blockPrivateFiles = require('./middleware/blockPrivateFiles');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 const createLocalDataRouter = require('./routes/localDataRoutes');
 const createLegacyRouter = require('./routes/legacyRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
 const createMongoFeedbackRouter = require('./routes/mongoFeedbackRoutes');
 const { databaseStatus, requireDatabase } = require('./config/database');
 
@@ -20,14 +21,20 @@ function createApp() {
   app.use(express.json({ limit: '1mb' }));
   app.use(express.urlencoded({ extended: false, limit: '1mb' }));
 
+  app.get('/health', (req, res) => res.json({ success: true, data: { status: 'ok' }, message: 'Snifr Express server is running.' }));
+  app.use(require('./routes/dashboardRoutes')(page));
   app.get('/health', (req, res) => res.json({ success: true, data: { status: 'ok', mongodb: databaseStatus() }, message: 'Snifr Express server is running.' }));
   app.use('/api/local', createLocalDataRouter());
+  app.use('/api', bookingRoutes);
+  app.use('/api/auth', require('./routes/authRoutes'));
+  app.use('/api/consumer-profiles', require('./routes/consumerProfileRoutes'));
+  app.use('/api/users', require('./routes/userRoutes'));
+  app.use('/api/walkers', require('./routes/walkerRoutes'));
   app.use('/api/feedback', requireDatabase, createMongoFeedbackRouter());
   app.use('/api', createLegacyRouter(ROOT));
 
   app.get('/', page('landingpage.html'));
   app.get('/auth', page('authpage.html'));
-  app.get('/dashboard', page('Dashboard.HTML'));
   app.get('/walkers', page('walkersearch.html'));
   app.get('/walker/:walkerId', (req, res) => res.redirect(`/wakerinfo.html?walker=${encodeURIComponent(req.params.walkerId)}`));
   app.get('/support', page('support.html'));

@@ -36,7 +36,7 @@
           <p class="aside-note">A thoughtful profile is the first step to a trusted connection.</p>
         </aside>
         <div class="editor-column">
-          <p class="storage-note"><strong>Browser draft</strong> Your profile is saved on this browser only. It will not appear in search until server saving and publishing are connected.</p>
+          <p class="storage-note">Save a draft to finish later, or publish your completed profile to appear in walker search.</p>
           <form id="onboarding-form" class="card editor-card" novalidate>
             <div class="progress-heading"><span id="step-counter">Step 1 of 4</span><span id="progress-label">About you</span></div>
             <progress id="setup-progress" max="4" value="1" aria-label="Profile setup progress"></progress>
@@ -63,9 +63,9 @@
               <label for="profile-image">Profile photo</label><div class="photo-upload"><div class="photo-frame"><img id="photo-preview" alt="Your selected profile photo" hidden><span id="photo-placeholder" aria-hidden="true">You</span></div><div class="photo-controls"><input id="profile-image" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="image-help image-error"><small id="image-help">JPG, PNG or WebP, up to 2 MB.</small><button id="remove-photo" class="text-button" type="button" hidden>Remove photo</button></div></div><small class="field-error" id="image-error" data-error="image"></small>
             </fieldset>
             <section class="step-panel" data-step="3" hidden aria-labelledby="review-heading">
-              <h2 id="review-heading">Looking good, future walker.</h2><p class="section-intro">Check your details before saving your completed profile draft.</p>
+              <h2 id="review-heading">Looking good, future walker.</h2><p class="section-intro">Check your details before publishing your profile.</p>
               <div class="profile-review"><div class="review-top"><img id="review-image" alt="Your profile photo"><div><h3 id="review-name"></h3><p id="review-location"></p><span id="review-experience"></span></div></div><p id="review-about" class="review-bio"></p><div class="review-details"><div><small>Services</small><strong id="review-services"></strong></div><div><small>Hourly rate</small><strong id="review-rate"></strong></div></div></div>
-              <p class="review-note">After saving, edit these details in Walker Settings or open Availability to plan your dates and time slots. Public publishing will be added in the next stage.</p>
+              <p class="review-note">After saving, edit these details in Walker Settings or open Availability to plan your dates and time slots. Your published profile appears in walker search.</p>
             </section>
             <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
             <div class="form-actions"><button id="back-step" class="button secondary" type="button" hidden>Back</button><button id="save-draft" class="text-button" type="button">Save draft</button><button id="next-step" class="button primary" type="submit">Continue</button></div>

@@ -14,10 +14,7 @@
   profile.message('Loading your profile…');
   try {
     const saved = await profile.initial(account);
-    if (saved.completed && !Object.keys(profile.validate(saved.profile)).length) {
-      location.replace('walker-settings.html');
-      return;
-    }
+    if (saved.published) { location.replace('/walker-dashboard'); return; }
     controller = profile.formController(form, saved.profile);
     step = saved.step;
     // A resumed draft must not skip an incomplete earlier step.
@@ -46,7 +43,7 @@
     document.querySelector('#progress-label').textContent = titles[step];
     document.querySelector('#setup-progress').value = step + 1;
     back.hidden = step === 0;
-    next.textContent = step === 3 ? 'Complete profile draft' : 'Continue';
+    next.textContent = step === 3 ? 'Publish profile' : 'Continue';
     if (step === 3) profile.review(controller.read());
     if (focus) {
       const heading = form.querySelector(`[data-step="${step}"] legend, [data-step="${step}"] h2`);
@@ -65,7 +62,7 @@
     } catch (error) { profile.message(error.message, 'error'); }
   });
 
-  form.addEventListener('submit', event => {
+  form.addEventListener('submit', async event => {
     event.preventDefault();
     if (!controller.imageReady()) return;
     const values = controller.read();
@@ -80,9 +77,10 @@
     controller.clearErrors();
     if (step < 3) { step++; profile.message(''); showStep(); return; }
     try {
-      profile.save(account, values, true, 3);
+      next.disabled = true;
+      await profile.publish(account,values);
       controller.markSaved();
-      location.href = 'walker-settings.html?setup=complete';
-    } catch (error) { profile.message(error.message, 'error'); }
+      location.href = '/walker-dashboard';
+    } catch (error) { profile.message(error.message, 'error'); } finally { next.disabled = false; }
   });
 })();

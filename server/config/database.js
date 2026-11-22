@@ -9,6 +9,11 @@ async function connectDatabase(uri = process.env.MONGODB_URI) {
   }
 
   mongoose.set('strictQuery', true);
+  mongoose.connection.on('reconnected', () => require('../controllers/reviewController').repairStandaloneRatings().catch(error => console.error('Rating repair failed:',error.message)));
+  await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
+  await require('../controllers/reviewController').repairStandaloneRatings();
+  console.log(`MongoDB connected: ${mongoose.connection.name}`);
+  return true;
   try {
     await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
     lastConnectionError = null;

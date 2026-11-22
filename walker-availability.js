@@ -1,12 +1,11 @@
-(() => {
+(async () => {
   const rules = window.AvailabilityRules;
   const profile = window.WalkerProfile;
   const account = profile.session();
   if (!profile.gate(account)) return;
-  const key = `snifrWalkerAvailability:v1:${account.id}`;
   const select = selector => document.querySelector(selector);
   let days = [];
-  let storedRaw = null;
+  let endpoint, saving = false;
   let selectedDate = rules.today();
   let visibleMonth = selectedDate.slice(0, 7);
   let editingId = null;
@@ -20,39 +19,41 @@
     select('#availability-message').className = `form-message ${error ? 'error' : 'success'}`;
   }
 
-  function load() {
-    const raw = localStorage.getItem(key);
-    let next = [];
-    if (raw !== null) {
-      let parsed;
-      try { parsed = JSON.parse(raw); }
-      catch { throw new Error('Your saved schedule could not be read. It has not been overwritten.'); }
-      if (parsed?.version !== 1) throw new Error('This schedule format is not supported. Your stored data has not been changed.');
-      rules.validateDays(parsed.days);
-      next = parsed.days;
-    }
-    days = next;
-    storedRaw = raw;
+  async function request(url,method = 'GET',body) {
+    const res = await fetch(url,{method,headers:body ? {'Content-Type':'application/json'} : {},body:body && JSON.stringify(body)});
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.message || 'The schedule could not be saved.');
+    return result.data;
   }
-
-  function persist(transform, success, nextDate = selectedDate) {
+  async function load() {
+    const overview = await request('/api/dashboard/walker');
+    if (!overview.profile) throw new Error('Publish your walker profile before setting dates.');
+    endpoint = '/api/walkers/' + overview.walkerId + '/availability';
+    days = overview.availability.map(day => ({...day,slots:day.slots.map(slot => ({...slot,id:slot._id}))}));
+  }
+  async function persist(transform, success, nextDate = selectedDate) {
+    if (saving) return;
+    saving = true;
     try {
-      if (profile.session()?.id !== account.id) throw new Error('Your sign-in changed. Sign in to this walker account again before saving.');
-      if (localStorage.getItem(key) !== storedRaw) {
-        load(); resetSlot(); render();
-        throw new Error('Your schedule changed in another tab. The latest version is now shown; review it and try again.');
-      }
       const updated = transform(days);
-      const raw = JSON.stringify({ version: 1, days: updated, savedAt: new Date().toISOString() });
-      try { localStorage.setItem(key, raw); }
-      catch { throw new Error('Your browser could not save the schedule. Allow site storage or free some space, then try again.'); }
-      days = updated;
-      storedRaw = raw;
-      selectedDate = nextDate;
-      visibleMonth = selectedDate.slice(0, 7);
+      const changed = updated.find(day => {
+        const old = days.find(item => item._id && item._id === day._id);
+        return !old || JSON.stringify(old) !== JSON.stringify(day);
+      });
+      if (changed) {
+        const slots = changed.slots.map(s => ({...s._id && {_id:s._id},startTime:s.startTime,endTime:s.endTime}));
+        await request(endpoint + (changed._id ? '/'+changed._id : ''),changed._id ? 'PATCH' : 'POST',
+          {date:changed.date,slots,...changed._id && {version:changed.__v}});
+      } else {
+        const removed = days.find(day => !updated.some(d => d._id === day._id));
+        if (removed) await request(endpoint+'/'+removed._id,'DELETE');
+      }
+      await load(); selectedDate = nextDate; visibleMonth = selectedDate.slice(0,7);
       resetSlot(); render(); message(success);
-      return true;
-    } catch (error) { message(error.message, true); return false; }
+    } catch (error) {
+      try { await load(); render(); } catch {}
+      message(error.message,true);
+    } finally { saving = false; }
   }
 
   function labelDate(date, options = { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric' }) {
@@ -173,7 +174,7 @@
         }
         const remove = element('button', 'Delete', 'text-button danger'); remove.type = 'button';
         remove.setAttribute('aria-label', `Delete ${labelTime(slot.startTime)} slot`);
-        remove.addEventListener('click', () => confirmChange('Delete this slot?', `${labelTime(slot.startTime)} – ${labelTime(slot.endTime)} on ${labelDate(selectedDate)} will be removed from your draft.`, () => persist(current => rules.removeSlot(current, selectedDate, slot.id), 'Slot deleted from your browser draft.'), 'Delete slot'));
+        remove.addEventListener('click', () => confirmChange('Delete this slot?', `${labelTime(slot.startTime)} – ${labelTime(slot.endTime)} on ${labelDate(selectedDate)} will be removed from your schedule.`, () => persist(current => rules.removeSlot(current, selectedDate, slot.id), 'Slot deleted from your schedule.'), 'Delete slot'));
         controls.append(remove); row.append(controls);
       }
       select('#slot-list').append(row);
@@ -219,7 +220,7 @@
     const endTime = select('#end-time').value;
     if (!startTime || !endTime) { message('Enter both a start time and an end time.', true); select(!startTime ? '#start-time' : '#end-time').focus(); return; }
     const id = editingId || crypto.randomUUID();
-    persist(current => rules.saveSlot(current, selectedDate, { id, startTime, endTime }, editingId), editingId ? 'Slot updated in your browser draft.' : 'Slot added to your browser draft.');
+    persist(current => rules.saveSlot(current, selectedDate, { id, startTime, endTime }, editingId), editingId ? 'Slot updated in your schedule.' : 'Slot added to your schedule.');
   });
   select('#cancel-slot-edit').addEventListener('click', () => withCleanForm(() => { resetSlot(); message('Slot edit cancelled.'); }));
   select('#move-date-form').addEventListener('submit', event => {
@@ -227,21 +228,17 @@
     const date = select('#move-date').value;
     withCleanForm(() => persist(current => rules.moveDate(current, selectedDate, date), 'Date and its slots moved.', date));
   });
-  select('#delete-date').addEventListener('click', () => confirmChange('Delete this date?', `The date ${labelDate(selectedDate)} and all its unbooked slots will be removed from your draft.`, () => persist(current => rules.removeDate(current, selectedDate), 'Date and its slots deleted.'), 'Delete date'));
+  select('#delete-date').addEventListener('click', () => confirmChange('Delete this date?', `The date ${labelDate(selectedDate)} and all its unbooked slots will be removed from your schedule.`, () => persist(current => rules.removeDate(current, selectedDate), 'Date and its slots deleted.'), 'Delete date'));
   window.addEventListener('beforeunload', event => { if (dirty) { event.preventDefault(); event.returnValue = ''; } });
   window.addEventListener('storage', event => {
     if (event.key === 'snifrSession' || event.key === null) {
       if (profile.session()?.id !== account.id) { dirty = false; dialog.close(); profile.gate(null); return; }
     }
-    if (event.key === key || event.key === null) message('Your schedule changed in another tab. Reload to see the latest version before editing.', true);
   });
 
   try {
-    load(); render();
-    try {
-      const draft = profile.load(account);
-      select('#profile-notice').hidden = !!(draft?.completed && !Object.keys(profile.validate(draft.profile)).length);
-    } catch { select('#profile-notice').hidden = false; }
+    await load(); render();
+    select('#profile-notice').hidden = true;
   } catch (error) {
     message(error.message || 'Your availability could not be loaded. Allow site storage and reload.', true);
     select('#walker-workspace').querySelectorAll('input, button').forEach(control => { control.disabled = true; });

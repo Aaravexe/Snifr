@@ -67,6 +67,8 @@ window.WalkerProfile = (() => {
   }
 
   async function initial(account) {
+    const live = await liveProfile(account);
+    if (live) return { profile:clean(live), completed:live.profileComplete, published:live.status === 'published', savedAt:live.updatedAt, step:3 };
     const stored = load(account);
     if (stored) return stored;
     const profile = empty();
@@ -81,6 +83,25 @@ window.WalkerProfile = (() => {
     return { profile, completed: false, step: 0 };
   }
 
+  async function liveProfile(account) {
+    if (!/^[a-f0-9]{24}$/i.test(account.id)) return null;
+    const result = await fetch('/api/dashboard/walker').then(r => r.json());
+    if (!result.success) throw new Error(result.message);
+    if (!result.data.profile) return null;
+    const record = await fetch('/api/walkers/' + result.data.walkerId).then(r => r.json());
+    if (!record.success) throw new Error(record.message);
+    return record.data;
+  }
+  async function publish(account, values) {
+    const record = await liveProfile(account);
+    const res = await fetch('/api/walkers' + (record ? '/' + record._id : ''), {
+      method:record ? 'PATCH' : 'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ ...values, status:'published' })
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.message || 'Could not publish your profile.');
+    return { profile:values, completed:true, savedAt:result.data.updatedAt };
+  }
   function formController(form, initialProfile) {
     let image = initialProfile.image;
     let dirty = false;
@@ -234,5 +255,5 @@ window.WalkerProfile = (() => {
     if (profile.image) image.src = profile.image;
   }
 
-  return { session, load, save, validate, initial, gate, formController, message, review };
+  return { session, load, save, publish, validate, initial, gate, formController, message, review };
 })();

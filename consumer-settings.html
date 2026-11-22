@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Account settings | Snifr</title><link rel="stylesheet" href="/Dashboard.CSS">
+  <style>
+    main { max-width: 760px; margin: 3rem auto; padding: 0 1.25rem; }
+    .panel { background: #fffaf2; border: 1px solid #e6d9c5; border-radius: 1rem; padding: 1.5rem; margin: 1.25rem 0; }
+    form { display: grid; gap: 1rem; } label { display: grid; gap: .35rem; font-weight: 600; }
+    input { width: 100%; padding: .75rem; border: 1px solid #e6d9c5; border-radius: .5rem; font: inherit; }
+    .danger { border-color: #c66; } #notice { min-height: 1.5rem; }
+  </style>
+</head>
+<body>
+  <header><a class="brand" href="/"><img src="/assets/snifr-logo.png" alt="">Snifr</a>
+    <nav aria-label="Main navigation"><a href="/consumer-dashboard">Dashboard</a><a href="/walkers">Find walkers</a><button id="logout" class="quiet">Sign out</button></nav>
+  </header>
+  <main>
+    <h1>Consumer account settings</h1><p id="greeting" aria-live="polite"></p><p id="notice" role="status"></p>
+    <section class="panel"><h2>Account details</h2>
+      <form id="settings-form">
+        <label>Full name<input name="displayName" required minlength="2" maxlength="80" autocomplete="name"></label>
+        <label>Email address<input name="email" type="email" required maxlength="254" autocomplete="email"></label>
+        <label>Phone<input name="phone" type="tel" maxlength="30" autocomplete="tel"></label>
+        <label>Address<input name="address" maxlength="240" autocomplete="street-address"></label>
+        <label>City<input name="city" maxlength="80" autocomplete="address-level2"></label>
+        <label>Profile image URL<input name="profileImage" type="url" maxlength="1500" placeholder="https://…"></label>
+        <label>Emergency contact<input name="emergencyContact" maxlength="120" placeholder="Name and phone number"></label>
+        <button id="save" type="submit">Save changes</button>
+      </form>
+    </section>
+    <section class="panel danger"><h2>Deactivate account</h2>
+      <p>Deactivation signs you out and prevents further use of this account.</p>
+      <button id="deactivate" class="quiet" type="button">Deactivate my account</button>
+    </section>
+  </main>
+  <script type="module" src="/consumer-settings.js"></script>
+</body>
+</html>
