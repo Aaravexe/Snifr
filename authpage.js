@@ -56,6 +56,9 @@ form.addEventListener('submit', async event => {
     });
     const result = await response.json();
     if (!response.ok) return show(result.message || 'Account request failed.');
+    // Keep only public identity fields for existing pages; the HttpOnly cookie
+    // remains the only authentication credential.
+    localStorage.setItem('snifrSession', JSON.stringify(result.data.user));
     show(creating ? 'Account created. Opening your Snifr account…' : 'Signed in. Opening your Snifr account…', true);
     setTimeout(() => location.replace(result.data.destination), 300);
   } catch {

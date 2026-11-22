@@ -27,7 +27,7 @@ try {
   $('deactivate').addEventListener('click', async event => {
     if (!confirm('Deactivate your Snifr account? You will be signed out.')) return;
     event.currentTarget.disabled = true;
-    try { await api('/api/auth/account', 'DELETE'); location.replace('/auth?mode=signin'); }
+    try { await api('/api/auth/account', 'DELETE'); localStorage.removeItem('snifrSession'); location.replace('/auth?mode=signin'); }
     catch (error) { notice(error.message); event.currentTarget.disabled = false; }
   });
 } catch (error) { notice(error.message); }

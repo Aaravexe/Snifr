@@ -8,7 +8,6 @@ function destination(role, complete = false) {
 }
 
 async function register(req, res) {
-  requireMongo(req, res, () => {});
   const data = fields(req.body, ['displayName', 'email', 'password', 'role', 'city']);
   const displayName = typeof data.displayName === 'string' ? data.displayName.trim() : '';
   const email = typeof data.email === 'string' ? data.email.trim().toLowerCase() : '';
@@ -62,4 +61,16 @@ async function deactivate(req, res) {
   res.json({ success: true, data: { id: user.id, isActive: false }, message: 'Account deactivated.' });
 }
 
-module.exports = { register, login, deactivate };
+async function changePassword(req, res) {
+  const data = fields(req.body, ['currentPassword', 'newPassword']);
+  if (typeof data.currentPassword !== 'string' || typeof data.newPassword !== 'string') throw fail(400, 'Enter your current and new passwords.');
+  const user = await User.findById(req.user.id).select('+passwordHash +passwordSalt');
+  if (!user || !user.isActive || !await user.matches(data.currentPassword)) throw fail(401, 'Your current password is incorrect.');
+  await user.setPassword(data.newPassword);
+  await user.save();
+  revoke(user.id);
+  startSession(req, res, user.publicAccount());
+  res.json({ success: true, data: user.publicAccount(), message: 'Password changed.' });
+}
+
+module.exports = { register, login, deactivate, changePassword };
