@@ -22,7 +22,7 @@ async function getBooking() {
   const response = await fetch(endpoint);
   const result = await response.json();
   if (!response.ok) throw new Error(result.message || 'Booking could not be loaded.');
-  return result.booking;
+  return result.data || result.booking;
 }
 
 function renderPets() {
@@ -40,21 +40,21 @@ function renderPets() {
 function showBooking(booking) {
   if (!booking) return;
   bookingBox.innerHTML = `
-    <img src="assets/figma-user-img.png" alt="${booking.walker}">
-    <div><strong>${booking.walker}</strong><small>${booking.date}, ${booking.time} · ${booking.duration} for ${booking.pet}</small></div>
+    <img src="assets/figma-user-img.png" alt="${booking.walkerName || booking.walker}">
+    <div><strong>${booking.walkerName || booking.walker}</strong><small>${booking.date}, ${booking.time} · ${booking.durationMinutes || booking.duration} min walk for ${booking.petName || booking.pet}</small></div>
     <em>${booking.status.toUpperCase()}</em>
     <button class="cancel-latest" type="button">Cancel</button>`;
   bookingBox.querySelector('.cancel-latest').addEventListener('click', async () => {
     if (!confirm('Cancel this booking?')) return;
     try {
-      const response = await fetch(`/api/bookings/${encodeURIComponent(booking.bookingId)}`, {
+      const response = await fetch(`/api/bookings/${encodeURIComponent(booking._id || booking.bookingId)}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'cancelled' })
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'Booking could not be cancelled.');
-      showBooking(result.booking);
+      showBooking(result.data || result.booking);
     } catch (error) {
       alert(error.message || 'The booking file could not be updated.');
     }
